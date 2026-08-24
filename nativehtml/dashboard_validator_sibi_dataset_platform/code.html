@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #E2E8F0;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-background": "#191b23",
+                        "inverse-on-surface": "#f0f0fb",
+                        "surface-bright": "#faf8ff",
+                        "on-error-container": "#93000a",
+                        "on-primary-container": "#eeefff",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-dim": "#d9d9e5",
+                        "surface-tint": "#0053db",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "background": "#faf8ff",
+                        "tertiary-container": "#bc4800",
+                        "primary": "#004ac6",
+                        "outline": "#737686",
+                        "on-surface-variant": "#434655",
+                        "on-tertiary-container": "#ffede6",
+                        "on-secondary-container": "#fefcff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "secondary-container": "#2170e4",
+                        "inverse-primary": "#b4c5ff",
+                        "primary-container": "#2563eb",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f3f3fe",
+                        "surface-container": "#ededf9",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-secondary-fixed": "#001a42",
+                        "surface-container-high": "#e7e7f3",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "on-surface": "#191b23",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "secondary-fixed": "#d8e2ff",
+                        "tertiary-fixed": "#ffdbcd",
+                        "surface": "#faf8ff",
+                        "surface-container-highest": "#e1e2ed",
+                        "outline-variant": "#c3c6d7",
+                        "tertiary": "#943700",
+                        "surface-variant": "#e1e2ed",
+                        "on-primary-fixed": "#00174b",
+                        "secondary": "#0058be",
+                        "on-secondary-fixed-variant": "#004395",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "inverse-surface": "#2e3039"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "2xl": "20px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "3xl": "64px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "container-max": "1280px",
+                        "2xl": "48px",
+                        "md": "16px",
+                        "gutter": "24px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface flex min-h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="hidden md:flex flex-col h-screen py-md gap-xs bg-surface-container-low border-r border-outline-variant w-[280px] shrink-0">
+<div class="px-gutter mb-xl">
+<h1 class="text-headline-md font-black text-primary uppercase tracking-tighter">SIBI Dataset</h1>
+<p class="text-label-md text-on-surface-variant">Expert Portal</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Dashboard Active -->
+<a class="flex items-center gap-md py-md px-lg bg-secondary-container text-on-secondary-container font-bold rounded-full mx-2 transition-transform duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md py-md px-lg text-on-surface-variant hover:bg-surface-variant/50 mx-2 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+<span class="text-label-md">Validation Queue</span>
+</a>
+<a class="flex items-center gap-md py-md px-lg text-on-surface-variant hover:bg-surface-variant/50 mx-2 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="text-label-md">Validation History</span>
+</a>
+<a class="flex items-center gap-md py-md px-lg text-on-surface-variant hover:bg-surface-variant/50 mx-2 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="text-label-md">Profile</span>
+</a>
+</nav>
+<div class="mt-auto px-2 space-y-1 border-t border-outline-variant pt-md">
+<a class="flex items-center gap-md py-md px-lg text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-md py-md px-lg text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+<span class="text-label-md">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-gutter h-16 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-md">
+<span class="md:hidden material-symbols-outlined text-primary cursor-pointer">menu</span>
+<div class="flex flex-col md:hidden">
+<span class="text-title-lg font-bold text-primary">SIBI Moderator</span>
+</div>
+<div class="hidden md:block">
+<h2 class="text-headline-md font-headline-md text-primary">Dashboard Validator</h2>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<div class="hidden sm:flex gap-md">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-colors" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-colors" data-icon="settings">settings</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-colors" data-icon="help">help</span>
+</div>
+<div class="flex items-center gap-sm pl-md border-l border-outline-variant">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a sign language expert, middle-aged with a warm expression, wearing a navy blue blazer. The background is a clean, minimalist office with soft lighting, reflecting a high-end corporate validator persona. The image is crisp, high-definition, and follows a modern professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkUw7cWinoRsa5DRbRkoMzDXhOz3x306NbPHv9YBIq2NQKeIbMTHJLrEryKB9rsGyD1N557KnldC8PlaXP3RC-awamSEwpv7mV5bsOd5wSpo88t_DuIm5dPFIbIC1wGFBSJQJR5DWt1sy_n_ZdTorzTiNiGAWYtGyLmxTjdqmRYIZY2yjB-x9fg6BRBj8PfAHktm9zWskB_HGNGTR8yyOT9B8x43EzcunyiLi_cCIWGUN6QUdeB4pXZA"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Scrollable Canvas -->
+<main class="flex-1 overflow-y-auto custom-scrollbar p-xl lg:p-3xl space-y-xl">
+<!-- Page Header -->
+<div class="space-y-xs">
+<h1 class="text-headline-lg font-headline-lg text-on-surface">Dashboard Validator</h1>
+<p class="text-body-lg text-on-surface-variant max-w-2xl">Pantau antrean validasi dan selesaikan proses peninjauan dataset video secara real-time.</p>
+</div>
+<!-- Stats Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-lg">
+<!-- Stat 1 -->
+<div class="bg-white p-lg rounded-2xl border border-outline-variant hover:shadow-lg transition-shadow duration-300 group">
+<div class="flex justify-between items-start mb-md">
+<div class="p-3 bg-primary-container/10 rounded-xl group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-primary-container text-3xl" data-icon="inbox">inbox</span>
+</div>
+<span class="px-3 py-1 bg-primary-container text-on-primary-container text-label-sm rounded-full">Baru</span>
+</div>
+<div class="space-y-xs">
+<h3 class="text-headline-md font-bold text-on-surface">24 Video</h3>
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider">Menunggu Validasi</p>
+</div>
+</div>
+<!-- Stat 2 -->
+<div class="bg-white p-lg rounded-2xl border border-outline-variant hover:shadow-lg transition-shadow duration-300 group">
+<div class="flex justify-between items-start mb-md">
+<div class="p-3 bg-emerald-100 rounded-xl group-hover:bg-emerald-200 transition-colors">
+<span class="material-symbols-outlined text-emerald-600 text-3xl" data-icon="check_circle">check_circle</span>
+</div>
+<span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-label-sm rounded-full">Selesai</span>
+</div>
+<div class="space-y-xs">
+<h3 class="text-headline-md font-bold text-on-surface">320</h3>
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider">Video Valid</p>
+</div>
+</div>
+<!-- Stat 3 -->
+<div class="bg-white p-lg rounded-2xl border border-outline-variant hover:shadow-lg transition-shadow duration-300 group">
+<div class="flex justify-between items-start mb-md">
+<div class="p-3 bg-red-100 rounded-xl group-hover:bg-red-200 transition-colors">
+<span class="material-symbols-outlined text-red-600 text-3xl" data-icon="cancel">cancel</span>
+</div>
+<span class="px-3 py-1 bg-red-100 text-red-700 text-label-sm rounded-full">Ditolak</span>
+</div>
+<div class="space-y-xs">
+<h3 class="text-headline-md font-bold text-on-surface">48</h3>
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider">Video Tidak Valid</p>
+</div>
+</div>
+<!-- Stat 4 -->
+<div class="bg-white p-lg rounded-2xl border border-outline-variant hover:shadow-lg transition-shadow duration-300 group">
+<div class="flex justify-between items-start mb-md">
+<div class="p-3 bg-slate-100 rounded-xl group-hover:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined text-slate-600 text-3xl" data-icon="timer">timer</span>
+</div>
+<span class="px-3 py-1 bg-slate-100 text-slate-700 text-label-sm rounded-full">Efisiensi</span>
+</div>
+<div class="space-y-xs">
+<h3 class="text-headline-md font-bold text-on-surface">02:15</h3>
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider">Rata-rata Review</p>
+</div>
+</div>
+</section>
+<!-- Chart and Timeline Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Weekly Activity Chart -->
+<div class="lg:col-span-2 bg-white p-lg rounded-2xl border border-outline-variant flex flex-col h-[400px]">
+<div class="flex justify-between items-center mb-xl">
+<div>
+<h3 class="text-title-lg font-bold text-on-surface">Aktivitas Validasi Mingguan</h3>
+<p class="text-label-md text-on-surface-variant">Data real-time volume review video per hari</p>
+</div>
+<select class="bg-surface-container-low border-none rounded-lg text-label-md focus:ring-2 focus:ring-primary">
+<option>Minggu Ini</option>
+<option>Minggu Lalu</option>
+</select>
+</div>
+<div class="flex-1 relative flex items-end justify-between gap-sm pt-8">
+<!-- Simple Fake Line Chart CSS Approach -->
+<div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+<span class="text-display-lg font-black text-primary">GRAPH AREA</span>
+</div>
+<div class="w-full h-full flex flex-col justify-end">
+<div class="relative flex-1 flex items-end gap-md px-4">
+<!-- Day Columns -->
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-primary-container/20 rounded-t-lg transition-all duration-500 group-hover:bg-primary-container" style="height: 40%;"></div>
+<span class="mt-2 text-label-sm text-on-surface-variant">Sen</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-primary-container/20 rounded-t-lg transition-all duration-500 group-hover:bg-primary-container" style="height: 65%;"></div>
+<span class="mt-2 text-label-sm text-on-surface-variant">Sel</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-primary-container/20 rounded-t-lg transition-all duration-500 group-hover:bg-primary-container" style="height: 85%;"></div>
+<span class="mt-2 text-label-sm text-on-surface-variant">Rab</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-primary-container/20 rounded-t-lg transition-all duration-500 group-hover:bg-primary-container" style="height: 45%;"></div>
+<span class="mt-2 text-label-sm text-on-surface-variant">Kam</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-primary-container/20 rounded-t-lg transition-all duration-500 group-hover:bg-primary-container" style="height: 95%;"></div>
+<span class="mt-2 text-label-sm text-on-surface-variant">Jum</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-primary-container/20 rounded-t-lg transition-all duration-500 group-hover:bg-primary-container" style="height: 30%;"></div>
+<span class="mt-2 text-label-sm text-on-surface-variant">Sab</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-primary-container/20 rounded-t-lg transition-all duration-500 group-hover:bg-primary-container" style="height: 20%;"></div>
+<span class="mt-2 text-label-sm text-on-surface-variant">Min</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activity (Timeline) -->
+<div class="bg-white p-lg rounded-2xl border border-outline-variant flex flex-col h-[400px]">
+<div class="mb-lg">
+<h3 class="text-title-lg font-bold text-on-surface">Aktivitas Terbaru</h3>
+<p class="text-label-md text-on-surface-variant">Log tinjauan terakhir Anda</p>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar space-y-md">
+<!-- Activity 1 -->
+<div class="flex gap-md group">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-emerald-600 text-[18px]" data-icon="check">check</span>
+</div>
+<div class="w-px flex-1 bg-outline-variant my-1"></div>
+</div>
+<div class="pb-4">
+<p class="text-body-md font-semibold text-on-surface">Validasi Huruf A selesai</p>
+<p class="text-label-sm text-on-surface-variant">10 Menit yang lalu • Batch #420</p>
+</div>
+</div>
+<!-- Activity 2 -->
+<div class="flex gap-md group">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-red-600 text-[18px]" data-icon="close">close</span>
+</div>
+<div class="w-px flex-1 bg-outline-variant my-1"></div>
+</div>
+<div class="pb-4">
+<p class="text-body-md font-semibold text-on-surface">Video Angka Lima ditolak</p>
+<p class="text-label-sm text-on-surface-variant">45 Menit yang lalu • Pencahayaan Buruk</p>
+</div>
+</div>
+<!-- Activity 3 -->
+<div class="flex gap-md group">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-emerald-600 text-[18px]" data-icon="check">check</span>
+</div>
+<div class="w-px flex-1 bg-outline-variant my-1"></div>
+</div>
+<div class="pb-4">
+<p class="text-body-md font-semibold text-on-surface">Video Salam diterima</p>
+<p class="text-label-sm text-on-surface-variant">2 Jam yang lalu • Gerakan Akurat</p>
+</div>
+</div>
+<!-- Activity 4 (More context) -->
+<div class="flex gap-md group">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-primary-container/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="login">login</span>
+</div>
+</div>
+<div class="pb-4">
+<p class="text-body-md font-semibold text-on-surface">Sesi Dimulai</p>
+<p class="text-label-sm text-on-surface-variant">08:30 WIB • Kantor Pusat</p>
+</div>
+</div>
+</div>
+<button class="w-full py-md mt-md text-primary font-bold text-label-md hover:bg-primary-container/5 rounded-xl transition-colors">
+                        Lihat Semua Log
+                    </button>
+</div>
+</div>
+<!-- Validation Queue Preview Table -->
+<section class="bg-white rounded-2xl border border-outline-variant overflow-hidden">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center">
+<h3 class="text-title-lg font-bold text-on-surface">Pratinjau Antrean</h3>
+<button class="bg-primary text-white px-lg py-md rounded-xl text-label-md font-bold hover:opacity-90 transition-opacity flex items-center gap-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="play_arrow">play_arrow</span>
+                        Mulai Tinjau Sekarang
+                    </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low border-b border-outline-variant">
+<tr>
+<th class="px-lg py-md text-label-md font-bold text-on-surface-variant uppercase tracking-widest">Video ID</th>
+<th class="px-lg py-md text-label-md font-bold text-on-surface-variant uppercase tracking-widest">Label SIBI</th>
+<th class="px-lg py-md text-label-md font-bold text-on-surface-variant uppercase tracking-widest">Kontributor</th>
+<th class="px-lg py-md text-label-md font-bold text-on-surface-variant uppercase tracking-widest">Status</th>
+<th class="px-lg py-md text-label-md font-bold text-on-surface-variant uppercase tracking-widest">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-lg text-body-md font-medium text-on-surface">#VID-9021</td>
+<td class="px-lg py-lg">
+<span class="px-3 py-1 bg-secondary-container/10 text-secondary text-label-md rounded-full font-semibold">Abjad - B</span>
+</td>
+<td class="px-lg py-lg flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a young Indonesian student, focused and professional, against a clean blue background. Digital avatar style for a data platform. Soft studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6v110j7qkDHIhgMLv1vfSu2ewc5HLmqJFepQbXAfNrUV18ClMT8exybQc-6hi96CcU1zvz88m5txL1-mO5-zmOFsEdGr3KaQdX8KHaPLBGbrFYK6EyI5WpXPzgVy66TJb1ZdHILh1abg39oxi5Ak54AZK5tnPeOzsxI4KMRUeYEjYOze7J5kXkRRBhVn-72TV20evQkOLmFOyKkBvcwCRuSVzE2j8ps9kIHkruJ6sU3YlqhDmYSiFvA"/>
+</div>
+<span class="text-body-md">Andi Wijaya</span>
+</td>
+<td class="px-lg py-lg">
+<div class="flex items-center gap-xs text-primary">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-label-md font-semibold">Menunggu</span>
+</div>
+</td>
+<td class="px-lg py-lg">
+<button class="text-primary hover:underline font-bold text-label-md">Tinjau</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-lg text-body-md font-medium text-on-surface">#VID-9022</td>
+<td class="px-lg py-lg">
+<span class="px-3 py-1 bg-secondary-container/10 text-secondary text-label-md rounded-full font-semibold">Kata - Terima Kasih</span>
+</td>
+<td class="px-lg py-lg flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a woman in her 30s, wearing traditional batik with a modern cut, friendly expression, clean white background. High fidelity professional headshot." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEj3poa87iWQnNtlr4pgmMxW5hd2Yddw7AsIUgNY0pLBwsfdKFRQZsXW-86hMXoXM7zkPgcAjvvbAXggr017kWyWeE0ZfILoH07PsW_V3ZJMEqdA_X5qWuQNcRqf4ZAergsYuZuRl9JW_ma1hT70cqBpA8Ckv7Ze73zjIix1V_Pm6m-misQtRtEPKc6bEPciEHznXQEsNpn57yaCZ0GueVuN36beP5CkzXINvcMFIiP0EY3vzie1blTg"/>
+</div>
+<span class="text-body-md">Siti Aminah</span>
+</td>
+<td class="px-lg py-lg">
+<div class="flex items-center gap-xs text-primary">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-label-md font-semibold">Menunggu</span>
+</div>
+</td>
+<td class="px-lg py-lg">
+<button class="text-primary hover:underline font-bold text-label-md">Tinjau</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+</div>
+<!-- Mobile Bottom NavBar (Hidden on Desktop) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface-container-high flex items-center justify-around border-t border-outline-variant z-50">
+<a class="flex flex-col items-center gap-xs text-primary" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="text-[10px] font-bold">Dashboard</span>
+</a>
+<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+<span class="text-[10px]">Queue</span>
+</a>
+<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="text-[10px]">History</span>
+</a>
+<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="text-[10px]">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple Micro-interactions
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.style.transform = 'scale(0.98)';
+            });
+            el.addEventListener('mouseup', () => {
+                el.style.transform = 'scale(1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

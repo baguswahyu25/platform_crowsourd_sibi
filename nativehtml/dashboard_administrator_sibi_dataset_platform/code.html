@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SIBI Dataset Platform - Dashboard Administrator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "tertiary": "#943700",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#fefcff",
+                        "background": "#faf8ff",
+                        "surface-bright": "#faf8ff",
+                        "on-secondary-fixed": "#001a42",
+                        "surface": "#faf8ff",
+                        "secondary": "#0058be",
+                        "surface-variant": "#e1e2ed",
+                        "secondary-container": "#2170e4",
+                        "primary-fixed": "#dbe1ff",
+                        "secondary-fixed": "#d8e2ff",
+                        "on-secondary-fixed-variant": "#004395",
+                        "on-primary-fixed": "#00174b",
+                        "surface-dim": "#d9d9e5",
+                        "surface-container-high": "#e7e7f3",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-tint": "#0053db",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "outline-variant": "#c3c6d7",
+                        "on-background": "#191b23",
+                        "on-tertiary-fixed": "#360f00",
+                        "surface-container-low": "#f3f3fe",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "surface-container": "#ededf9",
+                        "on-tertiary-container": "#ffede6",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#eeefff",
+                        "outline": "#737686",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "primary": "#004ac6",
+                        "tertiary-fixed": "#ffdbcd",
+                        "primary-container": "#2563eb",
+                        "surface-container-highest": "#e1e2ed",
+                        "inverse-surface": "#2e3039",
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#f0f0fb",
+                        "on-surface-variant": "#434655",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "tertiary-container": "#bc4800",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-surface": "#191b23"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1.25rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "2xl": "48px",
+                        "container-max": "1280px",
+                        "lg": "24px",
+                        "base": "8px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "3xl": "64px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chart-container { position: relative; width: 100%; height: 260px; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- Side Navigation Shell -->
+<aside class="w-[280px] h-screen sticky left-0 top-0 flex flex-col border-r border-outline-variant bg-surface-container-low transition-all duration-200 ease-in-out">
+<div class="p-lg">
+<div class="flex items-center gap-md mb-3xl">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">dataset</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">SIBI Admin</h1>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Dataset Management</p>
+</div>
+</div>
+<nav class="space-y-sm">
+<!-- Dashboard Active Tab -->
+<a class="flex items-center gap-md px-md py-sm rounded-xl text-primary font-bold bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md text-body-md">Users</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-body-md text-body-md">Datasets</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">rule</span>
+<span class="font-body-md text-body-md">Requirements</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-lg space-y-sm">
+<button class="w-full py-md bg-primary text-on-primary rounded-2xl font-label-md text-label-md flex items-center justify-center gap-sm shadow-lg hover:brightness-110 transition-all">
+<span class="material-symbols-outlined">add</span>
+                New Dataset
+            </button>
+<div class="pt-lg border-t border-outline-variant">
+<a class="flex items-center gap-md px-md py-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col min-w-0">
+<!-- Top App Bar Shell -->
+<header class="flex justify-between items-center w-full px-lg sticky top-0 z-50 h-16 border-b border-outline-variant bg-surface/80 backdrop-blur-md">
+<div class="flex items-center gap-lg">
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline">search</span>
+<input class="pl-10 pr-md py-xs rounded-xl border border-outline-variant bg-surface-container-low text-label-md focus:ring-2 focus:ring-primary focus:outline-none w-64" placeholder="Search data, users..." type="text"/>
+</div>
+<nav class="hidden md:flex gap-lg ml-md">
+<a class="font-label-md text-label-md text-primary border-b-2 border-primary pb-1" href="#">Overview</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Analytics</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Audit Log</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-base text-on-surface-variant hover:bg-surface-container-high rounded-full transition-transform active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="flex items-center gap-sm pl-md border-l border-outline-variant">
+<div class="text-right">
+<p class="font-label-md text-label-md font-bold">Admin SIBI</p>
+<p class="text-[10px] text-on-surface-variant leading-none">Super Admin</p>
+</div>
+<img class="w-8 h-8 rounded-full bg-primary-fixed" data-alt="A professional headshot of a modern digital administrator avatar, featuring clean lines, a friendly expression, and wearing a sleek tech-focused outfit. The image has a soft studio lighting with a pastel blue background, fitting the minimalist and trustworthy aesthetic of the SIBI platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIgMhQZfJ1JS5dPdIhXnR1LAJHiABtpdF-VvMGnSLVS4L6smDh-pVnWhlzuQNUqwYlUmP1MI2g1wd7TSfwSN55_SjgqgzO_y60c4qiwmsReIeysdaDsquDThuDe4hJlH0vlYCK53GmuLrCXjRVgca_K4DHAqfioO27NpnahcgLBeHUg5bk9iBOvLPSGxbWsT6MlpWNDkWps2AjEqYbsmvbZDtgx9FtSaOLlMBGJXINoP8slCI_SsBlXw"/>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="p-lg max-w-[1400px] mx-auto w-full space-y-lg">
+<!-- Breadcrumbs & Title -->
+<div class="flex flex-col gap-xs">
+<div class="flex items-center gap-xs text-on-surface-variant text-label-sm">
+<span class="hover:text-primary cursor-pointer">Platform</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-bold">Dashboard</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Dashboard Administrator</h2>
+</div>
+<!-- Statistics Grid (4x2) -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md">
+<!-- Row 1 -->
+<div class="bg-surface border border-outline-variant p-md rounded-2xl shadow-sm hover:shadow-md transition-all flex items-start gap-md">
+<div class="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+</div>
+<div>
+<p class="text-on-surface-variant text-label-md">Total Pengguna</p>
+<h3 class="text-headline-md font-bold">337</h3>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant p-md rounded-2xl shadow-sm hover:shadow-md transition-all flex items-start gap-md">
+<div class="w-12 h-12 rounded-xl bg-secondary-fixed flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person_edit</span>
+</div>
+<div>
+<p class="text-on-surface-variant text-label-md">Kontributor</p>
+<h3 class="text-headline-md font-bold">325</h3>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant p-md rounded-2xl shadow-sm hover:shadow-md transition-all flex items-start gap-md">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">fact_check</span>
+</div>
+<div>
+<p class="text-on-surface-variant text-label-md">Validator</p>
+<h3 class="text-headline-md font-bold">12</h3>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant p-md rounded-2xl shadow-sm hover:shadow-md transition-all flex items-start gap-md">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">video_library</span>
+</div>
+<div>
+<p class="text-on-surface-variant text-label-md">Video Dataset</p>
+<h3 class="text-headline-md font-bold">1.250</h3>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="bg-surface border border-outline-variant p-md rounded-2xl shadow-sm hover:shadow-md transition-all">
+<div class="flex justify-between items-start mb-sm">
+<span class="px-sm py-xs bg-yellow-100 text-yellow-800 text-[10px] font-bold rounded-full uppercase tracking-wider">Menunggu AI</span>
+<span class="material-symbols-outlined text-yellow-600">psychology</span>
+</div>
+<p class="text-on-surface-variant text-label-md">Processing Status</p>
+<h3 class="text-headline-md font-bold">15</h3>
+</div>
+<div class="bg-surface border border-outline-variant p-md rounded-2xl shadow-sm hover:shadow-md transition-all">
+<div class="flex justify-between items-start mb-sm">
+<span class="px-sm py-xs bg-blue-100 text-blue-800 text-[10px] font-bold rounded-full uppercase tracking-wider">Menunggu Validator</span>
+<span class="material-symbols-outlined text-blue-600">pending_actions</span>
+</div>
+<p class="text-on-surface-variant text-label-md">Pending Approval</p>
+<h3 class="text-headline-md font-bold">24</h3>
+</div>
+<div class="bg-surface border border-outline-variant p-md rounded-2xl shadow-sm hover:shadow-md transition-all">
+<div class="flex justify-between items-start mb-sm">
+<span class="px-sm py-xs bg-green-100 text-green-800 text-[10px] font-bold rounded-full uppercase tracking-wider">Dataset Valid</span>
+<span class="material-symbols-outlined text-green-600">verified</span>
+</div>
+<p class="text-on-surface-variant text-label-md">Approved Assets</p>
+<h3 class="text-headline-md font-bold">980</h3>
+</div>
+<div class="bg-surface border border-outline-variant p-md rounded-2xl shadow-sm hover:shadow-md transition-all">
+<div class="flex justify-between items-start mb-sm">
+<span class="px-sm py-xs bg-red-100 text-red-800 text-[10px] font-bold rounded-full uppercase tracking-wider">Tidak Valid</span>
+<span class="material-symbols-outlined text-red-600">error</span>
+</div>
+<p class="text-on-surface-variant text-label-md">Rejected Assets</p>
+<h3 class="text-headline-md font-bold">270</h3>
+</div>
+</section>
+<!-- Charts & Timeline Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Upload Dataset Chart (Bento Card Style) -->
+<div class="lg:col-span-2 bg-surface border border-outline-variant rounded-2xl p-lg">
+<div class="flex justify-between items-center mb-xl">
+<div>
+<h4 class="font-title-lg text-title-lg text-on-surface">Upload Dataset Bulanan</h4>
+<p class="text-label-md text-on-surface-variant">Data pertumbuhan unggahan video tahun 2024</p>
+</div>
+<button class="flex items-center gap-xs px-md py-xs border border-outline-variant rounded-xl text-label-md hover:bg-surface-container-low">
+<span>Jan - Jul</span>
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+</button>
+</div>
+<div class="chart-container flex items-end justify-between gap-base px-base">
+<!-- Simulated Bar/Line Chart -->
+<div class="flex-1 flex flex-col items-center gap-sm">
+<div class="w-full bg-primary-fixed rounded-t-lg transition-all duration-700 h-[30%] hover:brightness-95"></div>
+<span class="text-label-sm text-on-surface-variant">Jan</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-sm">
+<div class="w-full bg-primary-fixed rounded-t-lg transition-all duration-700 h-[45%] hover:brightness-95"></div>
+<span class="text-label-sm text-on-surface-variant">Feb</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-sm">
+<div class="w-full bg-primary-fixed rounded-t-lg transition-all duration-700 h-[40%] hover:brightness-95"></div>
+<span class="text-label-sm text-on-surface-variant">Mar</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-sm">
+<div class="w-full bg-primary-fixed rounded-t-lg transition-all duration-700 h-[65%] hover:brightness-95"></div>
+<span class="text-label-sm text-on-surface-variant">Apr</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-sm">
+<div class="w-full bg-primary-fixed rounded-t-lg transition-all duration-700 h-[55%] hover:brightness-95"></div>
+<span class="text-label-sm text-on-surface-variant">Mei</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-sm">
+<div class="w-full bg-primary rounded-t-lg transition-all duration-700 h-[85%] hover:brightness-110"></div>
+<span class="text-label-sm font-bold text-primary">Jun</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-sm">
+<div class="w-full bg-primary-fixed rounded-t-lg transition-all duration-700 h-[75%] hover:brightness-95"></div>
+<span class="text-label-sm text-on-surface-variant">Jul</span>
+</div>
+</div>
+</div>
+<!-- Pie Chart Column -->
+<div class="bg-surface border border-outline-variant rounded-2xl p-lg">
+<h4 class="font-title-lg text-title-lg text-on-surface mb-xl">Status Dataset</h4>
+<div class="relative flex items-center justify-center h-48 mb-lg">
+<svg class="w-40 h-40 transform -rotate-90" viewbox="0 0 100 100">
+<!-- Valid: 78% -->
+<circle class="transition-all duration-1000" cx="50" cy="50" fill="transparent" r="40" stroke="#22c55e" stroke-dasharray="196 55" stroke-dashoffset="0" stroke-width="12"></circle>
+<!-- Tidak Valid: 22% -->
+<circle class="transition-all duration-1000" cx="50" cy="50" fill="transparent" r="40" stroke="#ef4444" stroke-dasharray="55 196" stroke-dashoffset="-196" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-headline-md font-bold">1.250</span>
+<span class="text-label-sm text-on-surface-variant">Total</span>
+</div>
+</div>
+<div class="space-y-sm">
+<div class="flex items-center justify-between text-label-md">
+<div class="flex items-center gap-sm"><div class="w-3 h-3 rounded-full bg-green-500"></div> Valid</div>
+<span class="font-bold">980</span>
+</div>
+<div class="flex items-center justify-between text-label-md">
+<div class="flex items-center gap-sm"><div class="w-3 h-3 rounded-full bg-red-500"></div> Tidak Valid</div>
+<span class="font-bold">270</span>
+</div>
+<div class="flex items-center justify-between text-label-md">
+<div class="flex items-center gap-sm"><div class="w-3 h-3 rounded-full bg-yellow-500"></div> Menunggu AI</div>
+<span class="font-bold">15</span>
+</div>
+<div class="flex items-center justify-between text-label-md">
+<div class="flex items-center gap-sm"><div class="w-3 h-3 rounded-full bg-blue-500"></div> Menunggu Validator</div>
+<span class="font-bold">24</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activity Timeline -->
+<section class="bg-surface border border-outline-variant rounded-2xl p-lg">
+<div class="flex justify-between items-center mb-xl">
+<h4 class="font-title-lg text-title-lg text-on-surface">Aktivitas Terkini</h4>
+<button class="text-primary font-label-md text-label-md hover:underline">Lihat Semua</button>
+</div>
+<div class="relative space-y-xl before:absolute before:left-[19px] before:top-2 before:bottom-2 before:w-[2px] before:bg-outline-variant">
+<!-- Activity 1 -->
+<div class="relative flex gap-lg items-start">
+<div class="z-10 w-10 h-10 rounded-full bg-primary-fixed border-4 border-surface flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">upload</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-body-md text-body-md text-on-surface"><span class="font-bold">Kontributor</span> mengunggah video <span class="text-primary font-semibold">Huruf A</span></p>
+<p class="text-label-sm text-on-surface-variant">Menunggu antrian pemrosesan AI</p>
+</div>
+<span class="text-label-sm text-outline">Hari ini, 10:24</span>
+</div>
+</div>
+</div>
+<!-- Activity 2 -->
+<div class="relative flex gap-lg items-start">
+<div class="z-10 w-10 h-10 rounded-full bg-green-100 border-4 border-surface flex items-center justify-center text-green-700">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-body-md text-body-md text-on-surface"><span class="font-bold">Validator</span> menyetujui video <span class="text-primary font-semibold">Angka Lima</span></p>
+<p class="text-label-sm text-on-surface-variant">Asset telah dipindahkan ke dataset valid</p>
+</div>
+<span class="text-label-sm text-outline">Hari ini, 08:45</span>
+</div>
+</div>
+</div>
+<!-- Activity 3 -->
+<div class="relative flex gap-lg items-start">
+<div class="z-10 w-10 h-10 rounded-full bg-blue-100 border-4 border-surface flex items-center justify-center text-blue-700">
+<span class="material-symbols-outlined text-[20px]">add_task</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-body-md text-body-md text-on-surface"><span class="font-bold">Admin</span> menambahkan kebutuhan dataset baru</p>
+<p class="text-label-sm text-on-surface-variant">Update persyaratan untuk kategori Alfabet</p>
+</div>
+<span class="text-label-sm text-outline">Kemarin, 16:20</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<script>
+        // Micro-interactions and effects
+        document.querySelectorAll('button, a').forEach(elem => {
+            elem.addEventListener('mousedown', () => {
+                elem.style.transform = 'scale(0.98)';
+            });
+            elem.addEventListener('mouseup', () => {
+                elem.style.transform = '';
+            });
+            elem.addEventListener('mouseleave', () => {
+                elem.style.transform = '';
+            });
+        });
+
+        // Hover animation for bar chart
+        const bars = document.querySelectorAll('.chart-container > div > div');
+        bars.forEach(bar => {
+            bar.addEventListener('mouseenter', () => {
+                bar.style.filter = 'brightness(1.1)';
+                bar.style.transform = 'translateY(-4px)';
+            });
+            bar.addEventListener('mouseleave', () => {
+                bar.style.filter = '';
+                bar.style.transform = '';
+            });
+        });
+    </script>
+</body></html>

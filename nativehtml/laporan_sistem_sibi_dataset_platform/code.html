@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SIBI Administrator - Laporan Sistem</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "tertiary": "#943700",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#fefcff",
+                        "background": "#faf8ff",
+                        "surface-bright": "#faf8ff",
+                        "on-secondary-fixed": "#001a42",
+                        "surface": "#faf8ff",
+                        "secondary": "#0058be",
+                        "surface-variant": "#e1e2ed",
+                        "secondary-container": "#2170e4",
+                        "primary-fixed": "#dbe1ff",
+                        "secondary-fixed": "#d8e2ff",
+                        "on-secondary-fixed-variant": "#004395",
+                        "on-primary-fixed": "#00174b",
+                        "surface-dim": "#d9d9e5",
+                        "surface-container-high": "#e7e7f3",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-tint": "#0053db",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "outline-variant": "#c3c6d7",
+                        "on-background": "#191b23",
+                        "on-tertiary-fixed": "#360f00",
+                        "surface-container-low": "#f3f3fe",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "surface-container": "#ededf9",
+                        "on-tertiary-container": "#ffede6",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#eeefff",
+                        "outline": "#737686",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "primary": "#004ac6",
+                        "tertiary-fixed": "#ffdbcd",
+                        "primary-container": "#2563eb",
+                        "surface-container-highest": "#e1e2ed",
+                        "inverse-surface": "#2e3039",
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#f0f0fb",
+                        "on-surface-variant": "#434655",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "tertiary-container": "#bc4800",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-surface": "#191b23"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "2xl": "48px",
+                        "container-max": "1280px",
+                        "lg": "24px",
+                        "base": "8px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "3xl": "64px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #faf8ff;
+            color: #191b23;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #e2e8f0;
+        }
+        .chart-bar {
+            transition: height 1s ease-in-out;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- Sidebar Component (Anchored from JSON) -->
+<aside class="w-[280px] h-screen sticky left-0 top-0 flex flex-col bg-surface-container-low border-r border-outline-variant z-50">
+<div class="p-lg flex items-center gap-base">
+<span class="material-symbols-outlined text-primary text-[32px]">database</span>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-primary">SIBI Admin</span>
+<span class="font-body-md text-label-sm text-on-surface-variant">Dataset Management</span>
+</div>
+</div>
+<nav class="flex-1 px-md mt-md flex flex-col gap-xs">
+<a class="flex items-center gap-md px-md py-3 rounded-xl transition-all duration-200 hover:bg-surface-container-high text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 rounded-xl transition-all duration-200 hover:bg-surface-container-high text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md">Users</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 rounded-xl transition-all duration-200 hover:bg-surface-container-high text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-body-md">Datasets</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 rounded-xl transition-all duration-200 hover:bg-surface-container-high text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">rule</span>
+<span class="font-body-md">Requirements</span>
+</a>
+<!-- Active State: Reports (Laporan) -->
+<a class="flex items-center gap-md px-md py-3 rounded-xl bg-surface-container-high text-primary font-bold" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-body-md">Reports</span>
+</a>
+</nav>
+<div class="p-md border-t border-outline-variant flex flex-col gap-xs">
+<a class="flex items-center gap-md px-md py-3 rounded-xl transition-all duration-200 hover:bg-surface-container-high text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 rounded-xl transition-all duration-200 hover:bg-surface-container-high text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- TopAppBar (Anchored from JSON) -->
+<header class="flex justify-between items-center w-full px-lg sticky top-0 z-40 h-16 bg-surface/80 backdrop-blur-md border-b border-outline-variant">
+<div class="flex items-center gap-xl">
+<span class="font-title-lg text-title-lg font-black text-on-surface">SIBI Dataset Platform</span>
+<div class="hidden md:flex items-center gap-lg ml-md">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary" href="#">Overview</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary" href="#">Analytics</a>
+<a class="font-label-md text-label-md text-primary border-b-2 border-primary pb-1" href="#">Audit Log</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full w-64 focus:ring-2 focus:ring-primary text-label-md" placeholder="Cari laporan..." type="text"/>
+</div>
+<button class="p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border-2 border-surface shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a senior system administrator in a clean office setting, featuring high-fidelity lighting and a modern tech aesthetic. The individual has a confident expression, symbolizing trust and technical expertise. The background is slightly blurred with soft cool tones, consistent with a premium enterprise UI design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBTy2HqNuH9KNiJw_nWEVDei6Ukc0_zyFOevdOHonEI_s69RqMOMaFY8K8IcZP-H-IvkzEW6AV6i205VQxNsH_fgShiXtJeTWWlCOUs-dhIdV9po0_ugs5FJlCdMHAzncLfcfsG3_ANENzNbUkH2ZQWINqGqKH_GZZG0NLzIOMRLYUiIdGOxRXx3-lrsaMoPS6-Xw1IkOx9GwvAsw4NmnAZPBeqoJn0MqtotoXEUOpDQ07gFLCoSdN1w"/>
+</div>
+</div>
+</header>
+<div class="p-xl max-w-container-max mx-auto w-full space-y-xl">
+<!-- Header Section -->
+<div class="flex flex-col gap-xs">
+<nav class="flex items-center gap-2 text-label-sm text-outline">
+<a class="hover:text-primary" href="#">Dashboard</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-on-surface font-semibold">Laporan</span>
+</nav>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mt-base">Laporan Sistem</h1>
+</div>
+<!-- Filter Row -->
+<div class="glass-card p-lg rounded-2xl flex flex-wrap items-center justify-between gap-lg">
+<div class="flex flex-wrap items-center gap-md">
+<div class="flex flex-col gap-1">
+<label class="text-label-sm text-outline px-1">Rentang Tanggal</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px]">calendar_today</span>
+<input class="pl-10 pr-4 py-2 bg-white border border-outline-variant rounded-xl text-label-md w-56" type="text" value="01 Jan 2024 - 31 Jan 2024"/>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="text-label-sm text-outline px-1">Kategori</label>
+<select class="py-2 px-4 bg-white border border-outline-variant rounded-xl text-label-md w-40">
+<option>Semua Kategori</option>
+<option>Dataset</option>
+<option>Audit</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="text-label-sm text-outline px-1">Status</label>
+<select class="py-2 px-4 bg-white border border-outline-variant rounded-xl text-label-md w-32">
+<option>Semua</option>
+<option>Valid</option>
+<option>Pending</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="text-label-sm text-outline px-1">Role</label>
+<select class="py-2 px-4 bg-white border border-outline-variant rounded-xl text-label-md w-32">
+<option>Semua</option>
+<option>Admin</option>
+<option>Contributor</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-sm mt-auto">
+<button class="flex items-center gap-xs px-4 py-2 border border-outline-variant rounded-xl hover:bg-surface-container-high transition-colors text-label-md">
+<span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+                        PDF
+                    </button>
+<button class="flex items-center gap-xs px-4 py-2 border border-outline-variant rounded-xl hover:bg-surface-container-high transition-colors text-label-md">
+<span class="material-symbols-outlined text-[20px]">table_view</span>
+                        Excel
+                    </button>
+<button class="flex items-center gap-xs px-4 py-2 bg-primary text-on-primary rounded-xl hover:bg-primary-container transition-colors text-label-md font-semibold">
+<span class="material-symbols-outlined text-[20px]">print</span>
+                        Cetak
+                    </button>
+</div>
+</div>
+<!-- Summary Cards (Bento Style) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg">
+<div class="glass-card p-lg rounded-2xl flex flex-col justify-between hover:shadow-md transition-all duration-300">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined p-2 bg-primary-fixed text-primary rounded-lg">group</span>
+<span class="text-primary font-bold text-label-sm">+12%</span>
+</div>
+<div class="mt-md">
+<h3 class="text-outline text-label-md">Total Pengguna</h3>
+<p class="font-headline-md text-headline-md text-on-surface">1,284</p>
+</div>
+</div>
+<div class="glass-card p-lg rounded-2xl flex flex-col justify-between hover:shadow-md transition-all duration-300">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined p-2 bg-secondary-fixed text-secondary rounded-lg">cloud_upload</span>
+<span class="text-secondary font-bold text-label-sm">+5.4%</span>
+</div>
+<div class="mt-md">
+<h3 class="text-outline text-label-md">Total Upload</h3>
+<p class="font-headline-md text-headline-md text-on-surface">43,102</p>
+</div>
+</div>
+<div class="glass-card p-lg rounded-2xl flex flex-col justify-between hover:shadow-md transition-all duration-300">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined p-2 bg-green-100 text-green-700 rounded-lg">verified</span>
+<span class="text-green-700 font-bold text-label-sm">94%</span>
+</div>
+<div class="mt-md">
+<h3 class="text-outline text-label-md">Dataset Valid</h3>
+<p class="font-headline-md text-headline-md text-on-surface">40,515</p>
+</div>
+</div>
+<div class="glass-card p-lg rounded-2xl flex flex-col justify-between hover:shadow-md transition-all duration-300">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined p-2 bg-error-container text-error rounded-lg">cancel</span>
+<span class="text-error font-bold text-label-sm">6%</span>
+</div>
+<div class="mt-md">
+<h3 class="text-outline text-label-md">Tidak Valid</h3>
+<p class="font-headline-md text-headline-md text-on-surface">2,587</p>
+</div>
+</div>
+</div>
+<!-- Charts Row -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Bar Chart: Upload Dataset -->
+<div class="glass-card p-lg rounded-2xl lg:col-span-1">
+<div class="flex items-center justify-between mb-xl">
+<h3 class="font-title-lg text-title-lg text-on-surface">Upload Dataset</h3>
+<span class="material-symbols-outlined text-outline cursor-help" title="Data upload harian minggu ini">info</span>
+</div>
+<div class="h-48 flex items-end justify-between gap-base px-2">
+<div class="flex-1 bg-primary-fixed hover:bg-primary transition-colors rounded-t-md chart-bar" style="height: 45%"></div>
+<div class="flex-1 bg-primary-fixed hover:bg-primary transition-colors rounded-t-md chart-bar" style="height: 70%"></div>
+<div class="flex-1 bg-primary-fixed hover:bg-primary transition-colors rounded-t-md chart-bar" style="height: 60%"></div>
+<div class="flex-1 bg-primary-container hover:bg-primary transition-colors rounded-t-md chart-bar" style="height: 95%"></div>
+<div class="flex-1 bg-primary-fixed hover:bg-primary transition-colors rounded-t-md chart-bar" style="height: 50%"></div>
+<div class="flex-1 bg-primary-fixed hover:bg-primary transition-colors rounded-t-md chart-bar" style="height: 80%"></div>
+<div class="flex-1 bg-primary-fixed hover:bg-primary transition-colors rounded-t-md chart-bar" style="height: 30%"></div>
+</div>
+<div class="flex justify-between mt-md text-label-sm text-outline">
+<span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span>
+</div>
+</div>
+<!-- Line Chart: Validasi Dataset -->
+<div class="glass-card p-lg rounded-2xl lg:col-span-1 relative overflow-hidden">
+<div class="flex items-center justify-between mb-xl">
+<h3 class="font-title-lg text-title-lg text-on-surface">Validasi Dataset</h3>
+<span class="material-symbols-outlined text-outline">trending_up</span>
+</div>
+<!-- Abstract Line Chart Visualization -->
+<div class="h-48 relative px-2">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+<path d="M0,80 Q20,20 40,50 T80,30 T100,10" fill="none" stroke="#2563eb" stroke-linecap="round" stroke-width="3"></path>
+<path d="M0,80 Q20,20 40,50 T80,30 T100,10 V100 H0 Z" fill="url(#grad1)" opacity="0.1"></path>
+<defs>
+<lineargradient id="grad1" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#2563eb;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#ffffff;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="absolute top-1/2 left-1/2 w-3 h-3 bg-primary rounded-full border-2 border-white shadow-sm -translate-x-1/2 -translate-y-1/2"></div>
+</div>
+<div class="mt-md text-center">
+<span class="text-label-sm text-outline">Tingkat akurasi validasi: <span class="text-on-surface font-bold">98.2%</span></span>
+</div>
+</div>
+<!-- Pie Chart: Role Pengguna -->
+<div class="glass-card p-lg rounded-2xl lg:col-span-1">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-xl">Role Pengguna</h3>
+<div class="flex items-center justify-center gap-xl h-48">
+<div class="relative w-32 h-32 rounded-full border-[16px] border-primary-fixed border-t-primary border-r-secondary">
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="font-bold text-headline-md">1.2k</span>
+</div>
+</div>
+<div class="flex flex-col gap-sm">
+<div class="flex items-center gap-xs">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-label-sm text-outline">Admin (15%)</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="w-3 h-3 rounded-full bg-secondary"></span>
+<span class="text-label-sm text-outline">Contrib (35%)</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="w-3 h-3 rounded-full bg-primary-fixed"></span>
+<span class="text-label-sm text-outline">User (50%)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Table Laporan -->
+<div class="glass-card rounded-2xl overflow-hidden shadow-sm">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center bg-white">
+<h3 class="font-title-lg text-title-lg text-on-surface">Log Aktivitas Terbaru</h3>
+<div class="flex items-center gap-md">
+<div class="flex items-center bg-surface-container-low rounded-lg p-1">
+<button class="px-3 py-1 bg-white shadow-sm rounded-md text-label-sm font-semibold">Semua</button>
+<button class="px-3 py-1 text-label-sm text-outline hover:text-on-surface">Penting</button>
+</div>
+<button class="p-2 text-outline hover:text-primary">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-label-sm text-outline uppercase tracking-wider">
+<tr>
+<th class="px-lg py-4 font-bold">Tanggal</th>
+<th class="px-lg py-4 font-bold">Nama</th>
+<th class="px-lg py-4 font-bold">Aktivitas</th>
+<th class="px-lg py-4 font-bold">Role</th>
+<th class="px-lg py-4 font-bold">Status</th>
+<th class="px-lg py-4 font-bold text-center">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-lg py-4">
+<div class="flex flex-col">
+<span class="text-label-md text-on-surface font-medium">24 Jan 2024</span>
+<span class="text-label-sm text-outline">14:20 WIB</span>
+</div>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-md">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary text-xs">AM</div>
+<span class="text-label-md text-on-surface">Andi Mahendra</span>
+</div>
+</td>
+<td class="px-lg py-4 text-label-md text-on-surface-variant">Upload Dataset "Isyarat Dasar v2"</td>
+<td class="px-lg py-4">
+<span class="px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant text-label-sm">Contributor</span>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-xs text-green-600 font-medium text-label-sm">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                        Berhasil
+                                    </div>
+</td>
+<td class="px-lg py-4 text-center">
+<button class="opacity-0 group-hover:opacity-100 p-2 hover:bg-primary-fixed rounded-lg text-primary transition-all">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-lg py-4">
+<div class="flex flex-col">
+<span class="text-label-md text-on-surface font-medium">24 Jan 2024</span>
+<span class="text-label-sm text-outline">12:10 WIB</span>
+</div>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-md">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary text-xs">BP</div>
+<span class="text-label-md text-on-surface">Budi Pratama</span>
+</div>
+</td>
+<td class="px-lg py-4 text-label-md text-on-surface-variant">Validasi dataset massal (120 item)</td>
+<td class="px-lg py-4">
+<span class="px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-label-sm">Administrator</span>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-xs text-green-600 font-medium text-label-sm">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                        Berhasil
+                                    </div>
+</td>
+<td class="px-lg py-4 text-center">
+<button class="opacity-0 group-hover:opacity-100 p-2 hover:bg-primary-fixed rounded-lg text-primary transition-all">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-lg py-4">
+<div class="flex flex-col">
+<span class="text-label-md text-on-surface font-medium">23 Jan 2024</span>
+<span class="text-label-sm text-outline">09:45 WIB</span>
+</div>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-md">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary text-xs">SN</div>
+<span class="text-label-md text-on-surface">Siti Nurhaliza</span>
+</div>
+</td>
+<td class="px-lg py-4 text-label-md text-on-surface-variant">Gagal upload dataset "Abjad SIBI"</td>
+<td class="px-lg py-4">
+<span class="px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant text-label-sm">Contributor</span>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-xs text-error font-medium text-label-sm">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">error</span>
+                                        Gagal
+                                    </div>
+</td>
+<td class="px-lg py-4 text-center">
+<button class="opacity-0 group-hover:opacity-100 p-2 hover:bg-primary-fixed rounded-lg text-primary transition-all">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-md bg-white border-t border-outline-variant flex justify-between items-center">
+<span class="text-label-sm text-outline">Menampilkan 1-10 dari 432 data</span>
+<div class="flex items-center gap-xs">
+<button class="p-2 border border-outline-variant rounded-lg hover:bg-surface-container-low disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary rounded-lg text-label-sm font-bold">1</button>
+<button class="w-8 h-8 flex items-center justify-center hover:bg-surface-container-low rounded-lg text-label-sm">2</button>
+<button class="w-8 h-8 flex items-center justify-center hover:bg-surface-container-low rounded-lg text-label-sm">3</button>
+<span class="px-1">...</span>
+<button class="p-2 border border-outline-variant rounded-lg hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<footer class="p-lg text-center text-outline text-label-sm mt-auto">
+            © 2024 SIBI Dataset Management Platform. Hak Cipta Dilindungi.
+        </footer>
+</main>
+<script>
+        // Micro-interaction for charts: randomize bar heights on click for demonstration
+        document.querySelectorAll('.chart-bar').forEach(bar => {
+            bar.addEventListener('mouseenter', () => {
+                bar.style.opacity = '0.8';
+            });
+            bar.addEventListener('mouseleave', () => {
+                bar.style.opacity = '1';
+            });
+        });
+    </script>
+</body></html>

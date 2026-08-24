@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profil Kontributor - SIBI Dataset</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#faf8ff",
+                    "on-secondary-container": "#fefcff",
+                    "tertiary-fixed": "#ffdbcd",
+                    "on-secondary-fixed": "#001a42",
+                    "on-tertiary-fixed": "#360f00",
+                    "on-background": "#191b23",
+                    "surface-container-highest": "#e1e2ed",
+                    "surface-container-low": "#f3f3fe",
+                    "inverse-on-surface": "#f0f0fb",
+                    "on-secondary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "surface-dim": "#d9d9e5",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c3c6d7",
+                    "outline": "#737686",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "on-primary-fixed": "#00174b",
+                    "tertiary-container": "#bc4800",
+                    "secondary-container": "#2170e4",
+                    "on-primary-container": "#eeefff",
+                    "on-tertiary-container": "#ffede6",
+                    "inverse-primary": "#b4c5ff",
+                    "primary": "#004ac6",
+                    "primary-fixed": "#dbe1ff",
+                    "surface-bright": "#faf8ff",
+                    "surface-tint": "#0053db",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "on-error-container": "#93000a",
+                    "surface-container": "#ededf9",
+                    "on-surface-variant": "#434655",
+                    "on-surface": "#191b23",
+                    "error": "#ba1a1a",
+                    "surface-container-high": "#e7e7f3",
+                    "on-tertiary": "#ffffff",
+                    "surface": "#faf8ff",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "secondary-fixed": "#d8e2ff",
+                    "on-error": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "primary-container": "#2563eb",
+                    "inverse-surface": "#2e3039"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "32px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "container-max": "1280px",
+                    "3xl": "64px",
+                    "xs": "4px",
+                    "2xl": "48px",
+                    "gutter": "24px",
+                    "sm": "8px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "title-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-tab-indicator {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #004ac6;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #E2E8F0;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen overflow-x-hidden">
+<!-- SideNavBar Shell -->
+<aside class="w-72 h-full fixed left-0 top-0 bg-surface dark:bg-inverse-surface shadow-sm z-50 flex flex-col py-md px-lg overflow-y-auto" id="sidebar">
+<div class="mb-3xl">
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">SIBI Dataset</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Contributor Portal</p>
+</div>
+<nav class="flex-1 space-y-sm">
+<a class="flex items-center gap-md p-md rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-md p-md rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="dataset">dataset</span>
+<span>Kebutuhan Dataset</span>
+</a>
+<a class="flex items-center gap-md p-md rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="cloud_upload">cloud_upload</span>
+<span>Upload Dataset</span>
+</a>
+<a class="flex items-center gap-md p-md rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+<span>Status Validasi</span>
+</a>
+<!-- Active Navigation for Profile -->
+<a class="flex items-center gap-md p-md rounded-xl text-primary dark:text-primary-fixed font-bold border-r-4 border-primary dark:border-primary-fixed bg-surface-container-high scale-[0.98] transition-transform duration-150 font-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+<span>Profil</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant pt-md">
+<button class="w-full flex items-center gap-md p-md rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-md text-left">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Keluar</span>
+</button>
+</div>
+</aside>
+<!-- TopAppBar Shell -->
+<header class="flex justify-between items-center h-16 px-xl ml-72 w-[calc(100%-288px)] fixed top-0 backdrop-blur-md bg-surface/80 dark:bg-inverse-surface/80 border-b border-outline-variant z-40">
+<h2 class="font-title-lg text-title-lg font-bold text-on-surface dark:text-inverse-on-surface">SIBI Dataset</h2>
+<div class="flex items-center gap-lg">
+<div class="flex items-center gap-md">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<div class="flex items-center gap-sm pl-lg border-l border-outline-variant">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="A professional profile portrait of a Southeast Asian man in his 30s with a friendly expression. He is wearing a clean, modern navy blue shirt. The background is a soft-focus office environment with plenty of natural light and minimalist decor, reflecting a clean SaaS aesthetic with bright blue and white tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBSDDxhwSxkCvKeFxzryojgLDQb9wfnEZa5tCAL461-HrrDNPY_edK8IIkv-b7MPoX-393gmUrf3wRTyvddC8_rom9y3mdjL5PAoh8EYHrThQ4SGj4kV--9uQpvvdZMQbHPdDr13CRa_FXb0-2Rx6NBgTY_aszKsuTKR2nkWDNYsD1e0DN5OrlOtBTzaqQgSzQUr6Ae5fGJcw2PQM2OwsWBw4yWuURkzwMijOhFvVdZdSXqYjlXy3Yew"/>
+<span class="font-label-md text-on-surface hidden md:block">Budi Santoso</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-72 pt-16 min-h-screen">
+<div class="max-w-5xl mx-auto px-xl py-xl space-y-xl">
+<!-- Profile Header Card -->
+<section class="glass-card rounded-[20px] p-lg flex flex-col md:flex-row items-center md:items-start gap-xl shadow-sm">
+<div class="relative group">
+<img class="w-32 h-32 rounded-3xl object-cover border-4 border-white shadow-lg" data-alt="Close-up profile photo of Budi Santoso, a contributor for SIBI Platform. He has a professional and approachable look, wearing a smart casual outfit. The lighting is soft and high-key, emphasizing a clean and modern professional identity within a minimalist tech environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxHb3gVhhhgy45qnW8CEc8T23C9QOZzOrn6YAXptmC7OqtNzly7vFrMUKd3jydhKJ-AC8If4wn_OWiQshhRUGR91EBR8HggvVaud1uZk8g6HltJJ4yVyRrx5EMel75VGeIM-IUQZcKC9IkgDwDNzF1EcsXFsJJ9DeZjilTzK9cSH7TKgm9biOGXaQ2nhRkoBjEm6XU2LvGgJ42R-BlrZz98ZIjy5nxFf146biYudAuYVgSVw95YaIMCQ"/>
+<button class="absolute -bottom-2 -right-2 bg-primary text-white p-2 rounded-xl shadow-md hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+</div>
+<div class="flex-1 text-center md:text-left">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-md mb-md">
+<div>
+<h1 class="font-headline-md text-headline-md text-on-surface">Budi Santoso</h1>
+<p class="font-body-md text-on-surface-variant">budi@email.com</p>
+</div>
+<div class="flex flex-wrap justify-center md:justify-start gap-sm">
+<span class="px-md py-1 bg-primary/10 text-primary font-label-md rounded-full ring-1 ring-primary/20">Kontributor</span>
+<span class="px-md py-1 bg-surface-container-high text-on-surface-variant font-label-md rounded-full">Aktif</span>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-md pt-md border-t border-outline-variant">
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md">Bergabung: 1 Januari 2024</span>
+</div>
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="verified_user">verified_user</span>
+<span class="font-label-md">Status: Terverifikasi</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Tab Navigation & Content -->
+<div class="space-y-lg">
+<!-- Tabs -->
+<div class="flex border-b border-outline-variant overflow-x-auto no-scrollbar">
+<button class="px-xl py-md font-label-md text-primary font-bold relative transition-colors whitespace-nowrap" id="tab-informasi" onclick="switchTab('informasi')">
+                        Informasi Pribadi
+                        <div class="active-tab-indicator" id="indicator-informasi"></div>
+</button>
+<button class="px-xl py-md font-label-md text-on-surface-variant hover:text-primary transition-colors relative whitespace-nowrap" id="tab-keamanan" onclick="switchTab('keamanan')">
+                        Keamanan
+                        <div class="active-tab-indicator hidden" id="indicator-keamanan"></div>
+</button>
+<button class="px-xl py-md font-label-md text-on-surface-variant hover:text-primary transition-colors relative whitespace-nowrap" id="tab-riwayat" onclick="switchTab('riwayat')">
+                        Riwayat Aktivitas
+                        <div class="active-tab-indicator hidden" id="indicator-riwayat"></div>
+</button>
+</div>
+<!-- Tab Panels -->
+<div class="pb-xl">
+<!-- Informasi Pribadi Panel -->
+<div class="tab-panel animate-in fade-in slide-in-from-bottom-2 duration-300" id="panel-informasi">
+<div class="glass-card rounded-[20px] p-xl">
+<form class="space-y-lg" onsubmit="event.preventDefault()">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface">Nama Lengkap</label>
+<input class="w-full h-12 px-md bg-white border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" type="text" value="Budi Santoso"/>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface">Alamat Email</label>
+<input class="w-full h-12 px-md bg-white border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" type="email" value="budi@email.com"/>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface">Nomor HP</label>
+<input class="w-full h-12 px-md bg-white border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" type="tel" value="081234567890"/>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface">Institusi / Perusahaan</label>
+<input class="w-full h-12 px-md bg-white border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" type="text" value="Universitas Indonesia"/>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface">Alamat</label>
+<textarea class="w-full px-md py-md bg-white border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" rows="3">Jl. Margonda Raya No. 100, Depok, Jawa Barat</textarea>
+</div>
+<div class="pt-md flex justify-end">
+<button class="h-12 px-xl bg-primary text-white font-label-md rounded-xl shadow-sm hover:opacity-90 active:scale-[0.98] transition-all flex items-center gap-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="save">save</span>
+                                        Simpan Perubahan
+                                    </button>
+</div>
+</form>
+</div>
+</div>
+<!-- Keamanan Panel -->
+<div class="tab-panel hidden animate-in fade-in slide-in-from-bottom-2 duration-300" id="panel-keamanan">
+<div class="glass-card rounded-[20px] p-xl max-w-2xl">
+<h3 class="font-title-lg text-title-lg mb-lg text-on-surface">Ubah Password</h3>
+<form class="space-y-lg" onsubmit="event.preventDefault()">
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface">Password Lama</label>
+<input class="w-full h-12 px-md bg-white border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="••••••••" type="password"/>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface">Password Baru</label>
+<input class="w-full h-12 px-md bg-white border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="••••••••" type="password"/>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface">Konfirmasi Password Baru</label>
+<input class="w-full h-12 px-md bg-white border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="••••••••" type="password"/>
+</div>
+<div class="pt-md">
+<button class="h-12 px-xl bg-primary text-white font-label-md rounded-xl shadow-sm hover:opacity-90 active:scale-[0.98] transition-all">
+                                        Ubah Password
+                                    </button>
+</div>
+</form>
+</div>
+</div>
+<!-- Riwayat Aktivitas Panel -->
+<div class="tab-panel hidden animate-in fade-in slide-in-from-bottom-2 duration-300" id="panel-riwayat">
+<div class="glass-card rounded-[20px] p-xl">
+<div class="space-y-xl">
+<!-- Activity Items -->
+<div class="flex gap-lg">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="cloud_upload">cloud_upload</span>
+</div>
+<div class="w-px h-full bg-outline-variant my-xs"></div>
+</div>
+<div class="pb-xl">
+<p class="font-label-md text-on-surface font-bold">Upload Dataset Baru</p>
+<p class="text-on-surface-variant font-label-md">Berhasil mengunggah dataset 'SIBI_Alphabet_Jakarta' (500 gambar)</p>
+<p class="text-sm text-outline mt-1">24 Okt 2023 • 14:20</p>
+</div>
+</div>
+<div class="flex gap-lg">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-xl bg-secondary-container/10 text-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="login">login</span>
+</div>
+<div class="w-px h-full bg-outline-variant my-xs"></div>
+</div>
+<div class="pb-xl">
+<p class="font-label-md text-on-surface font-bold">Login Berhasil</p>
+<p class="text-on-surface-variant font-label-md">Masuk melalui perangkat Chrome di Windows 11</p>
+<p class="text-sm text-outline mt-1">24 Okt 2023 • 08:05</p>
+</div>
+</div>
+<div class="flex gap-lg">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-xl bg-tertiary-container/10 text-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+</div>
+</div>
+<div class="pb-xl">
+<p class="font-label-md text-on-surface font-bold">Perubahan Profil</p>
+<p class="text-on-surface-variant font-label-md">Memperbarui informasi Institusi</p>
+<p class="text-sm text-outline mt-1">22 Okt 2023 • 11:45</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        function switchTab(tabId) {
+            // Hide all panels
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.add('hidden');
+            });
+            
+            // Show selected panel
+            document.getElementById('panel-' + tabId).classList.remove('hidden');
+            
+            // Update tab styles
+            document.querySelectorAll('[id^="tab-"]').forEach(tab => {
+                tab.classList.remove('text-primary', 'font-bold');
+                tab.classList.add('text-on-surface-variant');
+            });
+            
+            document.getElementById('tab-' + tabId).classList.add('text-primary', 'font-bold');
+            document.getElementById('tab-' + tabId).classList.remove('text-on-surface-variant');
+            
+            // Update indicators
+            document.querySelectorAll('.active-tab-indicator').forEach(indicator => {
+                indicator.classList.add('hidden');
+            });
+            document.getElementById('indicator-' + tabId).classList.remove('hidden');
+        }
+
+        // Micro-interaction for hover states
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.style.transform = 'scale(0.98)';
+            });
+            el.addEventListener('mouseup', () => {
+                el.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detail Validasi - SIBI Dataset Platform</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #E2E8F0;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #CBD5E1;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-background": "#191b23",
+                        "inverse-on-surface": "#f0f0fb",
+                        "surface-bright": "#faf8ff",
+                        "on-error-container": "#93000a",
+                        "on-primary-container": "#eeefff",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-dim": "#d9d9e5",
+                        "surface-tint": "#0053db",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "background": "#faf8ff",
+                        "tertiary-container": "#bc4800",
+                        "primary": "#004ac6",
+                        "outline": "#737686",
+                        "on-surface-variant": "#434655",
+                        "on-tertiary-container": "#ffede6",
+                        "on-secondary-container": "#fefcff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "secondary-container": "#2170e4",
+                        "inverse-primary": "#b4c5ff",
+                        "primary-container": "#2563eb",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f3f3fe",
+                        "surface-container": "#ededf9",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-secondary-fixed": "#001a42",
+                        "surface-container-high": "#e7e7f3",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "on-surface": "#191b23",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "secondary-fixed": "#d8e2ff",
+                        "tertiary-fixed": "#ffdbcd",
+                        "surface": "#faf8ff",
+                        "surface-container-highest": "#e1e2ed",
+                        "outline-variant": "#c3c6d7",
+                        "tertiary": "#943700",
+                        "surface-variant": "#e1e2ed",
+                        "on-primary-fixed": "#00174b",
+                        "secondary": "#0058be",
+                        "on-secondary-fixed-variant": "#004395",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "inverse-surface": "#2e3039"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "3xl": "64px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "container-max": "1280px",
+                        "2xl": "48px",
+                        "md": "16px",
+                        "gutter": "24px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-hidden">
+<!-- Top Navigation Bar -->
+<header class="bg-surface border-b border-outline-variant flex justify-between items-center w-full px-gutter h-16 fixed top-0 z-50">
+<div class="flex items-center gap-md">
+<div class="text-title-lg font-title-lg font-bold text-primary">SIBI Moderator</div>
+<div class="h-6 w-[1px] bg-outline-variant mx-2"></div>
+<nav class="flex items-center gap-xs">
+<span class="text-on-surface-variant text-label-md">Dashboard</span>
+<span class="material-symbols-outlined text-[16px] text-outline">chevron_right</span>
+<span class="text-on-surface-variant text-label-md">Antrean Validasi</span>
+<span class="material-symbols-outlined text-[16px] text-outline">chevron_right</span>
+<span class="text-primary font-bold text-label-md border-b-2 border-primary pb-1">Detail Video ID-9921</span>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex gap-sm">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="Close up professional portrait of a sign language expert, neutral gray background, soft directional studio lighting, wearing a minimalist navy blue scrub, high-definition digital photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPtDx_dRyGYfj-cGaBmIIEK5L0zKSRgTMerjPK93paL6CNnrNr0lmwsZc7tccY0jajks37kKMH5OHcROag_xE5LpDPuGMa-e0hbVmB2QLc_ArAzMeS2ACmdi4BiGDTwWduz-z7LAPvB1DF0yVuswkBuQC9YolkbDA2Y8K_mmGJnTPGMliem5lZrkrR5j2qGwwId9QXGi_DDIaqmXVnYfdah7szh2PDOBANaZfHAfS4TFDM3vWYC7O5mQ"/>
+</div>
+</div>
+</header>
+<!-- Sidebar (Collapsed) -->
+<aside class="bg-surface-container-low border-r border-outline-variant fixed left-0 top-16 bottom-0 w-[72px] flex flex-col items-center py-md gap-md z-40">
+<div class="bg-secondary-container text-on-secondary-container w-12 h-12 flex items-center justify-center rounded-full mb-4">
+<span class="material-symbols-outlined">pending_actions</span>
+</div>
+<button class="text-on-surface-variant hover:bg-surface-variant/50 w-12 h-12 flex items-center justify-center rounded-full transition-all">
+<span class="material-symbols-outlined">dashboard</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-variant/50 w-12 h-12 flex items-center justify-center rounded-full transition-all">
+<span class="material-symbols-outlined">history</span>
+</button>
+<div class="mt-auto flex flex-col gap-sm">
+<button class="text-on-surface-variant hover:bg-surface-variant/50 w-12 h-12 flex items-center justify-center rounded-full transition-all">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Layout -->
+<main class="ml-[72px] mt-16 p-gutter h-[calc(100vh-64px)] overflow-hidden flex flex-col gap-lg">
+<!-- Header Section -->
+<div class="flex justify-between items-end shrink-0">
+<div>
+<h1 class="text-headline-md font-headline-md text-on-surface">Validasi Video Dataset</h1>
+<p class="text-on-surface-variant text-label-md">Tinjau rekaman isyarat untuk memastikan kepatuhan standar dataset SIBI.</p>
+</div>
+<div class="flex gap-md">
+<button class="px-lg h-10 rounded-xl border border-outline-variant bg-surface hover:bg-surface-container-low text-on-surface font-medium flex items-center gap-sm transition-all">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                    Kembali
+                </button>
+<button class="px-lg h-10 rounded-xl bg-primary text-white hover:opacity-90 font-semibold shadow-sm flex items-center gap-sm transition-all">
+<span class="material-symbols-outlined text-[20px]">save</span>
+                    Simpan Validasi
+                </button>
+</div>
+</div>
+<!-- Content Grid -->
+<div class="flex-1 grid grid-cols-12 gap-lg overflow-hidden">
+<!-- Left Column: Media Player & Metadata -->
+<div class="col-span-12 lg:col-span-7 flex flex-col gap-lg overflow-y-auto custom-scrollbar pr-2">
+<!-- Video Player Card -->
+<div class="bg-on-background rounded-[20px] overflow-hidden relative group aspect-video shadow-lg ring-1 ring-white/10">
+<img class="w-full h-full object-cover opacity-90" data-alt="A cinematic medium shot of a person performing Indonesian Sign Language (SIBI) against a clean, neutral gray background. Soft professional three-point lighting highlights hand movements clearly. Modern minimalist aesthetic with high clarity and balanced shadows, professional studio setup." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzZrYugIaJmtnevcEajwsZyyGAR8KVLBKbQDlL5-sEuptODmRM7kLzuIXY0kG9YrixLBmbvPTNiSwQwEE96RWNKXnmleIqfwf8LMIN1Xvit4jzT4mCqQBzRgxGlbYXFfPj3nXJeYDNqRt0cchGK0ap1agQI4jjacR4td44X8h_buIzwO87r16BnFq9ISYhcJD1ONWbo_ES46LGYLY2ZHvehxzwbTiNCg-XuLN0w15n-PdZbxFYtj5ESA"/>
+<!-- Player Controls Overlay -->
+<div class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<div class="p-md space-y-md">
+<!-- Progress Bar -->
+<div class="w-full h-1.5 bg-white/20 rounded-full relative cursor-pointer">
+<div class="absolute left-0 top-0 h-full w-1/3 bg-primary rounded-full"></div>
+<div class="absolute left-1/3 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg"></div>
+</div>
+<div class="flex items-center justify-between text-white">
+<div class="flex items-center gap-lg">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-[32px]">play_arrow</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-[24px]">volume_up</span></button>
+<span class="text-label-sm font-medium">00:12 / 00:45</span>
+</div>
+<div class="flex items-center gap-lg">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-[24px]">settings</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-[24px]">fullscreen</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Play Indicator (Static placeholder) -->
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white border border-white/20">
+<span class="material-symbols-outlined text-[48px]">play_arrow</span>
+</div>
+</div>
+</div>
+<!-- Metadata Card -->
+<div class="bg-white rounded-[20px] border border-outline-variant p-lg shadow-sm">
+<h3 class="text-label-md font-bold text-primary uppercase tracking-wider mb-md">Metadata File</h3>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-lg">
+<div class="space-y-xs">
+<p class="text-on-surface-variant text-label-sm">Nama File</p>
+<p class="text-on-surface font-semibold truncate">SIBI_AS_00921_HD.mp4</p>
+</div>
+<div class="space-y-xs">
+<p class="text-on-surface-variant text-label-sm">Ukuran</p>
+<p class="text-on-surface font-semibold">42.5 MB</p>
+</div>
+<div class="space-y-xs">
+<p class="text-on-surface-variant text-label-sm">Durasi</p>
+<p class="text-on-surface font-semibold">00:45</p>
+</div>
+<div class="space-y-xs">
+<p class="text-on-surface-variant text-label-sm">Resolusi</p>
+<p class="text-on-surface font-semibold">1920 x 1080 (FHD)</p>
+</div>
+<div class="space-y-xs">
+<p class="text-on-surface-variant text-label-sm">FPS</p>
+<p class="text-on-surface font-semibold">30.00 fps</p>
+</div>
+<div class="space-y-xs">
+<p class="text-on-surface-variant text-label-sm">Tanggal Upload</p>
+<p class="text-on-surface font-semibold">12 Okt 2023, 14:20</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Information & Forms -->
+<div class="col-span-12 lg:col-span-5 flex flex-col gap-lg overflow-y-auto custom-scrollbar pr-2 pb-md">
+<!-- Dataset Information Card -->
+<div class="bg-white rounded-[20px] border border-outline-variant p-lg shadow-sm">
+<h3 class="text-title-lg mb-md text-on-surface">Informasi Dataset</h3>
+<div class="space-y-md">
+<div class="flex justify-between items-center py-sm border-b border-surface-container">
+<span class="text-on-surface-variant text-label-md">Label</span>
+<span class="bg-primary-container/10 text-primary px-3 py-1 rounded-full text-label-sm font-bold">TERIMA KASIH</span>
+</div>
+<div class="flex justify-between items-center py-sm border-b border-surface-container">
+<span class="text-on-surface-variant text-label-md">Kategori</span>
+<span class="text-on-surface font-medium">Kata Dasar (Greeting)</span>
+</div>
+<div class="py-sm border-b border-surface-container">
+<span class="text-on-surface-variant text-label-md block mb-1">Deskripsi Video</span>
+<p class="text-on-surface text-body-md leading-relaxed">Gerakan isyarat tangan untuk kata 'Terima Kasih' dengan posisi tangan di bawah dagu bergerak ke arah depan.</p>
+</div>
+<div class="flex justify-between items-center py-sm">
+<span class="text-on-surface-variant text-label-md">Kontributor</span>
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest"></div>
+<span class="text-on-surface font-medium">Ahmad Fauzi</span>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Validation Result Card -->
+<div class="bg-white rounded-[20px] border border-outline-variant p-lg shadow-sm">
+<div class="flex justify-between items-center mb-md">
+<h3 class="text-title-lg text-on-surface">Hasil Validasi AI</h3>
+<div class="flex items-center gap-xs text-green-600 bg-green-50 px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span class="text-label-sm font-bold">Lolos Validasi AI</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-green-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-label-md">Format Video</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-green-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-label-md">Resolusi</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-green-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-label-md">Durasi</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-green-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-label-md">Deteksi Tangan</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-green-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-label-md">Pencahayaan</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-green-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-label-md">Tidak Blur</span>
+</div>
+</div>
+</div>
+<!-- Manual Validator Input Card -->
+<div class="bg-white rounded-[20px] border border-primary/20 p-lg shadow-md ring-1 ring-primary/5">
+<h3 class="text-title-lg text-on-surface mb-lg flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">rate_review</span>
+                        Hasil Validasi
+                    </h3>
+<form class="space-y-lg">
+<div class="flex gap-xl">
+<label class="flex items-center gap-md cursor-pointer group">
+<div class="relative flex items-center justify-center">
+<input class="peer appearance-none w-5 h-5 rounded-full border-2 border-outline-variant checked:border-primary transition-all" name="status" type="radio" value="valid"/>
+<div class="absolute w-2.5 h-2.5 bg-primary rounded-full opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+</div>
+<span class="text-on-surface font-semibold group-hover:text-primary transition-colors">Valid</span>
+</label>
+<label class="flex items-center gap-md cursor-pointer group">
+<div class="relative flex items-center justify-center">
+<input class="peer appearance-none w-5 h-5 rounded-full border-2 border-outline-variant checked:border-error transition-all" name="status" type="radio" value="invalid"/>
+<div class="absolute w-2.5 h-2.5 bg-error rounded-full opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+</div>
+<span class="text-on-surface font-semibold group-hover:text-error transition-colors">Tidak Valid</span>
+</label>
+</div>
+<div class="space-y-sm">
+<label class="text-label-md font-bold text-on-surface-variant block">Komentar Validator</label>
+<textarea class="w-full bg-surface border border-outline-variant rounded-xl p-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all h-32 resize-none" placeholder="Berikan komentar terhadap video ini. Minimal 20 karakter"></textarea>
+<p class="text-label-sm text-outline text-right">0 / 20 karakter minimum</p>
+</div>
+</form>
+</div>
+</div>
+</div>
+</main>
+<!-- Success Toast (Hidden by default) -->
+<div class="fixed bottom-lg right-lg bg-inverse-surface text-inverse-on-surface px-lg py-md rounded-xl shadow-2xl flex items-center gap-md translate-y-24 opacity-0 transition-all duration-500 z-[100]" id="toast">
+<span class="material-symbols-outlined text-green-400">check_circle</span>
+<p class="text-label-md font-medium">Validasi berhasil disimpan ke sistem.</p>
+</div>
+<script>
+        // Simple Interaction Logic
+        const saveBtn = document.querySelector('button.bg-primary');
+        const toast = document.getElementById('toast');
+
+        saveBtn.addEventListener('click', () => {
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 3000);
+        });
+
+        // Textarea char counter mock
+        const textarea = document.querySelector('textarea');
+        const counter = document.querySelector('.text-outline.text-right');
+        
+        textarea.addEventListener('input', (e) => {
+            const length = e.target.value.length;
+            counter.innerText = `${length} / 20 karakter minimum`;
+            if (length >= 20) {
+                counter.classList.add('text-green-600');
+                counter.classList.remove('text-outline');
+            } else {
+                counter.classList.remove('text-green-600');
+                counter.classList.add('text-outline');
+            }
+        });
+    </script>
+</body></html>

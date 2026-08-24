@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Masuk - SIBI Dataset Platform</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f3f3fe",
+                        "inverse-on-surface": "#f0f0fb",
+                        "secondary": "#0058be",
+                        "tertiary-fixed": "#ffdbcd",
+                        "background": "#faf8ff",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e1e2ed",
+                        "surface-dim": "#d9d9e5",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#b4c5ff",
+                        "on-secondary-container": "#fefcff",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "on-secondary-fixed-variant": "#004395",
+                        "surface-container": "#ededf9",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-tertiary-container": "#ffede6",
+                        "secondary-fixed": "#d8e2ff",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2e3039",
+                        "primary-container": "#2563eb",
+                        "primary-fixed": "#dbe1ff",
+                        "on-secondary-fixed": "#001a42",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#737686",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "on-primary-fixed": "#00174b",
+                        "surface-tint": "#0053db",
+                        "primary": "#004ac6",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-surface": "#191b23",
+                        "secondary-container": "#2170e4",
+                        "on-error-container": "#93000a",
+                        "on-primary-container": "#eeefff",
+                        "surface-container-highest": "#e1e2ed",
+                        "surface-bright": "#faf8ff",
+                        "outline-variant": "#c3c6d7",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#bc4800",
+                        "on-background": "#191b23",
+                        "surface-container-high": "#e7e7f3",
+                        "on-surface-variant": "#434655",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "surface": "#faf8ff",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#943700"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "md": "16px",
+                        "base": "8px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "container-max": "1280px",
+                        "3xl": "64px",
+                        "sm": "8px",
+                        "2xl": "48px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .btn-primary-inner-glow {
+            box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+        }
+        .card-elevation {
+            box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05), 0px 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex items-center justify-center px-gutter">
+<!-- Login Container -->
+<main class="w-full max-w-[448px] py-xl">
+<!-- Logo Section -->
+<div class="flex justify-center mb-xl">
+<img alt="Logo SIBI Dataset Platform" class="h-24 w-24 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTaRbllirCF_3dQFKFQOxTi_oiifUNb1IwXca-rQ5TKqpdNd0sq32oaXXLno9tFYlB1kn-OlKpSvg069d8hE1FS84035jdkEJU9m6m6T6qsdOmlSHLFtkqFLFeofWtKv5i1r94MqBEgFKp9BYpb4pGRxt44N_Mm_0hmmiXatIHmKqDZsXrOi5rTqqdure4a39jXJJkAIna7m59yiDk0cwsTt9ZlkRCGqvnwrBDeApZSR9A3Y4wmjLsnw"/>
+</div>
+<!-- Card Container -->
+<div class="bg-surface-container-lowest rounded-[20px] p-xl border border-outline-variant/30 card-elevation transition-all duration-300">
+<!-- Header Text -->
+<div class="text-center mb-xl">
+<h1 class="font-headline-md text-headline-md text-on-surface mb-base">Masuk ke Sistem</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Silakan masuk menggunakan akun Anda.</p>
+</div>
+<!-- Form -->
+<form class="space-y-lg" id="loginForm" onsubmit="return handleLogin(event)">
+<!-- Email Field -->
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="email">Alamat Email</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-md flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-[20px] text-outline">mail</span>
+</div>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl py-3 pl-[44px] pr-md font-body-md text-body-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 outline-none placeholder:text-outline-variant" id="email" name="email" placeholder="nama@email.com" required="" type="email"/>
+</div>
+<p class="hidden text-error font-label-sm text-label-sm mt-1" id="emailError">Harap masukkan format email yang valid.</p>
+</div>
+<!-- Password Field -->
+<div class="space-y-xs">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface-variant" for="password">Kata Sandi</label>
+<a class="font-label-md text-label-md text-primary hover:underline transition-all" href="#">Lupa Password?</a>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-md flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-[20px] text-outline">lock</span>
+</div>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl py-3 pl-[44px] pr-[44px] font-body-md text-body-md focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 outline-none placeholder:text-outline-variant" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-md flex items-center text-outline hover:text-on-surface transition-colors" onclick="togglePassword()" type="button">
+<span class="material-symbols-outlined text-[20px]" id="eyeIcon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Remember Me -->
+<div class="flex items-center">
+<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/20 transition-all cursor-pointer" id="remember" type="checkbox"/>
+<label class="ml-base font-body-md text-body-md text-on-surface-variant cursor-pointer select-none" for="remember">Ingat Saya</label>
+</div>
+<!-- Submit Button -->
+<button class="w-full bg-primary-container hover:bg-primary text-white font-label-md text-label-md py-3 rounded-xl btn-primary-inner-glow transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-base" id="submitBtn" type="submit">
+<span id="btnText">Masuk</span>
+<span class="hidden animate-spin h-5 w-5 border-2 border-white/30 border-t-white rounded-full" id="spinner"></span>
+</button>
+</form>
+<!-- Divider -->
+<div class="relative my-xl">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline-variant/30"></div>
+</div>
+<div class="relative flex justify-center text-label-sm font-label-sm">
+<span class="px-md bg-surface-container-lowest text-outline italic">atau</span>
+</div>
+</div>
+<!-- Back to Home -->
+<a class="w-full flex items-center justify-center gap-base border border-outline-variant text-on-surface font-label-md text-label-md py-3 rounded-xl hover:bg-surface-container-low transition-all active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                Kembali ke Beranda
+            </a>
+<!-- Footer Link -->
+<div class="mt-xl text-center">
+<p class="font-body-md text-body-md text-on-surface-variant">
+                    Belum memiliki akun? 
+                    <a class="text-primary font-semibold hover:underline" href="#">Daftar Sekarang</a>
+</p>
+</div>
+</div>
+<!-- Privacy Footer -->
+<p class="mt-xl text-center font-label-sm text-label-sm text-outline">
+            © 2024 SIBI Dataset Platform. Hak Cipta Dilindungi.
+        </p>
+</main>
+<script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.innerText = 'visibility_off';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.innerText = 'visibility';
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('spinner');
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+
+            // Basic Validation View
+            if (!emailInput.value.includes('@')) {
+                emailError.classList.remove('hidden');
+                emailInput.classList.add('border-error', 'ring-error/20');
+                return false;
+            } else {
+                emailError.classList.add('hidden');
+                emailInput.classList.remove('border-error', 'ring-error/20');
+            }
+
+            // Simulate Loading State
+            btn.disabled = true;
+            btnText.classList.add('opacity-0');
+            spinner.classList.remove('hidden');
+            
+            setTimeout(() => {
+                // Simulate error feedback
+                btn.classList.add('bg-error', 'hover:bg-error');
+                btnText.innerText = 'Email atau Password Salah';
+                btnText.classList.remove('opacity-0');
+                spinner.classList.add('hidden');
+                
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.classList.remove('bg-error', 'hover:bg-error');
+                    btnText.innerText = 'Masuk';
+                }, 2000);
+            }, 1500);
+
+            return false;
+        }
+
+        // Focus ring visual hint
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('.material-symbols-outlined')?.classList.add('text-primary');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('.material-symbols-outlined')?.classList.remove('text-primary');
+            });
+        });
+    </script>
+</body></html>

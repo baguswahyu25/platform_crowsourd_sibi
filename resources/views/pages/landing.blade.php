@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>SIBI Dataset Platform - Bangun Dataset Bahasa Isyarat Indonesia</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #faf8ff;
+        }
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.05) 0%, transparent 50%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-line::after {
+            content: '';
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            right: -2rem;
+            height: 2px;
+            background: repeating-linear-gradient(to right, #e2e8f0 0, #e2e8f0 4px, transparent 4px, transparent 8px);
+            z-index: 0;
+        }
+        @media (max-width: 768px) {
+            .step-line::after { display: none; }
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f3f3fe",
+                        "inverse-on-surface": "#f0f0fb",
+                        "secondary": "#0058be",
+                        "tertiary-fixed": "#ffdbcd",
+                        "background": "#faf8ff",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e1e2ed",
+                        "surface-dim": "#d9d9e5",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#b4c5ff",
+                        "on-secondary-container": "#fefcff",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "on-secondary-fixed-variant": "#004395",
+                        "surface-container": "#ededf9",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-tertiary-container": "#ffede6",
+                        "secondary-fixed": "#d8e2ff",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2e3039",
+                        "primary-container": "#2563eb",
+                        "primary-fixed": "#dbe1ff",
+                        "on-secondary-fixed": "#001a42",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#737686",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "on-primary-fixed": "#00174b",
+                        "surface-tint": "#0053db",
+                        "primary": "#004ac6",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-surface": "#191b23",
+                        "secondary-container": "#2170e4",
+                        "on-error-container": "#93000a",
+                        "on-primary-container": "#eeefff",
+                        "surface-container-highest": "#e1e2ed",
+                        "surface-bright": "#faf8ff",
+                        "outline-variant": "#c3c6d7",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#bc4800",
+                        "on-background": "#191b23",
+                        "surface-container-high": "#e7e7f3",
+                        "on-surface-variant": "#434655",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "surface": "#faf8ff",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#943700"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "md": "16px",
+                        "base": "8px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "container-max": "1280px",
+                        "3xl": "64px",
+                        "sm": "8px",
+                        "2xl": "48px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="antialiased text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- Navbar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-lg border-b border-outline-variant/30 transition-all duration-300">
+<div class="flex justify-between items-center h-16 px-gutter max-w-container-max mx-auto">
+<div class="flex items-center gap-xs">
+<img alt="Logo SIBI Dataset Platform" class="w-8 h-8 rounded-md object-cover" src="{{ asset('storage/logo.jpg') }}"/>
+<span class="font-title-lg text-title-lg font-bold text-primary dark:text-primary-fixed">SIBI Dataset Platform</span>
+</div>
+<div class="hidden md:flex items-center gap-xl">
+<a class="font-label-md text-label-md text-primary dark:text-primary-fixed font-semibold border-b-2 border-primary" href="#beranda">Beranda</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#tentang">Tentang</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#fitur">Fitur</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#alur">Alur Sistem</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#faq">FAQ</a>
+</div>
+<div class="flex items-center gap-md">
+<a href="{{ route('auth.login') }}" class="font-label-md text-label-md px-md py-xs rounded-lg border border-outline hover:bg-surface-container transition-colors active:scale-95 inline-flex items-center justify-center min-h-[44px]">Masuk</a>
+<a href="{{ route('auth.register') }}" class="font-label-md text-label-md px-md py-xs rounded-lg bg-primary text-on-primary hover:bg-primary/90 transition-colors shadow-sm active:scale-95 inline-flex items-center justify-center min-h-[44px]">Daftar</a>
+</div>
+</div>
+</nav>
+
+<main>
+<!-- Hero Section -->
+<section class="relative pt-32 pb-24 overflow-hidden hero-gradient" id="beranda">
+<div class="max-w-container-max mx-auto px-gutter grid grid-cols-1 lg:grid-cols-2 gap-xl items-center">
+<div class="space-y-xl" data-aos="fade-up">
+<div class="flex flex-wrap gap-xs">
+<span class="px-md py-1 rounded-full bg-primary-container/10 text-primary font-label-sm text-label-sm border border-primary/20">Berbasis AI</span>
+<span class="px-md py-1 rounded-full bg-secondary-container/10 text-secondary font-label-sm text-label-sm border border-secondary/20">Validasi Berlapis</span>
+<span class="px-md py-1 rounded-full bg-tertiary-container/10 text-tertiary font-label-sm text-label-sm border border-tertiary/20">Crowdsourcing</span>
+</div>
+<h1 class="font-display-lg text-display-lg leading-tight tracking-tight text-on-surface">
+                        Bangun Dataset Video <br/>
+<span class="text-primary">Bahasa Isyarat Indonesia</span> Bersama
+                    </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+                        Platform crowdsourcing berbasis web untuk mengumpulkan video Bahasa Isyarat Indonesia (SIBI) secara kolaboratif guna mendukung riset dan pengembangan teknologi AI yang inklusif.
+                    </p>
+<div class="flex flex-wrap gap-md">
+<a href="{{ route('auth.register') }}" class="px-xl py-4 rounded-xl bg-primary text-on-primary font-label-md text-label-md hover:bg-primary/90 transition-all shadow-md active:scale-95 inline-flex items-center justify-center min-h-[44px]">Mulai Berkontribusi</a>
+<a href="#tentang" class="px-xl py-4 rounded-xl border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:bg-surface-container transition-all active:scale-95 inline-flex items-center justify-center min-h-[44px]">Pelajari Selengkapnya</a>
+</div>
+</div>
+<div class="relative lg:h-[600px] flex items-center justify-center" data-aos="fade-left">
+<div class="relative w-full max-w-md aspect-square bg-surface-container rounded-3xl overflow-hidden border border-outline-variant/30 shadow-2xl group">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Hero SIBI" src="{{ asset('storage/hero.jpg') }}"/>
+<!-- Floating Cards -->
+<div class="absolute top-8 -left-8 bg-surface-container-lowest p-md rounded-2xl shadow-xl border border-outline-variant/20 animate-bounce transition-all duration-1000" style="animation-duration: 3s">
+<div class="flex items-center gap-base">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">video_library</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Total Video</p>
+<p class="font-title-lg text-title-lg font-bold">1.250+</p>
+</div>
+</div>
+</div>
+<div class="absolute bottom-12 -right-8 bg-surface-container-lowest p-md rounded-2xl shadow-xl border border-outline-variant/20 animate-bounce transition-all duration-1000" style="animation-duration: 4s">
+<div class="flex items-center gap-base">
+<div class="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">verified</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Video Valid</p>
+<p class="font-title-lg text-title-lg font-bold">95%</p>
+</div>
+</div>
+</div>
+<div class="absolute top-1/2 -right-12 bg-surface-container-lowest p-md rounded-2xl shadow-xl border border-outline-variant/20 hidden md:block">
+<div class="flex items-center gap-base">
+<div class="w-10 h-10 rounded-lg bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">group</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Kontributor</p>
+<p class="font-title-lg text-title-lg font-bold">325</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-xl bg-surface-container-low border-y border-outline-variant/20">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+<div class="text-center p-lg rounded-2xl hover:bg-surface-container-lowest transition-colors">
+<p class="font-display-lg text-display-lg font-bold text-primary mb-xs">325</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Kontributor Aktif</p>
+</div>
+<div class="text-center p-lg rounded-2xl hover:bg-surface-container-lowest transition-colors">
+<p class="font-display-lg text-display-lg font-bold text-primary mb-xs">12</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Validator Pakar</p>
+</div>
+<div class="text-center p-lg rounded-2xl hover:bg-surface-container-lowest transition-colors">
+<p class="font-display-lg text-display-lg font-bold text-primary mb-xs">1250</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Dataset Video</p>
+</div>
+<div class="text-center p-lg rounded-2xl hover:bg-surface-container-lowest transition-colors">
+<p class="font-display-lg text-display-lg font-bold text-primary mb-xs">980</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Video Terverifikasi</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Section Tentang -->
+<section class="py-3xl" id="tentang">
+<div class="max-w-container-max mx-auto px-gutter grid grid-cols-1 lg:grid-cols-2 gap-3xl items-center">
+<div class="order-2 lg:order-1">
+<div class="relative rounded-3xl overflow-hidden border border-outline-variant/30 shadow-lg">
+<img class="w-full h-[400px] object-cover" alt="Tentang SIBI Platform" src="{{ asset('storage/sibisection.jpg') }}"/>
+</div>
+</div>
+<div class="order-1 lg:order-2 space-y-lg">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Membangun Masa Depan Inklusif Melalui Data</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+                        SIBI Dataset Platform hadir sebagai solusi atas keterbatasan dataset Bahasa Isyarat Indonesia berkualitas tinggi. Melalui pendekatan crowdsourcing, kami mengajak komunitas untuk berkontribusi.
+                    </p>
+<div class="space-y-md">
+<div class="flex gap-md">
+<div class="w-12 h-12 flex-shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">volunteer_activism</span>
+</div>
+<div>
+<h4 class="font-title-lg text-title-lg font-bold text-on-surface">Crowdsourcing Terarah</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Proses pengumpulan video yang mudah diakses oleh siapa saja dengan panduan yang jelas.</p>
+</div>
+</div>
+<div class="flex gap-md">
+<div class="w-12 h-12 flex-shrink-0 rounded-full bg-secondary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">psychology</span>
+</div>
+<div>
+<h4 class="font-title-lg text-title-lg font-bold text-on-surface">Validasi AI Cerdas</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Setiap video yang diunggah melewati pengecekan otomatis berbasis Computer Vision sebelum validasi manusia.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Section Fitur -->
+<section class="py-3xl bg-surface-container-lowest" id="fitur">
+<div class="max-w-container-max mx-auto px-gutter text-center mb-3xl">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-md">Fitur Utama Platform</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl mx-auto">Dirancang untuk memudahkan kontributor dan menjaga kualitas data riset tingkat tinggi.</p>
+</div>
+<div class="max-w-container-max mx-auto px-gutter grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+<!-- Card 1 -->
+<div class="p-xl rounded-2xl bg-surface border border-outline-variant/30 hover:shadow-lg transition-all group">
+<div class="w-14 h-14 rounded-xl bg-primary/5 flex items-center justify-center mb-lg group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary">upload</span>
+</div>
+<h3 class="font-title-lg text-title-lg font-bold mb-md">Upload Dataset</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Unggah rekaman video isyarat Anda dengan format yang telah dioptimalkan untuk pelatihan model machine learning.</p>
+</div>
+<!-- Card 2 -->
+<div class="p-xl rounded-2xl bg-surface border border-outline-variant/30 hover:shadow-lg transition-all group">
+<div class="w-14 h-14 rounded-xl bg-primary/5 flex items-center justify-center mb-lg group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary">smart_toy</span>
+</div>
+<h3 class="font-title-lg text-title-lg font-bold mb-md">Validasi AI</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Sistem AI kami melakukan filter awal untuk memastikan kualitas pencahayaan, posisi tangan, dan kejelasan gerakan.</p>
+</div>
+<!-- Card 3 -->
+<div class="p-xl rounded-2xl bg-surface border border-outline-variant/30 hover:shadow-lg transition-all group">
+<div class="w-14 h-14 rounded-xl bg-primary/5 flex items-center justify-center mb-lg group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary">verified_user</span>
+</div>
+<h3 class="font-title-lg text-title-lg font-bold mb-md">Validator Pakar</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Review manual oleh ahli bahasa isyarat untuk menjamin akurasi semantik dari setiap video yang terkumpul.</p>
+</div>
+<!-- Card 4 -->
+<div class="p-xl rounded-2xl bg-surface border border-outline-variant/30 hover:shadow-lg transition-all group">
+<div class="w-14 h-14 rounded-xl bg-primary/5 flex items-center justify-center mb-lg group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary">database</span>
+</div>
+<h3 class="font-title-lg text-title-lg font-bold mb-md">Repository Dataset</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Akses ke basis data terstruktur yang siap digunakan untuk keperluan riset akademis dan pengembangan aplikasi.</p>
+</div>
+<!-- Card 5 -->
+<div class="p-xl rounded-2xl bg-surface border border-outline-variant/30 hover:shadow-lg transition-all group">
+<div class="w-14 h-14 rounded-xl bg-primary/5 flex items-center justify-center mb-lg group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary">groups</span>
+</div>
+<h3 class="font-title-lg text-title-lg font-bold mb-md">Crowdsourcing</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Sistem kolaborasi yang memungkinkan ribuan kontributor berpartisipasi secara simultan dari seluruh Indonesia.</p>
+</div>
+<!-- Card 6 -->
+<div class="p-xl rounded-2xl bg-surface border border-outline-variant/30 hover:shadow-lg transition-all group">
+<div class="w-14 h-14 rounded-xl bg-primary/5 flex items-center justify-center mb-lg group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary">bar_chart</span>
+</div>
+<h3 class="font-title-lg text-title-lg font-bold mb-md">Monitoring Status</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Pantau status kontribusi Anda mulai dari tahap antrian, validasi AI, hingga status 'Terverifikasi' secara real-time.</p>
+</div>
+</div>
+</section>
+
+<!-- Alur Sistem -->
+<section class="py-3xl" id="alur">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="text-center mb-3xl">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-md">Alur Kontribusi</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Proses transparan mulai dari pendaftaran hingga video masuk ke repository.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-gutter relative">
+<!-- Step 1 -->
+<div class="flex flex-col items-center text-center relative z-10 step-line">
+<div class="w-16 h-16 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-xl mb-md shadow-lg border-4 border-surface">1</div>
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Register</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant px-xs">Buat akun kontributor baru.</p>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col items-center text-center relative z-10 step-line">
+<div class="w-16 h-16 rounded-full bg-surface-container-high text-primary flex items-center justify-center font-bold text-xl mb-md shadow-sm border-4 border-surface">2</div>
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Login</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant px-xs">Masuk ke dashboard personal.</p>
+</div>
+<!-- Step 3 -->
+<div class="flex flex-col items-center text-center relative z-10 step-line">
+<div class="w-16 h-16 rounded-full bg-surface-container-high text-primary flex items-center justify-center font-bold text-xl mb-md shadow-sm border-4 border-surface">3</div>
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Upload Video</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant px-xs">Rekam atau unggah video SIBI.</p>
+</div>
+<!-- Step 4 -->
+<div class="flex flex-col items-center text-center relative z-10 step-line">
+<div class="w-16 h-16 rounded-full bg-surface-container-high text-primary flex items-center justify-center font-bold text-xl mb-md shadow-sm border-4 border-surface">4</div>
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Validasi AI</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant px-xs">Automated quality checking.</p>
+</div>
+<!-- Step 5 -->
+<div class="flex flex-col items-center text-center relative z-10 step-line">
+<div class="w-16 h-16 rounded-full bg-surface-container-high text-primary flex items-center justify-center font-bold text-xl mb-md shadow-sm border-4 border-surface">5</div>
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Validator Pakar</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant px-xs">Pengecekan akhir oleh ahli.</p>
+</div>
+<!-- Step 6 -->
+<div class="flex flex-col items-center text-center relative z-10">
+<div class="w-16 h-16 rounded-full bg-surface-container-high text-primary flex items-center justify-center font-bold text-xl mb-md shadow-sm border-4 border-surface">6</div>
+<h4 class="font-label-md text-label-md font-bold text-on-surface">Repository</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant px-xs">Data tersimpan di dataset utama.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-3xl bg-surface-container-low" id="faq">
+<div class="max-w-3xl mx-auto px-gutter">
+<div class="text-center mb-3xl">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-md">Pertanyaan Umum</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Semua yang perlu Anda ketahui tentang berpartisipasi di platform ini.</p>
+</div>
+<div class="space-y-md">
+<!-- Q1 -->
+<details class="group bg-surface-container-lowest rounded-2xl border border-outline-variant/30 overflow-hidden" open="">
+<summary class="flex justify-between items-center p-lg cursor-pointer list-none">
+<span class="font-title-lg text-title-lg font-bold text-on-surface">Siapa saja yang bisa menjadi kontributor?</span>
+<span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="px-lg pb-lg">
+<p class="font-body-md text-body-md text-on-surface-variant">Siapa saja dapat berkontribusi, baik teman tuli, praktisi bahasa isyarat, maupun masyarakat umum yang ingin belajar dan membantu membangun dataset. Kami menyediakan panduan lengkap untuk setiap gerakan isyarat.</p>
+</div>
+</details>
+<!-- Q2 -->
+<details class="group bg-surface-container-lowest rounded-2xl border border-outline-variant/30 overflow-hidden">
+<summary class="flex justify-between items-center p-lg cursor-pointer list-none">
+<span class="font-title-lg text-title-lg font-bold text-on-surface">Bagaimana standar video yang diterima?</span>
+<span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="px-lg pb-lg">
+<p class="font-body-md text-body-md text-on-surface-variant">Video harus memiliki pencahayaan yang cukup, latar belakang yang kontras/polos, dan seluruh bagian tubuh atas (kepala hingga pinggang) terlihat jelas dalam frame.</p>
+</div>
+</details>
+<!-- Q3 -->
+<details class="group bg-surface-container-lowest rounded-2xl border border-outline-variant/30 overflow-hidden">
+<summary class="flex justify-between items-center p-lg cursor-pointer list-none">
+<span class="font-title-lg text-title-lg font-bold text-on-surface">Apakah data saya aman dan anonim?</span>
+<span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="px-lg pb-lg">
+<p class="font-body-md text-body-md text-on-surface-variant">Privasi Anda adalah prioritas kami. Kami mengaburkan informasi sensitif dan hanya menggunakan data video untuk keperluan pelatihan model AI dan riset akademik dengan persetujuan Anda.</p>
+</div>
+</details>
+<!-- Q4 -->
+<details class="group bg-surface-container-lowest rounded-2xl border border-outline-variant/30 overflow-hidden">
+<summary class="flex justify-between items-center p-lg cursor-pointer list-none">
+<span class="font-title-lg text-title-lg font-bold text-on-surface">Bagaimana cara mengakses dataset untuk riset?</span>
+<span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="px-lg pb-lg">
+<p class="font-body-md text-body-md text-on-surface-variant">Peneliti dapat mengajukan permohonan akses melalui menu Repository dengan melampirkan proposal riset singkat untuk mendapatkan kunci akses API atau unduhan dataset.</p>
+</div>
+</details>
+</div>
+</div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-3xl px-gutter">
+<div class="max-w-container-max mx-auto bg-primary rounded-[32px] p-2xl text-center relative overflow-hidden group">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.2),transparent_50%)]"></div>
+<div class="relative z-10 space-y-xl max-w-2xl mx-auto">
+<h2 class="font-display-lg text-display-lg font-bold text-on-primary">Mari Berkontribusi Membangun Dataset Bahasa Isyarat Indonesia</h2>
+<p class="font-body-lg text-body-lg text-on-primary/80">Jadilah bagian dari perubahan besar untuk teknologi yang lebih inklusif bagi semua orang.</p>
+<div class="flex justify-center gap-md">
+<a href="{{ route('auth.register') }}" class="px-3xl py-4 rounded-xl bg-on-primary text-primary font-label-md text-label-md hover:shadow-xl hover:scale-105 transition-all active:scale-95 inline-flex items-center justify-center min-h-[44px]">Daftar Sekarang</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-surface-dim border-t border-outline-variant w-full py-xl">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-gutter max-w-container-max mx-auto">
+<div class="space-y-md">
+<div class="flex items-center gap-xs">
+<img alt="Logo SIBI Dataset Platform" class="w-8 h-8 rounded-md object-cover" src="{{ asset('storage/logo.jpg') }}"/>
+<span class="font-title-lg text-title-lg font-bold text-on-surface">SIBI Dataset</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Platform kolaboratif untuk mempercepat inklusi digital melalui pengumpulan data bahasa isyarat yang akurat.</p>
+</div>
+<div>
+<h5 class="font-label-md text-label-md font-bold mb-lg uppercase tracking-wider text-primary">Navigasi</h5>
+<ul class="space-y-sm">
+<li><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-opacity" href="#beranda">Beranda</a></li>
+<li><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-opacity" href="#tentang">Tentang Kami</a></li>
+<li><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-opacity" href="#fitur">Fitur Utama</a></li>
+<li><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-opacity" href="#faq">Pertanyaan Umum</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-label-md text-label-md font-bold mb-lg uppercase tracking-wider text-primary">Legal & Support</h5>
+<ul class="space-y-sm">
+<li><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-opacity" href="#">Kebijakan Privasi</a></li>
+<li><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-opacity" href="#">Syarat & Ketentuan</a></li>
+<li><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-opacity" href="#">Kontak Kami</a></li>
+<li><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-opacity" href="#">Bantuan Riset</a></li>
+</ul>
+</div>
+<div class="space-y-lg">
+<h5 class="font-label-md text-label-md font-bold mb-lg uppercase tracking-wider text-primary">Ikuti Kami</h5>
+<div class="flex gap-md">
+<a class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-all focus:ring-2 focus:ring-primary" href="#">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg>
+</a>
+<a class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-all focus:ring-2 focus:ring-primary" href="#">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"></path></svg>
+</a>
+<a class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-all focus:ring-2 focus:ring-primary" href="#">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.012 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.012 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.012-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.645-1.44-1.44 0-.794.645-1.439 1.44-1.439.794 0 1.44.645 1.44 1.439z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+<div class="max-w-container-max mx-auto px-gutter mt-xl pt-lg border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center gap-md">
+<p class="font-body-md text-body-md text-on-surface-variant">© {{ date('Y') }} SIBI Dataset Platform. Hak Cipta Dilindungi.</p>
+<div class="flex gap-lg">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline" href="#">Kebijakan Privasi</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline" href="#">Syarat & Ketentuan</a>
+</div>
+</div>
+</footer>
+
+<script>
+    // Navbar behavior on scroll
+    window.addEventListener('scroll', () => {
+        const nav = document.querySelector('nav');
+        if (nav) {
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-md', 'bg-surface/95');
+            } else {
+                nav.classList.remove('shadow-md', 'bg-surface/95');
+            }
+        }
+    });
+
+    // Smooth scroll highlighting logic
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (window.scrollY >= (sectionTop - 100)) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            if (link.getAttribute('href').startsWith('#')) {
+                link.classList.remove('text-primary', 'font-semibold', 'border-b-2', 'border-primary');
+                link.classList.add('text-on-surface-variant');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.remove('text-on-surface-variant');
+                    link.classList.add('text-primary', 'font-semibold', 'border-b-2', 'border-primary');
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
