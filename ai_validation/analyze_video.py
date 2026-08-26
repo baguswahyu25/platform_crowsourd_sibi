@@ -2,26 +2,47 @@ import cv2
 import numpy as np
 import json
 import sys
+import os
 
+def analyze_advanced_video(video_path):
+    if not os.path.exists(video_path):
+        return {
+            "success": False,
+            "message": "File video tidak ditemukan pada server."
+        }
 
-def analyze_advanced_video(video_path, blur_threshold=100, freeze_threshold=0.98):
     cap = cv2.VideoCapture(video_path)
 
     if not cap.isOpened():
         return {
             "success": False,
-            "message": "Tidak dapat membuka file video."
+            "message": "Tidak dapat membuka file video. Format berkas mungkin terdeteksi rusak."
         }
 
-    # Informasi video
-    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    # Informasi Dimensi Video
+    raw_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    raw_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = cap.get(cv2.CAP_PROP_FPS)
 
-    # Status resolusi
-    if height < 480:
+    if fps <= 0 or np.isnan(fps):
+        fps = 30.0
+
+    # Normalisasi Nilai FPS (misal 29.97/29.99 -> 30.0, 59.94 -> 60.0)
+    rounded_fps = round(float(fps), 2)
+    if 29.0 <= rounded_fps <= 30.5:
+        display_fps = 30.0
+    elif 58.0 <= rounded_fps <= 61.0:
+        display_fps = 60.0
+    else:
+        display_fps = rounded_fps
+
+    # Deteksi Orientasi & Smart Resolution (Mendukung Video HP Potret & Lanskap)
+    max_dim = max(raw_width, raw_height)
+    min_dim = min(raw_width, raw_height)
+
+    if max_dim < 600 and min_dim < 400:
         resolution_status = "Rendah"
-    elif height <= 720:
+    elif max_dim <= 1280 or min_dim <= 720:
         resolution_status = "Standar"
     else:
         resolution_status = "Tinggi"
@@ -34,125 +55,110 @@ def analyze_advanced_video(video_path, blur_threshold=100, freeze_threshold=0.98
 
     prev_gray = None
 
+    # Loop analisis frame-by-frame
     while True:
         ret, frame = cap.read()
 
-        if not ret:
+        if not ret or frame is None:
             break
 
         frame_count += 1
 
-        gray = cv2.cvtColor(
-            frame,
-            cv2.COLOR_BGR2GRAY
-        )
+        # Konversi ke Grayscale untuk analisis intensitas cahaya dan ketajaman
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        # 1. Brightness
-        brightness = np.mean(gray)
-        brightness_scores.append(float(brightness))
+        # 1. Analisis Kecerahan (Mean Brightness Intensity 0 - 255)
+        brightness = float(np.mean(gray))
+        brightness_scores.append(brightness)
 
-        # 2. Blur
-        blur_score = cv2.Laplacian(
-            gray,
-            cv2.CV_64F
-        ).var()
+        # 2. Analisis Ketajaman (Laplacian Variance Score)
+        laplacian_var = float(cv2.Laplacian(gray, cv2.CV_64F).var())
+        blur_scores.append(laplacian_var)
 
-        blur_scores.append(float(blur_score))
-
-        # 3. Freeze frame
+        # 3. Analisis Kelancaran Video (Hanya mendeteksi freeze frame murni yang benar-benar macet)
         if prev_gray is not None:
-            res = cv2.matchTemplate(
-                gray,
-                prev_gray,
-                cv2.TM_CCOEFF_NORMED
-            )[0][0]
-
-            if res > freeze_threshold:
-                freeze_count += 1
+            try:
+                # Menilai perbedaan piksel absolut antara 2 frame berturut-turut
+                diff = cv2.absdiff(gray, prev_gray)
+                mean_diff = float(np.mean(diff))
+                
+                # Jika perbedaan rata-rata piksel < 0.2, frame dianggap benar-benar macet (frozen)
+                if mean_diff < 0.2:
+                    freeze_count += 1
+            except Exception:
+                pass
 
         prev_gray = gray
 
     cap.release()
 
-    # Rata-rata
-    avg_blur = np.mean(blur_scores) if blur_scores else 0
+    if frame_count == 0:
+        return {
+            "success": False,
+            "message": "Tidak ada frame video yang dapat dibaca."
+        }
 
-    avg_brightness = (
-        np.mean(brightness_scores)
-        if brightness_scores
-        else 0
-    )
+    # Hitung nilai rata-rata analisis
+    avg_brightness = float(np.mean(brightness_scores)) if brightness_scores else 0.0
+    avg_blur = float(np.mean(blur_scores)) if blur_scores else 0.0
+    freeze_percentage = float((freeze_count / max(frame_count - 1, 1)) * 100)
 
-    freeze_percentage = (
-        (freeze_count / frame_count) * 100
-        if frame_count > 1
-        else 0
-    )
-
-    # Status blur
-    blur_status = (
-        "Tajam"
-        if avg_blur > blur_threshold
-        else "Buram"
-    )
-
-    # Status brightness
-    if avg_brightness < 40:
+    # 1. Kriteria Kecerahan (Toleran untuk Pencahayaan Ruangan Normal)
+    if avg_brightness < 45.0:
         brightness_status = "Terlalu Gelap"
-    elif avg_brightness > 220:
+    elif avg_brightness > 210.0:
         brightness_status = "Terlalu Terang"
     else:
         brightness_status = "Normal"
 
-    # Status freeze
-    if freeze_percentage > 10:
+    # 2. Kriteria Ketajaman (Blur Variance Threshold)
+    if avg_blur < 50.0:
+        blur_status = "Buram"
+    else:
+        blur_status = "Tajam"
+
+    # 3. Kriteria Kelancaran Video (Batas Toleran untuk Gerakan Isyarat SIBI)
+    if freeze_percentage > 35.0:
         freeze_status = "Patah-patah"
-    elif freeze_percentage > 2:
+    elif freeze_percentage > 15.0:
         freeze_status = "Ada Gejala Lag"
     else:
         freeze_status = "Lancar"
 
-    # Tentukan kelulusan
+    # Penentuan Kelulusan Akhir AI
     passed = (
-        brightness_status == "Normal"
-        and blur_status == "Tajam"
-        and freeze_percentage <= 2
-        and height >= 480
+        brightness_status == "Normal" and
+        blur_status == "Tajam" and
+        freeze_status != "Patah-patah" and
+        resolution_status != "Rendah"
     )
 
     return {
         "success": True,
 
         "brightness": {
-            "score": round(float(avg_brightness), 2),
+            "score": round(avg_brightness, 2),
             "status": brightness_status
         },
 
         "blur": {
-            "score": round(float(avg_blur), 2),
+            "score": round(avg_blur, 2),
             "status": blur_status
         },
 
         "freeze": {
-            "percentage": round(
-                float(freeze_percentage),
-                2
-            ),
+            "percentage": round(freeze_percentage, 2),
             "status": freeze_status
         },
 
         "video": {
-            "width": width,
-            "height": height,
-            "fps": round(float(fps), 2),
+            "width": raw_width,
+            "height": raw_height,
+            "fps": display_fps,
             "resolution_status": resolution_status
         },
 
-        "validation_status": (
-            "passed"
-            if passed
-            else "failed"
-        )
+        "validation_status": "passed" if passed else "failed"
     }
 
 

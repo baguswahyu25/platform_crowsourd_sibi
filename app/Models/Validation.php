@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\ValidationStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,17 +13,10 @@ class Validation extends Model
         'dataset_id',
         'validator_id',
         'status',
-        'notes',
+        'feedback',
+        'rejection_reason',
         'validated_at',
     ];
-
-    protected function casts(): array
-    {
-        return [
-            'status' => ValidationStatus::class,
-            'validated_at' => 'datetime',
-        ];
-    }
 
     public function dataset()
     {

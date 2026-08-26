@@ -28,7 +28,7 @@
             </div>
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-1">
                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Menunggu Validasi Pakar</p>
-                <p class="text-2xl font-black text-amber-600">{{ $myDatasets->where('status.value', 'pending')->count() }} Berkas</p>
+                <p class="text-2xl font-black text-amber-600">{{ $myDatasets->where('status.value', 'waiting_expert_validation')->count() }} Berkas</p>
             </div>
         </div>
 
@@ -50,18 +50,38 @@
                         <td class="px-5 py-4 font-bold text-blue-600">
                             Pengunggahan #{{ $myDatasets->count() - $index }}
                         </td>
-                        <td class="px-5 py-4 font-bold text-slate-900">
-                            {{ $dataset->title }}
-                            <span class="block text-[11px] text-slate-500 font-normal">Label: "{{ $dataset->sign_label }}"</span>
+                        <td class="px-5 py-4 font-bold text-slate-900 space-y-1">
+                            <div>
+                                {{ $dataset->title }}
+                                <span class="block text-[11px] text-slate-500 font-normal">Label: "{{ $dataset->sign_label }}"</span>
+                            </div>
+
+                            @if(($dataset->category ?? '') === 'Short Story' || !empty($dataset->story_content))
+                                <div class="bg-purple-50 p-2.5 rounded-xl border border-purple-100 text-[11px] text-purple-900 font-normal italic">
+                                    <strong>Naskah:</strong> "{{ Str::limit($dataset->story_content ?? $dataset->description, 100) }}"
+                                </div>
+                            @endif
+
+                            @if(!empty($dataset->rejection_reason))
+                                <div class="bg-rose-50 p-2.5 rounded-xl border border-rose-200 text-[11px] text-rose-800 font-normal">
+                                    <strong>Catatan Evaluasi:</strong> {{ $dataset->rejection_reason }}
+                                </div>
+                            @endif
                         </td>
-                        <td class="px-5 py-4 text-slate-600 font-medium">{{ $dataset->category }}</td>
+                        <td class="px-5 py-4 font-medium">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold {{ ($dataset->category ?? '') === 'Short Story' ? 'bg-purple-100 text-purple-800' : 'bg-slate-100 text-slate-700' }}">
+                                {{ $dataset->category }}
+                            </span>
+                        </td>
                         <td class="px-5 py-4 text-slate-500">{{ number_format($dataset->file_size / (1024*1024), 1) }} MB</td>
                         <td class="px-5 py-4 text-slate-500">{{ $dataset->created_at->format('d M Y, H:i') }}</td>
                         <td class="px-5 py-4">
                             @if(($dataset->status->value ?? 'pending') === 'validated')
                                 <x-badge type="validated" label="Tervalidasi Pakar" />
                             @elseif(($dataset->status->value ?? 'pending') === 'rejected')
-                                <x-badge type="rejected" label="Ditolak" />
+                                <x-badge type="rejected" label="Ditolak Pakar" />
+                            @elseif(($dataset->status->value ?? 'pending') === 'revision')
+                                <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-200 font-extrabold text-[10px]">Minta Revisi</span>
                             @else
                                 <x-badge type="pending" label="Menunggu Validasi Pakar" />
                             @endif

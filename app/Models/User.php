@@ -20,11 +20,14 @@ class User extends Authenticatable
         'phone',
         'institution',
         'is_active',
+        'otp_code',
+        'otp_expires_at',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
+        'otp_code',
     ];
 
     protected function casts(): array
@@ -34,6 +37,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'role' => UserRole::class,
             'is_active' => 'boolean',
+            'otp_expires_at' => 'datetime',
         ];
     }
 

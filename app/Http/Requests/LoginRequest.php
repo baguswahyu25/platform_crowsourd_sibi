@@ -16,6 +16,17 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
+            'cf-turnstile-response' => ['required'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'Alamat email wajib diisi.',
+            'email.email' => 'Format alamat email tidak valid.',
+            'password.required' => 'Kata sandi wajib diisi.',
+            'cf-turnstile-response.required' => 'Silakan selesaikan verifikasi keamanan terlebih dahulu.',
         ];
     }
 }

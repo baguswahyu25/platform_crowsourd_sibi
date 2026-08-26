@@ -14,6 +14,8 @@ class DatasetNeed extends Model
     protected $fillable = [
         'title',
         'category',
+        'category_id',
+        'subcategory',
         'description',
         'target_count',
         'current_count',

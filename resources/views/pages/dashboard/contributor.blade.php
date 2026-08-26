@@ -9,9 +9,6 @@
                 <h1 class="text-2xl sm:text-3xl font-black tracking-tight">Halo, Selamat Datang Kembali!</h1>
                 <p class="text-xs sm:text-sm text-blue-100 max-w-xl">Terima kasih atas kontribusi Anda. Anda dapat mengunggah berkas dataset gerakan isyarat SIBI lebih dari 1 kali tanpa batas.</p>
             </div>
-            <x-button variant="primary" icon="cloud_upload" href="{{ route('contributor.dataset.upload') }}" class="bg-white hover:bg-slate-100 text-blue-600 shadow-lg min-h-[44px]">
-                Unggah Dataset Baru
-            </x-button>
         </div>
 
         <!-- 4 Column Responsive Cards Grid for Contributor -->

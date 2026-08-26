@@ -7,6 +7,7 @@ enum DatasetNeedStatus: string
     case ACTIVE = 'active';
     case FULFILLED = 'fulfilled';
     case CLOSED = 'closed';
+    case INACTIVE = 'inactive';
 
     public function label(): string
     {
@@ -14,6 +15,7 @@ enum DatasetNeedStatus: string
             self::ACTIVE => 'Aktif',
             self::FULFILLED => 'Terpenuhi',
             self::CLOSED => 'Ditutup',
+            self::INACTIVE => 'Nonaktif',
         };
     }
 }

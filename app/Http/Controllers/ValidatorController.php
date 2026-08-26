@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dataset;
 use App\Services\DatasetService;
 use App\Services\ValidationService;
 use Illuminate\Http\Request;
@@ -12,7 +13,23 @@ class ValidatorController extends Controller
     public function __construct(
         protected DatasetService $datasetService,
         protected ValidationService $validationService
-    ) {}
+    ) {
+        $this->middleware(function ($request, $next) {
+            $user = auth()->user();
+            if (!$user) {
+                return redirect()->route('auth.login')->withErrors([
+                    'email' => 'Silakan masuk (login) terlebih dahulu untuk mengakses halaman Validator / Pakar SIBI.',
+                ]);
+            }
+
+            $role = is_object($user->role) ? $user->role->value : $user->role;
+            if ($role !== 'validator') {
+                abort(403, 'Akses ditolak. Halaman validasi ini khusus untuk pengguna dengan hak akses Validator / Pakar SIBI.');
+            }
+
+            return $next($request);
+        });
+    }
 
     public function dashboard(): View
     {
@@ -30,16 +47,7 @@ class ValidatorController extends Controller
 
     public function detail(int $id): View
     {
-        $dataset = $this->datasetService->getAllDatasets()->firstWhere('id', $id) ?? (object)[
-            'id' => $id,
-            'title' => 'Isyarat SIBI - Halo',
-            'sign_label' => 'HALO',
-            'category' => 'Kata Kunci',
-            'status' => 'pending',
-            'created_at' => now(),
-            'user' => (object)['name' => 'Ahmad Risyad', 'institution' => 'Universitas Indonesia'],
-            'file_path' => 'demo/halo.mp4'
-        ];
+        $dataset = Dataset::with(['user', 'datasetNeed', 'validation'])->findOrFail($id);
 
         return view('pages.validator.detail', compact('dataset'));
     }
@@ -64,8 +72,17 @@ class ValidatorController extends Controller
         ]);
 
         $validatorId = auth()->id() ?? 1;
+
+        $dataset = Dataset::find($id);
+        if ($dataset) {
+            $dataset->update([
+                'status' => $request->status,
+                'rejection_reason' => ($request->status === 'rejected' || $request->status === 'revision') ? $request->notes : null
+            ]);
+        }
+
         $this->validationService->validateDataset($id, $validatorId, $request->status, $request->notes);
 
-        return redirect()->route('validator.antrean')->with('success', 'Validasi dataset berhasil diperbarui.');
+        return redirect()->route('validator.antrean')->with('success', 'Keputusan evaluasi validasi dataset berhasil disimpan.');
     }
 }

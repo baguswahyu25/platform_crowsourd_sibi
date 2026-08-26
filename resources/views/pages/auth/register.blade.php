@@ -5,6 +5,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Registrasi Kontributor - SIBI Dataset Platform</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Cloudflare Turnstile Script -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script id="tailwind-config">
@@ -125,7 +127,7 @@
     </div>
 
     <!-- Registration Card -->
-    <div class="relative z-10 w-full max-w-[480px] bg-surface-container-lowest border border-outline-variant/30 rounded-[20px] shadow-sm p-xl transition-all duration-500" id="register-card">
+    <div class="relative z-10 w-full max-w-[520px] bg-surface-container-lowest border border-outline-variant/30 rounded-[20px] shadow-sm p-xl transition-all duration-500" id="register-card">
         <div class="mb-xl text-center">
             <h1 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Registrasi Kontributor</h1>
             <p class="font-body-md text-on-surface-variant">Bergabunglah dalam pengembangan dataset bahasa isyarat Indonesia.</p>
@@ -133,6 +135,10 @@
 
         @if($errors->any())
             <div class="mb-md p-md rounded-xl bg-error-container text-on-error-container text-label-md">
+                <div class="font-bold mb-1 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">error</span>
+                    <span>Periksa Kembali Isian Anda:</span>
+                </div>
                 <ul class="list-disc list-inside space-y-1">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -141,53 +147,95 @@
             </div>
         @endif
 
-        <form action="{{ route('auth.register.store') }}" method="POST" class="space-y-lg" id="registration-form">
+        <form action="{{ route('auth.register.store') }}" method="POST" class="space-y-lg" id="registration-form" novalidate>
             @csrf
 
             <!-- Nama Lengkap -->
             <div class="space-y-xs">
                 <label class="font-label-md text-label-md text-on-surface-variant block" for="name">Nama Lengkap</label>
                 <div class="relative">
-                    <input class="w-full h-12 px-md bg-surface-container-lowest border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" id="name" name="name" value="{{ old('name') }}" placeholder="John Doe" required type="text"/>
+                    <input class="w-full h-12 px-md bg-surface-container-lowest border {{ $errors->has('name') ? 'border-error' : 'border-outline-variant' }} rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" id="name" name="name" value="{{ old('name') }}" placeholder="John Doe" required type="text"/>
                 </div>
+                @error('name')
+                    <p class="text-xs text-error font-medium mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <!-- Email -->
             <div class="space-y-xs">
                 <label class="font-label-md text-label-md text-on-surface-variant block" for="email">Email</label>
                 <div class="relative">
-                    <input class="w-full h-12 px-md bg-surface-container-lowest border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" id="email" name="email" value="{{ old('email') }}" placeholder="name@company.com" required type="email"/>
+                    <input class="w-full h-12 px-md bg-surface-container-lowest border {{ $errors->has('email') ? 'border-error' : 'border-outline-variant' }} rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" id="email" name="email" value="{{ old('email') }}" placeholder="name@company.com" required type="email"/>
                 </div>
+                @error('email')
+                    <p class="text-xs text-error font-medium mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <!-- Password Row -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
-                <!-- Password -->
-                <div class="space-y-xs">
-                    <label class="font-label-md text-label-md text-on-surface-variant block" for="password">Password</label>
-                    <div class="relative">
-                        <input class="w-full h-12 px-md bg-surface-container-lowest border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" id="password" name="password" placeholder="••••••••" required type="password"/>
+            <div class="space-y-xs">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+                    <!-- Password -->
+                    <div class="space-y-xs">
+                        <label class="font-label-md text-label-md text-on-surface-variant block" for="password">Password</label>
+                        <div class="relative">
+                            <input class="w-full h-12 px-md bg-surface-container-lowest border {{ $errors->has('password') ? 'border-error' : 'border-outline-variant' }} rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" id="password" name="password" placeholder="••••••••" required type="password"/>
+                        </div>
+                    </div>
+                    <!-- Konfirmasi Password -->
+                    <div class="space-y-xs">
+                        <label class="font-label-md text-label-md text-on-surface-variant block" for="password_confirmation">Konfirmasi Password</label>
+                        <div class="relative">
+                            <input class="w-full h-12 px-md bg-surface-container-lowest border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" id="password_confirmation" name="password_confirmation" placeholder="••••••••" required type="password"/>
+                        </div>
                     </div>
                 </div>
-                <!-- Konfirmasi Password -->
-                <div class="space-y-xs">
-                    <label class="font-label-md text-label-md text-on-surface-variant block" for="password_confirmation">Konfirmasi</label>
-                    <div class="relative">
-                        <input class="w-full h-12 px-md bg-surface-container-lowest border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" id="password_confirmation" name="password_confirmation" placeholder="••••••••" required type="password"/>
-                    </div>
+
+                <!-- Password Format Helper Note -->
+                <div class="bg-blue-50/80 border border-blue-100 p-3 rounded-xl text-[11px] text-blue-900 mt-2 space-y-1">
+                    <p class="font-bold flex items-center gap-1">
+                        <span class="material-symbols-outlined text-xs text-blue-600">info</span>
+                        Ketentuan Kata Sandi:
+                    </p>
+                    <ul class="list-disc list-inside text-blue-800 space-y-0.5 pl-1">
+                        <li>Minimal <strong>8 karakter</strong></li>
+                        <li>Mengandung minimal <strong>1 huruf besar (A-Z)</strong></li>
+                        <li>Mengandung minimal <strong>1 angka (0-9)</strong></li>
+                        <li>Mengandung minimal <strong>1 simbol unik</strong> (!@#$%^&* dll)</li>
+                    </ul>
                 </div>
+
+                @error('password')
+                    <p class="text-xs text-error font-medium mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <!-- Checkbox -->
             <div class="flex items-start gap-sm pt-xs">
-                <input class="mt-1 w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" id="terms" required type="checkbox"/>
+                <input class="mt-1 w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary cursor-pointer" id="terms" required type="checkbox"/>
                 <label class="font-body-md text-body-md text-on-surface-variant cursor-pointer" for="terms">
                     Saya menyetujui <a class="text-primary hover:underline" href="#">syarat dan ketentuan</a>.
                 </label>
             </div>
 
-            <!-- Action Button -->
-            <button class="w-full h-12 bg-primary text-on-primary font-label-md text-label-md rounded-xl shadow-sm hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-sm mt-md min-h-[44px]" id="submit-btn" type="submit">
+            <!-- Cloudflare Turnstile Verification Widget (Always Visible + Callbacks) -->
+            <div class="flex flex-col items-center justify-center space-y-2 my-md">
+                <div 
+                    class="cf-turnstile" 
+                    data-sitekey="{{ config('services.turnstile.site_key') }}"
+                    data-appearance="always"
+                    data-callback="onTurnstileRegisterSuccess"
+                    data-expired-callback="onTurnstileRegisterExpired"
+                    data-error-callback="onTurnstileRegisterError">
+                </div>
+                <p id="turnstile-register-status" class="text-[11px] font-medium text-amber-700 flex items-center gap-1 text-center">
+                    <span class="material-symbols-outlined text-xs text-amber-600">shield</span>
+                    <span>Selesaikan verifikasi keamanan di atas sebelum mendaftar.</span>
+                </p>
+            </div>
+
+            <!-- Action Submit Button: Initially Disabled until Turnstile passes -->
+            <button class="w-full h-12 bg-slate-300 text-on-primary font-label-md text-label-md rounded-xl shadow-sm transition-all flex items-center justify-center gap-sm mt-md min-h-[44px] cursor-not-allowed opacity-60" id="submit-btn" type="submit" disabled>
                 <span>Daftar</span>
             </button>
         </form>
@@ -214,6 +262,45 @@
         </div>
     </div>
 </footer>
+
+<!-- Turnstile Register Callback Script -->
+<script>
+    function onTurnstileRegisterSuccess(token) {
+        const btn = document.getElementById('submit-btn');
+        const statusText = document.getElementById('turnstile-register-status');
+        if (btn) {
+            btn.disabled = false;
+            btn.classList.remove('opacity-60', 'cursor-not-allowed', 'bg-slate-300');
+            btn.classList.add('cursor-pointer', 'opacity-100', 'bg-primary', 'hover:opacity-90', 'active:scale-[0.98]');
+        }
+        if (statusText) {
+            statusText.className = 'text-[11px] font-medium text-emerald-700 flex items-center gap-1 text-center';
+            statusText.innerHTML = '<span class="material-symbols-outlined text-xs text-emerald-600">check_circle</span><span>Verifikasi keamanan berhasil! Anda dapat mendaftar sekarang.</span>';
+        }
+    }
+
+    function onTurnstileRegisterExpired() {
+        disableRegisterButton('Verifikasi keamanan telah kedaluwarsa. Silakan lakukan verifikasi kembali.');
+    }
+
+    function onTurnstileRegisterError() {
+        disableRegisterButton('Verifikasi keamanan belum berhasil. Silakan lakukan verifikasi kembali.');
+    }
+
+    function disableRegisterButton(message) {
+        const btn = document.getElementById('submit-btn');
+        const statusText = document.getElementById('turnstile-register-status');
+        if (btn) {
+            btn.disabled = true;
+            btn.classList.add('opacity-60', 'cursor-not-allowed', 'bg-slate-300');
+            btn.classList.remove('cursor-pointer', 'opacity-100', 'bg-primary');
+        }
+        if (statusText) {
+            statusText.className = 'text-[11px] font-medium text-amber-700 flex items-center gap-1 text-center';
+            statusText.innerHTML = '<span class="material-symbols-outlined text-xs text-amber-600">warning</span><span>' + message + '</span>';
+        }
+    }
+</script>
 
 </body>
 </html>

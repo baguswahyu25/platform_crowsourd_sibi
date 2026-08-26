@@ -25,7 +25,18 @@ Route::controller(AuthController::class)->name('auth.')->group(function () {
     Route::post('/login', 'login')->name('login.store');
     Route::get('/register', 'showRegister')->name('register');
     Route::post('/register', 'register')->name('register.store');
+    
+    // Verifikasi Email OTP Routes
+    Route::get('/verify-email', 'showVerifyEmail')->name('verify-email');
+    Route::post('/verify-otp', 'verifyOtp')->name('verify-otp');
+    Route::post('/resend-otp', 'resendOtp')->name('resend-otp');
+
+    // Lupa Password & Reset Password Routes
     Route::get('/forgot-password', 'showForgotPassword')->name('forgot-password');
+    Route::post('/forgot-password', 'sendResetLinkEmail')->name('forgot-password.store');
+    Route::get('/reset-password/{token}', 'showResetPassword')->name('reset-password');
+    Route::post('/reset-password', 'resetPassword')->name('reset-password.store');
+
     Route::post('/logout', 'logout')->name('logout');
 });
 
@@ -35,7 +46,12 @@ Route::prefix('contributor')->name('contributor.')->group(function () {
     Route::get('/dataset', [ContributorController::class, 'datasets'])->name('dataset.index');
     Route::get('/upload', [ContributorController::class, 'upload'])->name('dataset.upload');
     Route::post('/upload', [DatasetController::class, 'store'])->name('dataset.store');
+    
+    // AI Check Progress & Result Routes
+    Route::get('/ai-check-failed', [DatasetController::class, 'aiCheckFailed'])->name('dataset.ai_check_failed');
+    Route::get('/validation-result-failed', [DatasetController::class, 'validationResultFailed'])->name('dataset.validation_result_failed');
     Route::get('/ai-check/{id}', [DatasetController::class, 'aiCheck'])->name('dataset.ai_check');
+
     Route::get('/kebutuhan', [ContributorController::class, 'kebutuhan'])->name('kebutuhan.index');
 });
 
@@ -53,6 +69,11 @@ Route::prefix('validator')->name('validator.')->group(function () {
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/kebutuhan', [AdminController::class, 'kebutuhan'])->name('kebutuhan.index');
+    Route::post('/kebutuhan', [AdminController::class, 'storeNeed'])->name('kebutuhan.store');
+    Route::put('/kebutuhan/{id}', [AdminController::class, 'updateNeed'])->name('kebutuhan.update');
+    Route::patch('/kebutuhan/{id}/toggle', [AdminController::class, 'toggleNeedStatus'])->name('kebutuhan.toggle');
+    Route::delete('/kebutuhan/{id}', [AdminController::class, 'destroyNeed'])->name('kebutuhan.destroy');
+
     Route::get('/pengguna', [AdminController::class, 'pengguna'])->name('pengguna.index');
     Route::get('/laporan', [AdminController::class, 'laporan'])->name('laporan.index');
 });

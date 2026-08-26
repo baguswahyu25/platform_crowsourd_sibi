@@ -1,25 +1,19 @@
 <header class="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm">
     <div class="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <!-- Mobile Sidebar Toggle -->
-        <button @click="sidebarOpen = !sidebarOpen" type="button" class="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 min-h-[44px] min-w-[44px] flex items-center justify-center">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
-
-        <!-- Brand / Search -->
+        <!-- Mobile Sidebar Toggle & Brand -->
         <div class="flex items-center space-x-3">
+            <button @click="sidebarOpen = !sidebarOpen" type="button" class="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 min-h-[44px] min-w-[44px] flex items-center justify-center">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
             <a href="{{ route('landing') }}" class="flex items-center space-x-2 lg:hidden">
                 <img src="{{ asset('storage/logo.jpg') }}" alt="SIBI Logo" class="h-9 w-auto rounded-md shadow-xs object-cover"/>
                 <span class="font-bold text-slate-900 tracking-tight">SIBI Platform</span>
             </a>
-            <div class="hidden sm:flex items-center bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 w-64">
-                <span class="material-symbols-outlined text-slate-400 text-sm mr-2">search</span>
-                <input type="text" placeholder="Cari dataset, kata SIBI..." class="bg-transparent text-sm focus:outline-none w-full text-slate-700"/>
-            </div>
         </div>
 
         <!-- Header Actions & Profile Dropdown -->
-        <div class="flex items-center space-x-3" x-data="{ profileOpen: false }">
-            <button type="button" class="p-2 text-slate-500 hover:bg-slate-100 rounded-lg relative min-h-[44px] min-w-[44px] flex items-center justify-center">
+        <div class="flex items-center space-x-3 ml-auto" x-data="{ profileOpen: false }">
+            <button type="button" class="p-2 text-slate-500 hover:bg-slate-100 rounded-lg relative min-h-[44px] min-w-[44px] flex items-center justify-center" title="Notifikasi">
                 <span class="material-symbols-outlined">notifications</span>
                 <span class="absolute top-2 right-2 h-2 w-2 bg-rose-500 rounded-full"></span>
             </button>

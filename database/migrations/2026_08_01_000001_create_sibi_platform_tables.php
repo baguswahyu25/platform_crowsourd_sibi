@@ -14,6 +14,8 @@ return new class extends Migration
             $table->string('phone')->nullable()->after('avatar');
             $table->string('institution')->nullable()->after('phone');
             $table->boolean('is_active')->default(true)->after('institution');
+            $table->string('otp_code')->nullable()->after('is_active');
+            $table->timestamp('otp_expires_at')->nullable()->after('otp_code');
         });
 
         Schema::create('dataset_needs', function (Blueprint $table) {
@@ -44,7 +46,7 @@ return new class extends Migration
             $table->string('file_type')->default('video');
             $table->bigInteger('file_size')->default(0);
 
-            // AUTO VALIDATION COLUMNS
+            // Auto Validation metadata (OpenCV Python Analysis)
             $table->float('brightness_score')->nullable();
             $table->string('brightness_status')->nullable();
 
@@ -62,7 +64,7 @@ return new class extends Migration
             $table->string('auto_validation_status')->default('passed');
             $table->text('validation_message')->nullable();
 
-            // OVERALL STATUS
+            // Overall Status
             $table->string('status')->default('pending');
 
             $table->timestamps();
@@ -73,8 +75,7 @@ return new class extends Migration
             $table->foreignId('dataset_id')->constrained()->cascadeOnDelete();
             $table->foreignId('validator_id')->constrained('users')->cascadeOnDelete();
             $table->string('status');
-            $table->text('notes')->nullable();
-            $table->timestamp('validated_at')->useCurrent();
+            $table->text('feedback')->nullable();
             $table->timestamps();
         });
     }
@@ -86,7 +87,7 @@ return new class extends Migration
         Schema::dropIfExists('dataset_needs');
 
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['role', 'avatar', 'phone', 'institution', 'is_active']);
+            $table->dropColumn(['role', 'avatar', 'phone', 'institution', 'is_active', 'otp_code', 'otp_expires_at']);
         });
     }
 };
