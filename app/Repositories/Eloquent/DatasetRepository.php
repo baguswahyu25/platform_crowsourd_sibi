@@ -25,7 +25,11 @@ class DatasetRepository implements DatasetRepositoryInterface
 
     public function getPendingValidation(): Collection
     {
-        return Dataset::whereIn('status', ['waiting_expert_validation', 'pending'])->with('user')->latest()->get();
+        return Dataset::where('auto_validation_status', 'passed')
+            ->where('status', 'waiting_expert_validation')
+            ->with(['user', 'datasetNeed', 'validation'])
+            ->latest()
+            ->get();
     }
 
     public function create(array $data): Dataset

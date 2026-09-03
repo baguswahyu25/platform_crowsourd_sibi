@@ -67,7 +67,7 @@ class ValidatorController extends Controller
     public function processValidation(Request $request, int $id)
     {
         $request->validate([
-            'status' => 'required|in:validated,rejected,revision',
+            'status' => 'required|in:validated,rejected',
             'notes' => 'nullable|string',
         ]);
 
@@ -77,7 +77,7 @@ class ValidatorController extends Controller
         if ($dataset) {
             $dataset->update([
                 'status' => $request->status,
-                'rejection_reason' => ($request->status === 'rejected' || $request->status === 'revision') ? $request->notes : null
+                'rejection_reason' => ($request->status === 'rejected') ? $request->notes : null
             ]);
         }
 

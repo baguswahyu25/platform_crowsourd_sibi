@@ -30,7 +30,22 @@
                     </span>
                 </div>
 
-                <!-- 4 Criteria Analysis Details (Failed state highlights) -->
+                <!-- Failure Reasons List -->
+                @if(!empty($d['failure_reasons']) && is_array($d['failure_reasons']))
+                    <div class="bg-rose-50 border border-rose-200 p-5 rounded-2xl space-y-2">
+                        <h3 class="text-xs font-bold text-rose-900 uppercase tracking-wider flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-base text-rose-600">warning</span>
+                            <span>Masalah yang Ditemukan pada Video:</span>
+                        </h3>
+                        <ul class="list-disc list-inside text-xs text-rose-800 space-y-1 font-semibold pl-1">
+                            @foreach($d['failure_reasons'] as $reason)
+                                <li>{{ $reason }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <!-- 5 Criteria Analysis Details (Failed state highlights) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <!-- 1. Pencahayaan -->
                     <div class="p-5 rounded-2xl border {{ ($d['brightness_status'] ?? 'Normal') === 'Normal' ? 'bg-slate-50 border-slate-200' : 'bg-rose-50 border-rose-200' }} space-y-1">
@@ -71,32 +86,32 @@
                             @endif
                         </div>
                         <p class="text-lg font-black text-slate-900">{{ $d['freeze_status'] ?? 'Patah-patah' }}</p>
-                        <p class="text-[11px] text-slate-400">Freeze Frame: {{ $d['freeze_percentage'] ?? 36.5 }}% (Max: 35.0%)</p>
+                        <p class="text-[11px] text-slate-400">Freeze Frame: {{ $d['freeze_percentage'] ?? 36.5 }}% (Max: 25.0%)</p>
                     </div>
 
                     <!-- 4. Resolusi & Frame Rate -->
-                    <div class="p-5 rounded-2xl border {{ ($d['resolution_status'] ?? 'Standar') !== 'Rendah' ? 'bg-slate-50 border-slate-200' : 'bg-rose-50 border-rose-200' }} space-y-1">
+                    <div class="p-5 rounded-2xl border {{ (($d['resolution_status'] ?? 'Sesuai Standar') === 'Sesuai Standar' && ($d['fps_status'] ?? 'Sesuai Standar') === 'Sesuai Standar') ? 'bg-slate-50 border-slate-200' : 'bg-rose-50 border-rose-200' }} space-y-1">
                         <div class="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider">
                             <span>Resolusi & Frame Rate</span>
-                            @if(($d['resolution_status'] ?? 'Standar') !== 'Rendah')
-                                <span class="text-emerald-600 font-extrabold">✓ {{ $d['resolution_status'] ?? 'Tinggi' }}</span>
+                            @if(($d['resolution_status'] ?? 'Sesuai Standar') === 'Sesuai Standar' && ($d['fps_status'] ?? 'Sesuai Standar') === 'Sesuai Standar')
+                                <span class="text-emerald-600 font-extrabold">✓ Sesuai Standar</span>
                             @else
-                                <span class="text-rose-600 font-extrabold">✕ Resolusi Rendah</span>
+                                <span class="text-rose-600 font-extrabold">✕ Di Bawah Standar</span>
                             @endif
                         </div>
                         <p class="text-lg font-black text-slate-900">{{ $d['video_width'] ?? 640 }} × {{ $d['video_height'] ?? 480 }}</p>
-                        <p class="text-[11px] text-slate-400">Frame Rate: {{ $d['video_fps'] ?? 30.0 }} FPS</p>
+                        <p class="text-[11px] text-slate-400">Frame Rate: {{ $d['video_fps'] ?? 30.0 }} FPS (Min: 24 FPS)</p>
                     </div>
                 </div>
 
                 <!-- Notice Card -->
-                <div class="bg-rose-50 border border-rose-200 p-5 rounded-2xl space-y-2">
-                    <h3 class="text-xs font-bold text-rose-900 uppercase tracking-wider">Informasi Penting:</h3>
-                    <p class="text-xs text-rose-700 leading-relaxed font-semibold">
-                        Video belum dapat dikirim ke tahap validasi pakar. Silakan perbaiki video sesuai kriteria dan upload kembali.
+                <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-2">
+                    <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Instruksi Upload Ulang:</h3>
+                    <p class="text-xs text-slate-700 leading-relaxed font-medium">
+                        Video belum dapat diteruskan ke tahap validasi pakar SIBI. Silakan rekam dan upload ulang video dengan memperhatikan pencahayaan yang cukup, fokus kamera yang jernih, dan resolusi minimal 640x480 pada 24 FPS.
                     </p>
-                    <p class="text-[11px] text-rose-600">
-                        * Berkas video gagal ini tidak disimpan di database maupun penyimpanan server Anda untuk menghemat memori.
+                    <p class="text-[11px] text-slate-500 italic pt-1 border-t border-slate-200">
+                        * Berkas ini tidak masuk antrean Pakar SIBI. Anda dapat mengunggah ulang video baru kapan saja melalui tombol di bawah ini.
                     </p>
                 </div>
 

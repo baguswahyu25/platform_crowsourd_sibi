@@ -128,13 +128,18 @@ class DatasetController extends Controller
         $pythonBinary = env('PYTHON_PATH');
         if (!$pythonBinary || !file_exists($pythonBinary)) {
             $candidates = [
+                '/home/driveenusa.it.com/public_html/ai_validation/venv/bin/python',
+                '/usr/bin/python3',
+                '/usr/local/bin/python3',
+                '/usr/bin/python',
+                'python3',
+                'python',
                 'C:/Users/asus/.pyenv/pyenv-win/versions/3.12.7/python.exe',
                 'C:/Users/asus/.pyenv/pyenv-win/shims/python.bat',
                 'C:/Users/asus/.pyenv/pyenv-win/shims/python.exe',
-                'python',
             ];
             foreach ($candidates as $c) {
-                if ($c === 'python' || file_exists($c)) {
+                if ($c === 'python3' || $c === 'python' || file_exists($c)) {
                     $pythonBinary = $c;
                     break;
                 }
@@ -163,29 +168,86 @@ class DatasetController extends Controller
 
         $isPassed = ($output['validation_status'] === 'passed');
 
-        if (!$isPassed) {
-            Storage::disk('public')->delete($path);
+        // Logging detail hasil analisis OpenCV AI
+        Log::info('OpenCV AI Video Validation Result:', [
+            'file_path' => $path,
+            'file_exists' => file_exists($fullVideoPath),
+            'file_size' => $fileSize,
+            'video_width' => $output['video']['width'] ?? null,
+            'video_height' => $output['video']['height'] ?? null,
+            'video_fps' => $output['video']['fps'] ?? null,
+            'fps_status' => $output['video']['fps_status'] ?? null,
+            'resolution_status' => $output['video']['resolution_status'] ?? null,
+            'brightness_score' => $output['brightness']['score'] ?? null,
+            'brightness_status' => $output['brightness']['status'] ?? null,
+            'blur_score' => $output['blur']['score'] ?? null,
+            'blur_status' => $output['blur']['status'] ?? null,
+            'freeze_percentage' => $output['freeze']['percentage'] ?? null,
+            'freeze_status' => $output['freeze']['status'] ?? null,
+            'final_status' => $output['validation_status'] ?? 'failed',
+            'failure_reasons' => $output['failure_reasons'] ?? [],
+        ]);
 
+        if (!$isPassed) {
             $failedTitle = $isShortStory ? $request->input('title') : ($isSentence ? $request->input('sentence_content') : ($request->title ?? 'Peragaan SIBI'));
             $failedCategory = $isShortStory ? 'Short Story' : ($isSentence ? 'Sentence' : ($request->category ?? 'Alphabet'));
             $failedLabel = $isShortStory ? $request->input('sign_label') : ($isSentence ? $request->input('sentence_content') : ($request->sign_label ?? 'Label SIBI'));
+            $storyContent = $isShortStory ? $request->input('story_content') : ($isSentence ? $request->input('sentence_content') : null);
+
+            $userId = auth()->id() ?? 1;
+            $failedReasonsStr = !empty($output['failure_reasons']) ? implode('; ', $output['failure_reasons']) : 'Video tidak memenuhi kriteria kualitas teknis AI.';
+
+            $failedDatasetRecord = $this->datasetService->storeDataset([
+                'title' => $failedTitle,
+                'category' => $failedCategory,
+                'subcategory' => $request->input('subcategory') ?? ($isShortStory ? 'short_story' : ($isSentence ? 'sentence' : null)),
+                'sign_label' => $failedLabel,
+                'description' => $request->input('description') ?? $storyContent,
+                'story_content' => $storyContent,
+                'dataset_need_id' => ($isShortStory || $isSentence) ? null : $request->dataset_need_id,
+                'file_path' => $path,
+                'file_type' => $extension,
+                'file_size' => $fileSize,
+
+                'brightness_score' => $output['brightness']['score'] ?? null,
+                'brightness_status' => $output['brightness']['status'] ?? null,
+
+                'blur_score' => $output['blur']['score'] ?? null,
+                'blur_status' => $output['blur']['status'] ?? null,
+
+                'freeze_percentage' => $output['freeze']['percentage'] ?? null,
+                'freeze_status' => $output['freeze']['status'] ?? null,
+
+                'video_width' => $output['video']['width'] ?? null,
+                'video_height' => $output['video']['height'] ?? null,
+                'video_fps' => $output['video']['fps'] ?? null,
+                'resolution_status' => $output['video']['resolution_status'] ?? null,
+
+                'auto_validation_status' => 'failed',
+                'validation_message' => $failedReasonsStr,
+                'rejection_reason' => $failedReasonsStr,
+                'status' => 'failed',
+            ], $userId);
 
             session()->flash('failed_dataset', [
+                'id' => $failedDatasetRecord->id,
                 'title' => $failedTitle,
                 'category' => $failedCategory,
                 'sign_label' => $failedLabel,
                 'dataset_need_id' => $request->dataset_need_id,
-                'story_content' => $isShortStory ? $request->input('story_content') : ($isSentence ? $request->input('sentence_content') : null),
-                'brightness_score' => $output['brightness']['score'],
-                'brightness_status' => $output['brightness']['status'],
-                'blur_score' => $output['blur']['score'],
-                'blur_status' => $output['blur']['status'],
-                'freeze_percentage' => $output['freeze']['percentage'],
-                'freeze_status' => $output['freeze']['status'],
-                'video_width' => $output['video']['width'],
-                'video_height' => $output['video']['height'],
-                'video_fps' => $output['video']['fps'],
-                'resolution_status' => $output['video']['resolution_status'],
+                'story_content' => $storyContent,
+                'brightness_score' => $output['brightness']['score'] ?? null,
+                'brightness_status' => $output['brightness']['status'] ?? null,
+                'blur_score' => $output['blur']['score'] ?? null,
+                'blur_status' => $output['blur']['status'] ?? null,
+                'freeze_percentage' => $output['freeze']['percentage'] ?? null,
+                'freeze_status' => $output['freeze']['status'] ?? null,
+                'video_width' => $output['video']['width'] ?? null,
+                'video_height' => $output['video']['height'] ?? null,
+                'video_fps' => $output['video']['fps'] ?? null,
+                'fps_status' => $output['video']['fps_status'] ?? 'Sesuai Standar',
+                'resolution_status' => $output['video']['resolution_status'] ?? null,
+                'failure_reasons' => $output['failure_reasons'] ?? [],
                 'auto_validation_status' => 'failed',
             ]);
 

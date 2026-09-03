@@ -1,14 +1,31 @@
 <x-app-layout title="Pemeriksaan AI - SIBI Dataset Platform" role="contributor">
+    @php
+        $d = $failedDataset ?? [];
+        $bPassed = ($d['brightness_status'] ?? 'Normal') === 'Normal';
+        $blurPassed = ($d['blur_status'] ?? 'Tajam') === 'Tajam';
+        $freezePassed = ($d['freeze_status'] ?? 'Lancar') === 'Lancar' || ($d['freeze_status'] ?? 'Lancar') === 'Ada Gejala Lag';
+        $resPassed = ($d['resolution_status'] ?? 'Sesuai Standar') === 'Sesuai Standar';
+        $fpsPassed = ($d['fps_status'] ?? 'Sesuai Standar') === 'Sesuai Standar';
+    @endphp
+
     <div class="max-w-6xl mx-auto space-y-8" x-data="{ 
         state: 'checking', 
         result: 'failed',
         progress: 0,
         currentStep: 0,
         items: [
-            { label: 'Kecerahan', status: 'checking' },
-            { label: 'Ketajaman', status: 'pending' },
-            { label: 'Kelancaran Video', status: 'pending' },
-            { label: 'Resolusi dan FPS', status: 'pending' }
+            { label: 'Pencahayaan Subjek', status: 'checking', detail: '{{ $d["brightness_status"] ?? "Terlalu Gelap" }}' },
+            { label: 'Ketajaman Video', status: 'pending', detail: '{{ $d["blur_status"] ?? "Tajam" }}' },
+            { label: 'Kelancaran Video', status: 'pending', detail: '{{ $d["freeze_status"] ?? "Lancar" }}' },
+            { label: 'Resolusi Video', status: 'pending', detail: '{{ $d["video_width"] ?? 640 }}×{{ $d["video_height"] ?? 480 }}' },
+            { label: 'Frame Rate (FPS)', status: 'pending', detail: '{{ $d["video_fps"] ?? 30 }} FPS' }
+        ],
+        targetStatuses: [
+            '{{ $bPassed ? "valid" : "failed" }}',
+            '{{ $blurPassed ? "valid" : "failed" }}',
+            '{{ $freezePassed ? "valid" : "failed" }}',
+            '{{ $resPassed ? "valid" : "failed" }}',
+            '{{ $fpsPassed ? "valid" : "failed" }}'
         ],
         startScan() {
             this.progress = 0;
@@ -16,22 +33,22 @@
             this.items[0].status = 'checking';
 
             let interval = setInterval(() => {
-                if (this.currentStep < 3) {
-                    this.items[this.currentStep].status = 'valid';
+                if (this.currentStep < 4) {
+                    this.items[this.currentStep].status = this.targetStatuses[this.currentStep];
                     this.currentStep++;
                     this.items[this.currentStep].status = 'checking';
-                    this.progress = Math.round((this.currentStep / 4) * 100);
-                } else if (this.currentStep === 3) {
-                    this.items[3].status = 'failed';
+                    this.progress = Math.round((this.currentStep / 5) * 100);
+                } else if (this.currentStep === 4) {
+                    this.items[4].status = this.targetStatuses[4];
                     this.progress = 100;
-                    this.currentStep = 4;
+                    this.currentStep = 5;
                     clearInterval(interval);
 
                     setTimeout(() => {
                         window.location.href = '{{ route("contributor.dataset.validation_result_failed") }}';
                     }, 600);
                 }
-            }, 800);
+            }, 500);
         }
     }" x-init="startScan()">
 
@@ -52,7 +69,7 @@
                 <div class="space-y-2">
                     <h1 class="text-2xl font-black text-slate-900 tracking-tight">Video sedang diperiksa AI</h1>
                     <p class="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
-                        Harap tunggu. Sistem AI (OpenCV) sedang menganalisis 4 kriteria kualitas video secara otomatis.
+                        Harap tunggu. Sistem AI (OpenCV) sedang memproses 5 parameter kualitas video secara otomatis.
                     </p>
                 </div>
 
@@ -67,9 +84,9 @@
                     </div>
                 </div>
 
-                <!-- Synchronized Checklist Loading Items -->
+                <!-- Synchronized Checklist Loading Items (5 Parameters) -->
                 <div class="w-full max-w-md mx-auto bg-slate-50 rounded-2xl p-6 border border-slate-200/80 text-left space-y-4">
-                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Memeriksa:</h3>
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Memeriksa 5 Parameter Utama:</h3>
                     <ul class="space-y-3.5 text-xs">
                         <template x-for="(item, index) in items" :key="index">
                             <li class="flex items-center justify-between transition-all duration-300" :class="item.status === 'pending' ? 'opacity-40' : 'opacity-100'">
@@ -95,7 +112,10 @@
                                         </div>
                                     </template>
 
-                                    <span class="font-bold text-slate-800 text-sm" x-text="item.label"></span>
+                                    <div>
+                                        <span class="font-bold text-slate-800 text-sm block" x-text="item.label"></span>
+                                        <span class="text-[11px] text-slate-500 font-medium" x-text="item.detail"></span>
+                                    </div>
                                 </div>
 
                                 <template x-if="item.status === 'valid'">

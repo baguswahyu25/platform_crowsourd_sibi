@@ -133,6 +133,13 @@
             <p class="font-body-md text-on-surface-variant">Bergabunglah dalam pengembangan dataset bahasa isyarat Indonesia.</p>
         </div>
 
+        @if(session('error'))
+            <div class="mb-md p-md rounded-xl bg-error-container text-on-error-container text-label-md flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">warning</span>
+                <span>{{ session('error') }}</span>
+            </div>
+        @endif
+
         @if($errors->any())
             <div class="mb-md p-md rounded-xl bg-error-container text-on-error-container text-label-md">
                 <div class="font-bold mb-1 flex items-center gap-1">

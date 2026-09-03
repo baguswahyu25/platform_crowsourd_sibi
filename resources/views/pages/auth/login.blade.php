@@ -19,6 +19,13 @@
                 </div>
             @endif
 
+            @if(session('error'))
+                <div class="mb-5 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-base text-rose-600">warning</span>
+                    <span>{{ session('error') }}</span>
+                </div>
+            @endif
+
             @if($errors->any())
                 <div class="mb-5 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold space-y-1">
                     <div class="flex items-center gap-2 font-bold text-rose-900">

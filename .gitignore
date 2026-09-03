@@ -22,3 +22,13 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+# Private developer seeder
+/database/seeders/DatabaseSeeder.php
+# Local testing files
+/scratch/
+# Python cache
+/ai_validation/__pycache__/
+# Python virtual environment
+/ai_validation/venv/
+# Python virtual environment
+/ai_validation/venv/

@@ -80,8 +80,8 @@
                                 <x-badge type="validated" label="Tervalidasi Pakar" />
                             @elseif(($dataset->status->value ?? 'pending') === 'rejected')
                                 <x-badge type="rejected" label="Ditolak Pakar" />
-                            @elseif(($dataset->status->value ?? 'pending') === 'revision')
-                                <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-200 font-extrabold text-[10px]">Minta Revisi</span>
+                            @elseif(($dataset->status->value ?? 'pending') === 'failed')
+                                <x-badge type="rejected" label="Gagal Validasi AI" />
                             @else
                                 <x-badge type="pending" label="Menunggu Validasi Pakar" />
                             @endif

@@ -1,14 +1,30 @@
 <x-app-layout title="Pemeriksaan AI - SIBI Dataset Platform" role="contributor">
+    @php
+        $bPassed = ($dataset->brightness_status ?? 'Normal') === 'Normal';
+        $blurPassed = ($dataset->blur_status ?? 'Tajam') === 'Tajam';
+        $freezePassed = ($dataset->freeze_status ?? 'Lancar') === 'Lancar' || ($dataset->freeze_status ?? 'Lancar') === 'Ada Gejala Lag';
+        $resPassed = ($dataset->resolution_status ?? 'Sesuai Standar') === 'Sesuai Standar';
+        $fpsPassed = ($dataset->fps_status ?? 'Sesuai Standar') === 'Sesuai Standar';
+    @endphp
+
     <div class="max-w-6xl mx-auto space-y-8" x-data="{ 
         state: 'checking', 
         result: '{{ $dataset->auto_validation_status ?? 'passed' }}',
         progress: 0,
         currentStep: 0,
         items: [
-            { label: 'Kecerahan', status: 'checking' },
-            { label: 'Ketajaman', status: 'pending' },
-            { label: 'Kelancaran Video', status: 'pending' },
-            { label: 'Resolusi dan FPS', status: 'pending' }
+            { label: 'Pencahayaan Subjek', status: 'checking', detail: '{{ $dataset->brightness_status ?? 'Normal' }}' },
+            { label: 'Ketajaman Video', status: 'pending', detail: '{{ $dataset->blur_status ?? 'Tajam' }}' },
+            { label: 'Kelancaran Video', status: 'pending', detail: '{{ $dataset->freeze_status ?? 'Lancar' }}' },
+            { label: 'Resolusi Video', status: 'pending', detail: '{{ $dataset->video_width ?? 1280 }}×{{ $dataset->video_height ?? 720 }}' },
+            { label: 'Frame Rate (FPS)', status: 'pending', detail: '{{ $dataset->video_fps ?? 30 }} FPS' }
+        ],
+        targetStatuses: [
+            '{{ $bPassed ? "valid" : "failed" }}',
+            '{{ $blurPassed ? "valid" : "failed" }}',
+            '{{ $freezePassed ? "valid" : "failed" }}',
+            '{{ $resPassed ? "valid" : "failed" }}',
+            '{{ $fpsPassed ? "valid" : "failed" }}'
         ],
         startScan() {
             this.progress = 0;
@@ -16,40 +32,26 @@
             this.items[0].status = 'checking';
 
             let interval = setInterval(() => {
-                if (this.currentStep < 3) {
-                    // Mark current item as valid
-                    this.items[this.currentStep].status = 'valid';
-
-                    // Move to next item
+                if (this.currentStep < 4) {
+                    this.items[this.currentStep].status = this.targetStatuses[this.currentStep];
                     this.currentStep++;
                     this.items[this.currentStep].status = 'checking';
-
-                    // Sync top progress bar (25%, 50%, 75%)
-                    this.progress = Math.round((this.currentStep / 4) * 100);
-                } else if (this.currentStep === 3) {
-                    // Final 4th item check
-                    if (this.result === 'passed') {
-                        this.items[3].status = 'valid';
-                    } else {
-                        this.items[3].status = 'failed';
-                    }
-
+                    this.progress = Math.round((this.currentStep / 5) * 100);
+                } else if (this.currentStep === 4) {
+                    this.items[4].status = this.targetStatuses[4];
                     this.progress = 100;
-                    this.currentStep = 4;
+                    this.currentStep = 5;
                     clearInterval(interval);
 
-                    // Transfer smoothly to final detailed result page
                     setTimeout(() => {
                         window.location.href = '{{ route("dataset.validation-result", $dataset->id) }}';
                     }, 600);
                 }
-            }, 800);
+            }, 500);
         }
     }" x-init="startScan()">
 
-        <!-- ========================================================================= -->
         <!-- TAMPILAN: SCANNING / PEMERIKSAAN AI SEDANG BERLANGSUNG -->
-        <!-- ========================================================================= -->
         <div class="flex flex-col items-center justify-center py-10">
             <div class="w-full max-w-2xl bg-white rounded-3xl border border-slate-200 shadow-xl p-8 sm:p-12 text-center space-y-8">
                 <!-- Scanning Animation Graphic -->
@@ -66,7 +68,7 @@
                 <div class="space-y-2">
                     <h1 class="text-2xl font-black text-slate-900 tracking-tight">Video sedang diperiksa AI</h1>
                     <p class="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
-                        Harap tunggu. Sistem AI (OpenCV) sedang menganalisis 4 kriteria kualitas video secara otomatis.
+                        Harap tunggu. Sistem AI (OpenCV) sedang memproses 5 parameter kualitas video secara otomatis.
                     </p>
                 </div>
 
@@ -81,9 +83,9 @@
                     </div>
                 </div>
 
-                <!-- Synchronized Checklist Loading Items -->
+                <!-- Synchronized Checklist Loading Items (5 Parameters) -->
                 <div class="w-full max-w-md mx-auto bg-slate-50 rounded-2xl p-6 border border-slate-200/80 text-left space-y-4">
-                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Memeriksa:</h3>
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Memeriksa 5 Parameter Utama:</h3>
                     <ul class="space-y-3.5 text-xs">
                         <template x-for="(item, index) in items" :key="index">
                             <li class="flex items-center justify-between transition-all duration-300" :class="item.status === 'pending' ? 'opacity-40' : 'opacity-100'">
@@ -113,12 +115,15 @@
                                         </div>
                                     </template>
 
-                                    <span class="font-bold text-slate-800 text-sm" x-text="item.label"></span>
+                                    <div>
+                                        <span class="font-bold text-slate-800 text-sm block" x-text="item.label"></span>
+                                        <span class="text-[11px] text-slate-500 font-medium" x-text="item.detail"></span>
+                                    </div>
                                 </div>
 
                                 <!-- Status Badges -->
                                 <template x-if="item.status === 'valid'">
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">✓ TERENSHI</span>
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">✓ TERUJI</span>
                                 </template>
                                 <template x-if="item.status === 'failed'">
                                     <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-50 text-rose-700 border border-rose-200">✕ GAGAL</span>

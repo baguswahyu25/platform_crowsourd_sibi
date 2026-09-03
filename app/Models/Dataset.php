@@ -11,6 +11,11 @@ class Dataset extends Model
 {
     use HasFactory;
 
+    protected $attributes = [
+        'auto_validation_status' => 'pending',
+        'status' => 'pending',
+    ];
+
     protected $fillable = [
         'user_id',
         'dataset_need_id',
@@ -91,6 +96,23 @@ class Dataset extends Model
         return Storage::disk('public')->exists($cleanPath) || file_exists(storage_path('app/public/' . $cleanPath));
     }
 
+    /**
+     * Accessor untuk mendapatkan MIME type video yang valid (misal: video/mp4).
+     */
+    public function getVideoMimeTypeAttribute(): string
+    {
+        $ext = strtolower($this->file_type ?? 'mp4');
+        return match ($ext) {
+            'mp4' => 'video/mp4',
+            'webm' => 'video/webm',
+            'ogg', 'ogv' => 'video/ogg',
+            'mov', 'qt' => 'video/quicktime',
+            'avi' => 'video/x-msvideo',
+            'mkv' => 'video/x-matroska',
+            default => str_contains($ext, '/') ? $ext : 'video/mp4',
+        };
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -103,6 +125,11 @@ class Dataset extends Model
 
     public function validation()
     {
-        return $this->hasOne(Validation::class);
+        return $this->hasOne(Validation::class)->latestOfMany();
+    }
+
+    public function validations()
+    {
+        return $this->hasMany(Validation::class, 'dataset_id');
     }
 }

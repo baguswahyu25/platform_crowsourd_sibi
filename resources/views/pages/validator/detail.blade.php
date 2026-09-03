@@ -19,15 +19,15 @@
                     <!-- Video Player Container Asli Kontributor -->
                     <div class="aspect-video bg-slate-950 rounded-2xl overflow-hidden flex items-center justify-center relative shadow-inner border border-slate-800">
                         @if($dataset->has_video)
-                            <video controls preload="metadata" class="w-full h-full object-contain">
-                                <source src="{{ $dataset->video_url }}" type="{{ $dataset->file_type ?? 'video/mp4' }}">
+                            <video src="{{ $dataset->video_url }}" controls preload="auto" class="w-full h-full object-contain">
+                                <source src="{{ $dataset->video_url }}" type="{{ $dataset->video_mime_type }}">
                                 <p class="text-xs text-rose-400 p-4 text-center">Video tidak dapat diputar pada browser ini.</p>
                             </video>
                         @else
                             <div class="text-center text-slate-400 space-y-2 p-6">
                                 <span class="material-symbols-outlined text-5xl text-rose-500">video_off</span>
                                 <p class="text-xs font-bold text-slate-200">Video dataset tidak ditemukan atau tidak dapat diakses.</p>
-                                <p class="text-[11px] text-slate-500 font-mono">Path: {{ $dataset->file_path ?? 'datasets/sample.mp4' }}</p>
+                                <p class="text-[11px] text-slate-500 font-mono">Path: {{ $dataset->file_path ?? 'TIDAK TERSEDIA' }}</p>
                             </div>
                         @endif
                     </div>
@@ -52,12 +52,12 @@
                             <span class="font-bold text-slate-800">{{ $dataset->user->name ?? $dataset->contributor_code }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-slate-500 font-medium">Institusi:</span>
-                            <span class="font-bold text-slate-800">{{ $dataset->user->institution ?? 'Universitas Indonesia' }}</span>
+                            <span class="text-slate-500 font-medium">Status Validasi AI:</span>
+                            <span class="font-bold text-emerald-700">✓ LULUS ({{ strtoupper($dataset->auto_validation_status) }})</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-slate-500 font-medium">Ukuran Berkas & Resolusi:</span>
-                            <span class="font-bold text-slate-800">{{ $dataset->video_width ?? 1920 }}×{{ $dataset->video_height ?? 1080 }} ({{ round(($dataset->file_size ?? 12000000)/(1024*1024), 2) }} MB @ {{ $dataset->video_fps ?? 30 }} FPS)</span>
+                            <span class="font-bold text-slate-800">{{ $dataset->video_width ?? 1920 }}×{{ $dataset->video_height ?? 1080 }} ({{ round(($dataset->file_size ?? 0)/(1024*1024), 2) }} MB @ {{ $dataset->video_fps ?? 30 }} FPS)</span>
                         </div>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                         </div>
                         <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
                             <span class="text-[10px] text-slate-400 font-bold uppercase block">Resolusi</span>
-                            <span class="font-bold text-slate-900 text-sm">{{ $dataset->resolution_status ?? 'Tinggi' }}</span>
+                            <span class="font-bold text-slate-900 text-sm">{{ $dataset->resolution_status ?? 'Sesuai Standar' }}</span>
                             <span class="text-[10px] text-slate-400 block">{{ $dataset->video_width ?? 1920 }}×{{ $dataset->video_height ?? 1080 }}</span>
                         </div>
                     </div>
@@ -113,18 +113,11 @@
                                     <span class="text-[11px] text-emerald-700">Peragaan isyarat SIBI sesuai dan berkualitas.</span>
                                 </div>
                             </label>
-                            <label class="flex items-center p-3.5 rounded-2xl border border-blue-200 bg-blue-50/50 cursor-pointer hover:bg-blue-50 transition">
-                                <input type="radio" name="status" value="revision" class="text-blue-600 focus:ring-blue-500 mr-3" />
-                                <div>
-                                    <span class="text-xs font-bold text-blue-900 block">⏳ MINTA REVISI (REVISION)</span>
-                                    <span class="text-[11px] text-blue-700">Gerakan kurang jelas atau butuh perekaman ulang.</span>
-                                </div>
-                            </label>
                             <label class="flex items-center p-3.5 rounded-2xl border border-rose-200 bg-rose-50/50 cursor-pointer hover:bg-rose-50 transition">
                                 <input type="radio" name="status" value="rejected" class="text-rose-600 focus:ring-rose-500 mr-3" />
                                 <div>
-                                    <span class="text-xs font-bold text-rose-900 block">✕ TOLAK DATASET (REJECTED)</span>
-                                    <span class="text-[11px] text-rose-700">Peragaan tidak sesuai standar SIBI atau naskah tidak cocok.</span>
+                                    <span class="text-xs font-bold text-rose-900 block">✕ TOLAK DATASET / TIDAK VALID (REJECTED)</span>
+                                    <span class="text-[11px] text-rose-700">Peragaan tidak sesuai standar SIBI. Kontributor diminta upload ulang.</span>
                                 </div>
                             </label>
                         </div>

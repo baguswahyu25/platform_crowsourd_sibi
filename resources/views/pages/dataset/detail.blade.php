@@ -21,8 +21,8 @@
             <!-- Video Player Asli Kontributor -->
             <div class="aspect-video bg-slate-950 rounded-2xl overflow-hidden relative shadow-inner border border-slate-800 flex items-center justify-center">
                 @if($dataset->has_video)
-                    <video controls preload="metadata" class="w-full h-full object-contain">
-                        <source src="{{ $dataset->video_url }}" type="{{ $dataset->file_type ?? 'video/mp4' }}">
+                    <video src="{{ $dataset->video_url }}" controls preload="auto" class="w-full h-full object-contain">
+                        <source src="{{ $dataset->video_url }}" type="{{ $dataset->video_mime_type }}">
                         <p class="text-xs text-rose-400 p-4 text-center">Video tidak dapat diputar pada browser ini.</p>
                     </video>
                 @else

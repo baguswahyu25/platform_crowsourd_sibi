@@ -6,23 +6,23 @@
                 <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Dashboard Validator SIBI</h1>
                 <p class="text-xs text-slate-500 mt-1">Tinjau, validasi, dan berikan catatan evaluasi untuk dataset gesture isyarat SIBI yang masuk.</p>
             </div>
-            <x-button variant="primary" icon="play_arrow" href="{{ route('validator.antrean') }}">Mulai Validasi Antrean (45)</x-button>
+            <x-button variant="primary" icon="play_arrow" href="{{ route('validator.antrean') }}">Mulai Validasi Antrean ({{ $pendingDatasets->count() }})</x-button>
         </div>
 
         <!-- 4 Column Responsive Cards Grid for Validator -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <x-card title="Antrean Belum Diperiksa" value="45" icon="pending_actions" trend="Perlu Tindakan SEGERA" :trendUp="false" />
-            <x-card title="Disetujui Bulan Ini" value="184" icon="check_circle" trend="+22% produktivitas" :trendUp="true" />
-            <x-card title="Revisi Diminta" value="28" icon="rate_review" trend="Perlu tindak lanjut kontributor" :trendUp="true" />
-            <x-card title="Rata-rata Waktu Validasi" value="1.2 Hari" icon="timer" trend="Sangat Cepat" :trendUp="true" />
+            <x-card title="Antrean Belum Diperiksa" value="{{ $pendingDatasets->count() }}" icon="pending_actions" trend="Perlu Peninjauan" :trendUp="false" />
+            <x-card title="Disetujui / Di-Validasi" value="{{ $allDatasets->where('status.value', 'validated')->count() }}" icon="check_circle" trend="Total Validated" :trendUp="true" />
+            <x-card title="Ditolak Pakar (Tidak Valid)" value="{{ $allDatasets->where('status.value', 'rejected')->count() }}" icon="cancel" trend="Perlu Upload Ulang" :trendUp="false" />
+            <x-card title="Total Dataset Masuk" value="{{ $allDatasets->count() }}" icon="video_library" trend="Sistem Crowdsourcing" :trendUp="true" />
         </div>
 
         <!-- Pending Validation Queue Quick Action Section -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <h2 class="text-base font-bold text-slate-900">Antrean Validasi Terbaru</h2>
-                    <p class="text-xs text-slate-500">Klik 'Tinjau Video/Gambar' untuk memeriksa keakuratan isyarat SIBI.</p>
+                    <h2 class="text-base font-bold text-slate-900">Antrean Validasi Terbaru (Lulus AI)</h2>
+                    <p class="text-xs text-slate-500">Klik 'Tinjau Sample' untuk menganalisis video asli kontributor.</p>
                 </div>
                 <a href="{{ route('validator.antrean') }}" class="text-xs font-bold text-blue-600 hover:underline">Lihat Semua Antrean &rarr;</a>
             </div>
@@ -38,34 +38,34 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 text-xs">
-                    <tr class="hover:bg-slate-50/80 transition">
-                        <td class="px-5 py-4 font-bold text-slate-900 flex items-center space-x-3">
-                            <span class="material-symbols-outlined text-blue-600">videocam</span>
-                            <span>Isyarat "TERIMA KASIH"</span>
-                        </td>
-                        <td class="px-5 py-4 text-slate-600">Budi Santoso</td>
-                        <td class="px-5 py-4 text-slate-700 font-medium">Kata Kunci</td>
-                        <td class="px-5 py-4 text-slate-500">Hari ini, 09:30</td>
-                        <td class="px-5 py-4 text-right">
-                            <a href="{{ route('validator.detail', 101) }}" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition">
-                                <span class="material-symbols-outlined text-sm mr-1">rate_review</span> Tinjau Sample
-                            </a>
-                        </td>
-                    </tr>
-                    <tr class="hover:bg-slate-50/80 transition">
-                        <td class="px-5 py-4 font-bold text-slate-900 flex items-center space-x-3">
-                            <span class="material-symbols-outlined text-blue-600">videocam</span>
-                            <span>Isyarat "NAMA SAYA"</span>
-                        </td>
-                        <td class="px-5 py-4 text-slate-600">Dewi Anggraini</td>
-                        <td class="px-5 py-4 text-slate-700 font-medium">Frasa SIBI</td>
-                        <td class="px-5 py-4 text-slate-500">Kemarin, 14:15</td>
-                        <td class="px-5 py-4 text-right">
-                            <a href="{{ route('validator.detail', 102) }}" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition">
-                                <span class="material-symbols-outlined text-sm mr-1">rate_review</span> Tinjau Sample
-                            </a>
-                        </td>
-                    </tr>
+                    @forelse($pendingDatasets->take(5) as $dataset)
+                        <tr class="hover:bg-slate-50/80 transition">
+                            <td class="px-5 py-4 font-bold text-slate-900 flex items-center space-x-3">
+                                <span class="material-symbols-outlined text-blue-600">videocam</span>
+                                <div>
+                                    <span class="block">#DS-{{ $dataset->id }} - {{ $dataset->title }}</span>
+                                    <span class="text-[11px] text-slate-500 font-normal">Label: "{{ $dataset->sign_label }}"</span>
+                                </div>
+                            </td>
+                            <td class="px-5 py-4 text-slate-600">
+                                <span class="font-bold block">{{ $dataset->user->name ?? 'Kontributor SIBI' }}</span>
+                                <span class="text-[11px] text-slate-400">{{ $dataset->contributor_code ?? ('ID: ' . $dataset->user_id) }}</span>
+                            </td>
+                            <td class="px-5 py-4 text-slate-700 font-medium">{{ $dataset->category }}</td>
+                            <td class="px-5 py-4 text-slate-500">{{ $dataset->created_at->format('d M Y, H:i') }}</td>
+                            <td class="px-5 py-4 text-right">
+                                <a href="{{ route('validator.detail', $dataset->id) }}" class="inline-flex items-center px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition min-h-[44px]">
+                                    <span class="material-symbols-outlined text-sm mr-1.5">rate_review</span> Tinjau Sample
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-5 py-8 text-center text-slate-500">
+                                Tidak ada antrean dataset yang menunggu validasi pakar saat ini.
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </x-table>
         </div>
