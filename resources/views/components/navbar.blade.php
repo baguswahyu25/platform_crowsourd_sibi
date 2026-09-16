@@ -21,12 +21,16 @@
             <!-- Profile Menu -->
             <div class="relative">
                 <button @click="profileOpen = !profileOpen" type="button" class="flex items-center space-x-2.5 p-1.5 rounded-xl hover:bg-slate-100 transition min-h-[44px]">
-                    <div class="h-9 w-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold text-sm shadow-sm">
-                        {{ strtoupper(substr(auth()->user()->name ?? 'P', 0, 1)) }}
-                    </div>
+                    @if(auth()->check() && auth()->user()->avatar)
+                        <img src="{{ asset('storage/' . ltrim(str_replace(['public/', 'storage/'], '', auth()->user()->avatar), '/')) }}" alt="{{ auth()->user()->name }}" class="h-9 w-9 rounded-full object-cover shadow-sm border border-slate-200" />
+                    @else
+                        <div class="h-9 w-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold text-sm shadow-sm">
+                            {{ strtoupper(substr(auth()->user()->name ?? 'P', 0, 1)) }}
+                        </div>
+                    @endif
                     <div class="hidden md:block text-left">
-                        <div class="text-xs font-semibold text-slate-800 leading-none">{{ auth()->user()->name ?? 'Pengguna Demo' }}</div>
-                        <div class="text-[10px] font-medium text-slate-500 mt-1 capitalize">{{ auth()->user()->role->value ?? 'Contributor' }}</div>
+                        <div class="text-xs font-semibold text-slate-800 leading-none">{{ auth()->user()->name ?? 'Pengguna' }}</div>
+                        <div class="text-[10px] font-medium text-slate-500 mt-1 capitalize">{{ auth()->user()->role->value ?? auth()->user()->role ?? 'Contributor' }}</div>
                     </div>
                     <span class="material-symbols-outlined text-slate-400 text-sm">expand_more</span>
                 </button>

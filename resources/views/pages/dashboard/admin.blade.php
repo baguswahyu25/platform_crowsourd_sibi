@@ -7,39 +7,46 @@
                 <p class="text-xs text-slate-500 mt-1">Ringkasan statistik pengguna, throughput validasi, dan kesehatan sistem SIBI.</p>
             </div>
             <div class="flex items-center space-x-3">
-                <x-button variant="secondary" icon="download">Unduh Laporan PDF</x-button>
-                <x-button variant="primary" icon="add" href="{{ route('admin.kebutuhan.index') }}">Tambah Target Kebutuhan</x-button>
+                <x-button variant="primary" icon="add" href="{{ route('admin.kebutuhan.index') }}">Tambah Kebutuhan Dataset</x-button>
             </div>
         </div>
 
-        <!-- 4 Column Responsive Cards Grid -->
+        @php
+            $contributorCount = $users->filter(fn($u) => ($u->role->value ?? $u->role) === 'contributor')->count();
+            $validatorCount = $users->filter(fn($u) => ($u->role->value ?? $u->role) === 'validator')->count();
+            $pendingCount = $datasets->filter(fn($d) => $d->auto_validation_status === 'passed' && ($d->status->value ?? $d->status) === 'waiting_expert_validation')->count();
+            $validatedCount = $datasets->filter(fn($d) => ($d->status->value ?? $d->status) === 'validated')->count();
+            $rejectedCount = $datasets->filter(fn($d) => in_array($d->status->value ?? $d->status, ['rejected', 'failed']))->count();
+        @endphp
+
+        <!-- 4 Column Responsive Cards Grid (REAL DATA FROM DATABASE) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <x-card title="Total Dataset SIBI" value="1,248" icon="folder" trend="+14% bulan ini" :trendUp="true" />
-            <x-card title="Total Kontributor" value="384" icon="groups" trend="+28 pengguna baru" :trendUp="true" />
-            <x-card title="Validator Aktif" value="12" icon="verified_user" trend="Status Normal" :trendUp="true" />
-            <x-card title="Antrean Validasi" value="45" icon="pending_actions" trend="Perlu Tindakan" :trendUp="false" />
+            <x-card title="Total Dataset SIBI" value="{{ $datasets->count() }} Berkas" icon="folder" trend="Dataset Real DB" :trendUp="true" />
+            <x-card title="Total Kontributor" value="{{ $contributorCount }} Pengguna" icon="groups" trend="Kontributor Terdaftar" :trendUp="true" />
+            <x-card title="Validator Pakar" value="{{ $validatorCount }} Pakar" icon="verified_user" trend="Pakar SIBI" :trendUp="true" />
+            <x-card title="Antrean Validasi" value="{{ $pendingCount }} Antrean" icon="pending_actions" trend="Sedang Ditinjau" :trendUp="false" />
         </div>
 
-        <!-- Charts Grid (2 columns laptop/desktop) -->
+        <!-- Charts Grid (Real Dynamic Chart Data) -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div class="lg:col-span-8 bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-sm font-bold text-slate-900">Grafik Pertumbuhan Dataset SIBI (2026)</h3>
-                    <span class="text-xs text-slate-400 font-medium">Diperbarui 1 jam lalu</span>
+                    <h3 class="text-sm font-bold text-slate-900">Distribusi Kategori Dataset SIBI Real</h3>
+                    <span class="text-xs text-slate-400 font-medium">Real-time Database Metric</span>
                 </div>
                 <div class="h-64 flex items-center justify-center">
-                    <canvas id="adminDatasetChart"></canvas>
+                    <canvas id="adminCategoryChart"></canvas>
                 </div>
             </div>
             <div class="lg:col-span-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
-                <h3 class="text-sm font-bold text-slate-900 mb-4">Distribusi Status Validasi</h3>
+                <h3 class="text-sm font-bold text-slate-900 mb-4">Distribusi Status Validasi Real</h3>
                 <div class="h-64 flex items-center justify-center">
                     <canvas id="validationDoughnutChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Recent Datasets Management Table -->
+        <!-- Recent Datasets Management Table (REAL DATA FROM DATABASE) -->
         <div class="space-y-3">
             <div class="flex items-center justify-between">
                 <h2 class="text-base font-bold text-slate-900">Aktivitas Dataset Terbaru</h2>
@@ -57,45 +64,59 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 text-xs">
-                    <tr class="hover:bg-slate-50/80 transition">
-                        <td class="px-5 py-4 font-bold text-slate-900">#DS-1092 - Isyarat "SELAMAT PAGI"</td>
-                        <td class="px-5 py-4 text-slate-600">Ahmad Risyad</td>
-                        <td class="px-5 py-4 font-medium text-slate-700">Frasa Harian</td>
-                        <td class="px-5 py-4"><x-badge type="pending" label="Pending" /></td>
-                        <td class="px-5 py-4 text-right">
-                            <a href="{{ route('dataset.detail', 1092) }}" class="text-blue-600 hover:underline font-bold">Detail</a>
-                        </td>
-                    </tr>
-                    <tr class="hover:bg-slate-50/80 transition">
-                        <td class="px-5 py-4 font-bold text-slate-900">#DS-1091 - Abjad SIBI "A" s/d "Z"</td>
-                        <td class="px-5 py-4 text-slate-600">Siti Nurhaliza</td>
-                        <td class="px-5 py-4 font-medium text-slate-700">Abjad SIBI</td>
-                        <td class="px-5 py-4"><x-badge type="validated" label="Tervalidasi" /></td>
-                        <td class="px-5 py-4 text-right">
-                            <a href="{{ route('dataset.detail', 1091) }}" class="text-blue-600 hover:underline font-bold">Detail</a>
-                        </td>
-                    </tr>
+                    @forelse($datasets->take(5) as $dataset)
+                        <tr class="hover:bg-slate-50/80 transition">
+                            <td class="px-5 py-4 font-bold text-slate-900">
+                                #DS-{{ $dataset->id }} - {{ $dataset->title }}
+                                <span class="block text-[11px] text-slate-500 font-normal">Label: "{{ $dataset->sign_label }}"</span>
+                            </td>
+                            <td class="px-5 py-4 text-slate-600">{{ $dataset->user->name ?? 'Kontributor' }}</td>
+                            <td class="px-5 py-4 font-medium text-slate-700">{{ $dataset->category }}</td>
+                            <td class="px-5 py-4">
+                                @if(($dataset->status->value ?? $dataset->status) === 'validated')
+                                    <x-badge type="validated" label="Tervalidasi" />
+                                @elseif(($dataset->status->value ?? $dataset->status) === 'waiting_expert_validation')
+                                    <x-badge type="pending" label="Menunggu Pakar" />
+                                @else
+                                    <x-badge type="inactive" label="Ditolak / Gagal" />
+                                @endif
+                            </td>
+                            <td class="px-5 py-4 text-right">
+                                <a href="{{ route('dataset.detail', $dataset->id) }}" class="text-blue-600 hover:underline font-bold">Detail</a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-5 py-8 text-center text-slate-500">Belum ada data dataset yang terdaftar di database.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </x-table>
         </div>
     </div>
 
-    <!-- Chart.js Init Script -->
+    @php
+        $abjadCount = $datasets->filter(fn($d) => in_array(strtolower($d->category), ['abjad', 'alphabet']))->count();
+        $kataCount = $datasets->filter(fn($d) => in_array(strtolower($d->category), ['kata', 'word']))->count();
+        $imbuhanCount = $datasets->filter(fn($d) => in_array(strtolower($d->category), ['kata imbuhan', 'kata_imbuhan', 'idiom_expression']))->count();
+        $sentenceCount = $datasets->filter(fn($d) => in_array(strtolower($d->category), ['kalimat', 'sentence']))->count();
+        $storyCount = $datasets->filter(fn($d) => in_array(strtolower($d->category), ['cerita pendek', 'short story', 'short_story']))->count();
+    @endphp
+
+    <!-- Real Dynamic Chart.js Init Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const ctx1 = document.getElementById('adminDatasetChart')?.getContext('2d');
+            const ctx1 = document.getElementById('adminCategoryChart')?.getContext('2d');
             if(ctx1) {
                 new Chart(ctx1, {
-                    type: 'line',
+                    type: 'bar',
                     data: {
-                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul'],
+                        labels: ['Abjad', 'Kata', 'Kata Imbuhan', 'Kalimat', 'Cerita Pendek'],
                         datasets: [{
-                            label: 'Jumlah Dataset',
-                            data: [120, 210, 340, 480, 720, 950, 1248],
-                            borderColor: '#2563eb',
-                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                            fill: true,
-                            tension: 0.4
+                            label: 'Jumlah Video Real',
+                            data: [{{ $abjadCount }}, {{ $kataCount }}, {{ $imbuhanCount }}, {{ $sentenceCount }}, {{ $storyCount }}],
+                            backgroundColor: ['#2563eb', '#10b981', '#6366f1', '#14b8a6', '#a855f7'],
+                            borderRadius: 8
                         }]
                     },
                     options: { responsive: true, maintainAspectRatio: false }
@@ -107,9 +128,9 @@
                 new Chart(ctx2, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Tervalidasi', 'Pending', 'Ditolak'],
+                        labels: ['Tervalidasi', 'Menunggu Pakar', 'Ditolak / Gagal'],
                         datasets: [{
-                            data: [820, 340, 88],
+                            data: [{{ $validatedCount }}, {{ $pendingCount }}, {{ $rejectedCount }}],
                             backgroundColor: ['#10b981', '#f59e0b', '#f43f5e']
                         }]
                     },

@@ -12,12 +12,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->trustProxies(at: '*');
+        $middleware->alias([
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (TokenMismatchException $e, $request) {
-            return redirect()->back()
+            return redirect()->route('auth.login')
                 ->withInput($request->except('_token', 'password', 'password_confirmation'))
-                ->with('error', 'Sesi halaman Anda telah kedaluwarsa. Halaman telah diperbarui, silakan coba masuk kembali.');
+                ->with('error', 'Halaman login telah kedaluwarsa. Silakan coba login kembali.');
         });
     })->create();

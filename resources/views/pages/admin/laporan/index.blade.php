@@ -13,8 +13,8 @@
         <!-- 3 Summary Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
             <x-card title="Total Sampel Diunggah" value="{{ $datasets->count() }} Berkas" icon="folder" trend="Multi-Upload Per Contributor" :trendUp="true" />
-            <x-card title="Akurasi Validasi Paket" value="96.4%" icon="analytics" trend="Tingkat Presisi Sangat Tinggi" :trendUp="true" />
-            <x-card title="Total Sampel Tervalidasi" value="{{ $datasets->where('status.value', 'validated')->count() }} Berkas" icon="fact_check" trend="Siap Dipakai AI Training" :trendUp="true" />
+            <x-card title="Tingkat Kelulusan Validasi" value="{{ $datasets->count() > 0 ? round(($datasets->filter(fn($d) => ($d->status->value ?? $d->status) === 'validated')->count() / $datasets->count()) * 100, 1) . '%' : '0%' }}" icon="analytics" trend="Persentase Dataset Valid" :trendUp="true" />
+            <x-card title="Total Sampel Tervalidasi" value="{{ $datasets->filter(fn($d) => ($d->status->value ?? $d->status) === 'validated')->count() }} Berkas" icon="fact_check" trend="Siap Dipakai AI Training" :trendUp="true" />
         </div>
 
         <!-- Contributor Activity & Multi-Upload Table -->
@@ -44,17 +44,17 @@
                         @php
                             $user = $userDatasets->first()->user ?? null;
                             $code = $userDatasets->first()->contributor_code ?? ('Kontributor ' . $userId);
-                            $validatedCount = $userDatasets->where('status.value', 'validated')->count();
+                            $validatedCount = $userDatasets->filter(fn($d) => ($d->status->value ?? $d->status) === 'validated')->count();
                         @endphp
                         <tr class="hover:bg-slate-50/80 transition">
                             <td class="px-5 py-4 font-black text-blue-600">
                                 {{ $code }}
                             </td>
                             <td class="px-5 py-4 font-bold text-slate-900">
-                                {{ $user->name ?? 'Ahmad Risyad' }}
-                                <span class="block text-[11px] text-slate-500 font-normal">{{ $user->email ?? 'kontributor@sibi.id' }}</span>
+                                {{ $user->name ?? ('Kontributor #' . $userId) }}
+                                <span class="block text-[11px] text-slate-500 font-normal">{{ $user->email ?? '-' }}</span>
                             </td>
-                            <td class="px-5 py-4 text-slate-600 font-medium">{{ $user->institution ?? 'Universitas Indonesia' }}</td>
+                            <td class="px-5 py-4 text-slate-600 font-medium">{{ $user->institution ?? '-' }}</td>
                             <td class="px-5 py-4 font-black text-slate-900 text-sm">
                                 <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full border border-blue-100">
                                     {{ $userDatasets->count() }} Kali Upload

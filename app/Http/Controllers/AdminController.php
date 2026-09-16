@@ -41,7 +41,26 @@ class AdminController extends Controller
                   ->orWhere('category', $categoryFilter);
         }
 
-        $needs = $query->orderBy('id', 'desc')->get();
+        $rawNeeds = $query->get();
+        $subOrder = [
+            'letters' => 1,
+            'numbers' => 2,
+            'Kata ganti diri' => 1,
+            'Kata kerja (kata dasar)' => 2,
+            'Kata benda' => 3,
+            'Kata sifat' => 4,
+        ];
+
+        $needs = $rawNeeds->sort(function ($a, $b) use ($subOrder) {
+            $orderA = $subOrder[$a->subcategory ?? ''] ?? 99;
+            $orderB = $subOrder[$b->subcategory ?? ''] ?? 99;
+
+            if ($orderA !== $orderB) {
+                return $orderA <=> $orderB;
+            }
+
+            return strnatcasecmp($a->title, $b->title);
+        })->values();
 
         $sentenceSubmissions = Dataset::where('category', 'Sentence')
             ->orWhere('subcategory', 'sentence')
@@ -60,16 +79,16 @@ class AdminController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'category_id' => 'required|string|in:alphabet,word,idiom_expression',
+            'category_id' => 'required|string|in:alphabet,word,kata_imbuhan,idiom_expression',
             'subcategory' => 'nullable|string|max:255',
-            'target_count' => 'required|integer|min:1',
             'priority' => 'required|string|in:high,medium,low',
         ]);
 
-        $categoryName = match($request->category_id) {
+        $catId = ($request->category_id === 'idiom_expression') ? 'kata_imbuhan' : $request->category_id;
+        $categoryName = match($catId) {
             'alphabet' => 'Abjad',
             'word' => 'Kata',
-            'idiom_expression' => 'Idiom / Ungkapan / Kata Majemuk',
+            'kata_imbuhan' => 'Kata Imbuhan',
             default => 'Kata'
         };
 
@@ -78,10 +97,9 @@ class AdminController extends Controller
         DatasetNeed::create([
             'title' => $request->title,
             'category' => $categoryName,
-            'category_id' => $request->category_id,
+            'category_id' => $catId,
             'subcategory' => $request->subcategory,
             'description' => "Label predefined untuk kategori {$categoryName}.",
-            'target_count' => $request->target_count,
             'current_count' => 0,
             'priority' => $request->priority,
             'status' => DatasetNeedStatus::ACTIVE,
@@ -96,14 +114,12 @@ class AdminController extends Controller
         $need = DatasetNeed::findOrFail($id);
         $request->validate([
             'title' => 'required|string|max:255',
-            'target_count' => 'required|integer|min:1',
             'priority' => 'required|string|in:high,medium,low',
             'status' => 'required|string|in:active,fulfilled,inactive',
         ]);
 
         $need->update([
             'title' => $request->title,
-            'target_count' => $request->target_count,
             'priority' => $request->priority,
             'status' => $request->status,
         ]);

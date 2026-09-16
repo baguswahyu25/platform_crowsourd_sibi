@@ -47,8 +47,8 @@ class DatasetController extends Controller
         // 1. Guard Kebutuhan Dataset untuk Predefined Category
         if ($needId && !$isShortStory && !$isSentence) {
             $need = DatasetNeed::find($needId);
-            if ($need && ($need->status->value === 'fulfilled' || $need->current_count >= $need->target_count)) {
-                return $redirectWithError("Target kebutuhan dataset untuk \"{$need->title}\" sudah terpenuhi. Pengunggahan telah ditutup.");
+            if ($need && $need->status->value === 'fulfilled') {
+                return $redirectWithError("Kebutuhan dataset untuk \"{$need->title}\" sudah terpenuhi. Pengunggahan telah ditutup.");
             }
         }
 
@@ -189,48 +189,16 @@ class DatasetController extends Controller
         ]);
 
         if (!$isPassed) {
+            // Hapus file video gagal dari storage secara langsung (tidak disimpan permanen)
+            Storage::disk('public')->delete($path);
+
             $failedTitle = $isShortStory ? $request->input('title') : ($isSentence ? $request->input('sentence_content') : ($request->title ?? 'Peragaan SIBI'));
             $failedCategory = $isShortStory ? 'Short Story' : ($isSentence ? 'Sentence' : ($request->category ?? 'Alphabet'));
             $failedLabel = $isShortStory ? $request->input('sign_label') : ($isSentence ? $request->input('sentence_content') : ($request->sign_label ?? 'Label SIBI'));
             $storyContent = $isShortStory ? $request->input('story_content') : ($isSentence ? $request->input('sentence_content') : null);
 
-            $userId = auth()->id() ?? 1;
-            $failedReasonsStr = !empty($output['failure_reasons']) ? implode('; ', $output['failure_reasons']) : 'Video tidak memenuhi kriteria kualitas teknis AI.';
-
-            $failedDatasetRecord = $this->datasetService->storeDataset([
-                'title' => $failedTitle,
-                'category' => $failedCategory,
-                'subcategory' => $request->input('subcategory') ?? ($isShortStory ? 'short_story' : ($isSentence ? 'sentence' : null)),
-                'sign_label' => $failedLabel,
-                'description' => $request->input('description') ?? $storyContent,
-                'story_content' => $storyContent,
-                'dataset_need_id' => ($isShortStory || $isSentence) ? null : $request->dataset_need_id,
-                'file_path' => $path,
-                'file_type' => $extension,
-                'file_size' => $fileSize,
-
-                'brightness_score' => $output['brightness']['score'] ?? null,
-                'brightness_status' => $output['brightness']['status'] ?? null,
-
-                'blur_score' => $output['blur']['score'] ?? null,
-                'blur_status' => $output['blur']['status'] ?? null,
-
-                'freeze_percentage' => $output['freeze']['percentage'] ?? null,
-                'freeze_status' => $output['freeze']['status'] ?? null,
-
-                'video_width' => $output['video']['width'] ?? null,
-                'video_height' => $output['video']['height'] ?? null,
-                'video_fps' => $output['video']['fps'] ?? null,
-                'resolution_status' => $output['video']['resolution_status'] ?? null,
-
-                'auto_validation_status' => 'failed',
-                'validation_message' => $failedReasonsStr,
-                'rejection_reason' => $failedReasonsStr,
-                'status' => 'failed',
-            ], $userId);
-
+            // Flash hasil analisis gagal ke session (TIDAK membuat record datasets di MySQL)
             session()->flash('failed_dataset', [
-                'id' => $failedDatasetRecord->id,
                 'title' => $failedTitle,
                 'category' => $failedCategory,
                 'sign_label' => $failedLabel,
@@ -274,7 +242,7 @@ class DatasetController extends Controller
             $categoryName = match($catInput) {
                 'alphabet', 'abjad' => 'Abjad',
                 'word', 'kata' => 'Kata',
-                'idiom_expression', 'idiom' => 'Idiom / Ungkapan / Kata Majemuk',
+                'kata_imbuhan', 'imbuhan', 'idiom_expression', 'idiom' => 'Kata Imbuhan',
                 default => $request->category ?? 'Abjad'
             };
             $title = $request->title ?? 'Peragaan SIBI';

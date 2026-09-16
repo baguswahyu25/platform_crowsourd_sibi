@@ -2,12 +2,14 @@
     @php
         $isLockedFlow = isset($selectedNeed) && $selectedNeed !== null;
         $initialCategory = request()->query('category') ?? ($selectedNeed->category_id ?? 'alphabet');
+        if ($initialCategory === 'idiom_expression') $initialCategory = 'kata_imbuhan';
     @endphp
 
     <div class="max-w-6xl mx-auto space-y-8" x-data="{
         isLocked: {{ $isLockedFlow ? 'true' : 'false' }},
         activeCategory: '{{ $initialCategory }}',
         activeSubcategory: '{{ $isLockedFlow ? ($selectedNeed->subcategory ?? 'letters') : 'letters' }}',
+        activeWordSubcategory: 'Kata ganti diri',
         selectedNeedId: '{{ $selectedNeed->id ?? '' }}',
         
         // Contributor-Generated Inputs (Sentence & Short Story)
@@ -24,12 +26,13 @@
             return this.needs.filter(n => {
                 if (n.status === 'inactive') return false;
                 if (this.activeCategory === 'alphabet') {
-                    return n.category_id === 'alphabet' && 
+                    return (n.category_id === 'alphabet' || n.category === 'Abjad') && 
                            (this.activeSubcategory === 'letters' ? (n.subcategory === 'letters' || n.title.startsWith('Huruf')) : (n.subcategory === 'numbers' || n.title.startsWith('Angka')));
                 } else if (this.activeCategory === 'word') {
-                    return n.category_id === 'word';
-                } else if (this.activeCategory === 'idiom_expression') {
-                    return n.category_id === 'idiom_expression';
+                    return (n.category_id === 'word' || n.category === 'Kata') && 
+                           (n.subcategory === this.activeWordSubcategory);
+                } else if (this.activeCategory === 'kata_imbuhan' || this.activeCategory === 'idiom_expression') {
+                    return n.category_id === 'kata_imbuhan' || n.category_id === 'idiom_expression' || n.category === 'Kata Imbuhan';
                 }
                 return false;
             });
@@ -51,13 +54,15 @@
             this.updateSelectedNeed();
         },
 
+        selectWordSubcategory(sub) {
+            if (this.isLocked) return;
+            this.activeWordSubcategory = sub;
+            this.updateSelectedNeed();
+        },
+
         updateSelectedNeed() {
             if (this.isLocked) return;
-            const list = this.filteredNeeds.filter(n => n.status !== 'fulfilled' && n.current_count < n.target_count);
-            if (list.length > 0) {
-                this.selectedNeed = list[0];
-                this.selectedNeedId = list[0].id;
-            } else if (this.filteredNeeds.length > 0) {
+            if (this.filteredNeeds.length > 0) {
                 this.selectedNeed = this.filteredNeeds[0];
                 this.selectedNeedId = this.filteredNeeds[0].id;
             } else {
@@ -79,8 +84,11 @@
                 if (found) {
                     this.selectedNeed = found;
                     this.selectedNeedId = found.id;
-                    if (found.category_id) this.activeCategory = found.category_id;
-                    if (found.subcategory) this.activeSubcategory = found.subcategory;
+                    if (found.category_id) this.activeCategory = (found.category_id === 'idiom_expression') ? 'kata_imbuhan' : found.category_id;
+                    if (found.subcategory) {
+                        this.activeSubcategory = found.subcategory;
+                        this.activeWordSubcategory = found.subcategory;
+                    }
                 }
             @else
                 if (this.activeCategory !== 'sentence' && this.activeCategory !== 'short_story') {
@@ -128,142 +136,111 @@
                     </p>
                 </div>
 
-                @php
-                    $isFulfilled = ($selectedNeed->status->value === 'fulfilled' || $selectedNeed->current_count >= $selectedNeed->target_count);
-                    $percentage = round(($selectedNeed->current_count / max($selectedNeed->target_count, 1)) * 100);
-                    if ($percentage > 100) $percentage = 100;
-                    $remaining = max(0, $selectedNeed->target_count - $selectedNeed->current_count);
-                @endphp
-
-                @if($isFulfilled)
-                    <!-- ALERT KEBUTUHAN SUDAH TERPENUHI -->
-                    <div class="bg-rose-50 border-2 border-rose-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
-                        <div class="flex items-start space-x-4">
-                            <div class="w-14 h-14 bg-rose-600 text-white rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-rose-600/20">
-                                <span class="material-symbols-outlined text-3xl">task_alt</span>
-                            </div>
-                            <div class="space-y-1">
-                                <span class="px-3 py-1 bg-rose-100 text-rose-800 font-extrabold text-xs rounded-full uppercase">Target Terpenuhi (Closed)</span>
-                                <h2 class="text-xl font-extrabold text-rose-900">Kebutuhan Dataset Label "{{ $selectedNeed->title }}" Sudah Terpenuhi</h2>
-                                <p class="text-xs sm:text-sm text-rose-700 leading-relaxed">
-                                    Kuota sampel video untuk label ini telah mencapai target <strong>{{ $selectedNeed->target_count }} / {{ $selectedNeed->target_count }} Video (100%)</strong>. Pengunggahan baru untuk label ini telah ditutup oleh sistem.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
-                            <a href="{{ route('contributor.kebutuhan.index') }}" class="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2 min-h-[44px]">
-                                <span class="material-symbols-outlined text-base">arrow_back</span>
-                                Kembali ke Kebutuhan Dataset
-                            </a>
-                            <a href="{{ route('contributor.dashboard') }}" class="w-full sm:w-auto px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition flex items-center justify-center min-h-[44px]">
-                                Kembali ke Dashboard
-                            </a>
-                        </div>
-                    </div>
-                @else
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                        <div class="lg:col-span-8 space-y-6">
-                            <!-- LOCKED READ-ONLY INFORMATION CARD -->
-                            <div class="bg-blue-50/80 border-2 border-blue-200 rounded-3xl p-6 sm:p-8 space-y-4 shadow-sm">
-                                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-blue-200/80 pb-4">
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
-                                            <span class="material-symbols-outlined text-xl">lock</span>
-                                        </div>
-                                        <div>
-                                            <h3 class="text-sm font-extrabold text-blue-900">Kategori & Label Dataset Terkunci (Read-Only)</h3>
-                                            <p class="text-[11px] text-blue-700">Nilai ini diambil secara otomatis dari Kebutuhan Dataset pilihan Anda.</p>
-                                        </div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-8 space-y-6">
+                        <!-- LOCKED READ-ONLY INFORMATION CARD -->
+                        <div class="bg-blue-50/80 border-2 border-blue-200 rounded-3xl p-6 sm:p-8 space-y-4 shadow-sm">
+                            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-blue-200/80 pb-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
+                                        <span class="material-symbols-outlined text-xl">lock</span>
                                     </div>
-                                    <span class="px-3 py-1 bg-amber-100 text-amber-800 font-extrabold text-[11px] rounded-full">
-                                        Terkumpul: {{ $selectedNeed->current_count }}/{{ $selectedNeed->target_count }} Video
-                                    </span>
-                                </div>
-
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div class="bg-white p-4 rounded-2xl border border-blue-100">
-                                        <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block mb-1">Selected Category</span>
-                                        <p class="text-base font-black text-slate-900">{{ $selectedNeed->category }}</p>
-                                    </div>
-                                    <div class="bg-white p-4 rounded-2xl border border-blue-100">
-                                        <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block mb-1">Selected Label</span>
-                                        <p class="text-base font-black text-blue-600">{{ $selectedNeed->title }}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Upload Form for Locked Flow -->
-                            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-                                <form action="{{ route('contributor.dataset.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="uploadFormLocked">
-                                    @csrf
-                                    <input type="hidden" name="dataset_need_id" value="{{ $selectedNeed->id }}">
-                                    <input type="hidden" name="category" value="{{ $selectedNeed->category }}">
-                                    <input type="hidden" name="category_id" value="{{ $selectedNeed->category_id }}">
-                                    <input type="hidden" name="title" value="Peragaan {{ $selectedNeed->title }}">
-                                    <input type="hidden" name="sign_label" value="{{ $selectedNeed->title }}">
-
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Deskripsi Tambahan (Opsional)</label>
-                                        <textarea name="description" x-model="descriptionText" class="w-full p-4 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none text-sm transition resize-none" placeholder="Tambahkan deskripsi singkat mengenai video peragaan..." rows="3"></textarea>
+                                        <h3 class="text-sm font-extrabold text-blue-900">Kategori & Label Dataset Terkunci (Read-Only)</h3>
+                                        <p class="text-[11px] text-blue-700">Nilai ini diambil secara otomatis dari Kebutuhan Dataset pilihan Anda.</p>
                                     </div>
+                                </div>
+                                <span class="px-3 py-1 bg-blue-100 text-blue-800 font-extrabold text-[11px] rounded-full">
+                                    Terkumpul: {{ $selectedNeed->current_count }} Video
+                                </span>
+                            </div>
 
-                                    <!-- Upload Area Video -->
-                                    <div class="space-y-2">
-                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">File Video Peragaan (Maksimal 3 MB)</label>
-                                        <div class="border-2 border-dashed border-slate-300 rounded-3xl p-8 flex flex-col items-center justify-center gap-4 bg-slate-50/50 hover:bg-blue-50/50 hover:border-blue-600 transition cursor-pointer relative group">
-                                            <div class="w-16 h-16 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center mb-1 group-hover:scale-110 transition">
-                                                <span class="material-symbols-outlined text-4xl">cloud_upload</span>
-                                            </div>
-                                            <div class="text-center">
-                                                <p class="font-bold text-slate-800 text-base mb-1">Seret dan letakkan file video di sini</p>
-                                                <p class="text-xs text-slate-500 mb-4">atau</p>
-                                                <button class="px-6 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-xs shadow-md pointer-events-none" type="button">Pilih Video</button>
-                                                <p class="text-[11px] text-slate-400 mt-4">Format didukung: MP4, MOV, AVI (Maksimal 3 MB)</p>
-                                            </div>
-                                            <input accept="video/*" class="absolute inset-0 opacity-0 cursor-pointer" type="file" name="dataset_file" id="file-input-locked" required onchange="handleFileSelectLocked(this)">
-                                        </div>
-                                    </div>
-
-                                    <div class="hidden bg-slate-50 border border-slate-200 rounded-2xl p-4 items-center gap-4 group" id="file-preview-locked">
-                                        <div class="w-20 h-16 bg-slate-900 rounded-xl flex items-center justify-center text-white shrink-0">
-                                            <span class="material-symbols-outlined text-3xl">play_circle</span>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <h4 class="font-bold text-slate-900 text-sm truncate mb-1" id="file-name-locked">video_sample.mp4</h4>
-                                            <p class="text-xs text-slate-500" id="file-size-locked">2.4 MB</p>
-                                        </div>
-                                        <button class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition" type="button" onclick="removeSelectedFileLocked()">
-                                            <span class="material-symbols-outlined">close</span>
-                                        </button>
-                                    </div>
-
-                                    <div class="space-y-3 pt-2">
-                                        <div class="flex items-start space-x-3 bg-blue-50/50 p-3.5 rounded-2xl border border-blue-100">
-                                            <input class="mt-0.5 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer" id="confirm-guidelines-locked" type="checkbox" required>
-                                            <label class="text-xs font-semibold text-slate-700 cursor-pointer" for="confirm-guidelines-locked">Saya telah memastikan video mengikuti panduan perekaman SIBI.</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex items-center gap-4 pt-4 border-t border-slate-100">
-                                        <a href="{{ route('contributor.kebutuhan.index') }}" class="px-6 min-h-[44px] bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
-                                            <span class="material-symbols-outlined text-sm">arrow_back</span>
-                                            Kembali ke Kebutuhan Dataset
-                                        </a>
-                                        <button class="flex-1 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2" type="submit">
-                                            <span class="material-symbols-outlined text-sm">publish</span>
-                                            Unggah Dataset
-                                        </button>
-                                    </div>
-                                </form>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="bg-white p-4 rounded-2xl border border-blue-100">
+                                    <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block mb-1">Selected Category</span>
+                                    <p class="text-base font-black text-slate-900">{{ $selectedNeed->category }}</p>
+                                    @if(!empty($selectedNeed->subcategory))
+                                        <span class="text-xs text-slate-500 font-semibold">Subkategori: {{ $selectedNeed->subcategory }}</span>
+                                    @endif
+                                </div>
+                                <div class="bg-white p-4 rounded-2xl border border-blue-100">
+                                    <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block mb-1">Selected Label</span>
+                                    <p class="text-base font-black text-blue-600">{{ $selectedNeed->title }}</p>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="lg:col-span-4">
-                            <x-video-guidelines />
+                        <!-- Upload Form for Locked Flow -->
+                        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+                            <form action="{{ route('contributor.dataset.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="uploadFormLocked">
+                                @csrf
+                                <input type="hidden" name="dataset_need_id" value="{{ $selectedNeed->id }}">
+                                <input type="hidden" name="category" value="{{ $selectedNeed->category }}">
+                                <input type="hidden" name="category_id" value="{{ $selectedNeed->category_id }}">
+                                <input type="hidden" name="subcategory" value="{{ $selectedNeed->subcategory }}">
+                                <input type="hidden" name="title" value="Peragaan {{ $selectedNeed->title }}">
+                                <input type="hidden" name="sign_label" value="{{ $selectedNeed->title }}">
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Deskripsi Tambahan (Opsional)</label>
+                                    <textarea name="description" x-model="descriptionText" class="w-full p-4 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none text-sm transition resize-none" placeholder="Tambahkan deskripsi singkat mengenai video peragaan..." rows="3"></textarea>
+                                </div>
+
+                                <!-- Upload Area Video -->
+                                <div class="space-y-2">
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">File Video Peragaan (Maksimal 3 MB)</label>
+                                    <div class="border-2 border-dashed border-slate-300 rounded-3xl p-8 flex flex-col items-center justify-center gap-4 bg-slate-50/50 hover:bg-blue-50/50 hover:border-blue-600 transition cursor-pointer relative group">
+                                        <div class="w-16 h-16 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center mb-1 group-hover:scale-110 transition">
+                                            <span class="material-symbols-outlined text-4xl">cloud_upload</span>
+                                        </div>
+                                        <div class="text-center">
+                                            <p class="font-bold text-slate-800 text-base mb-1">Seret dan letakkan file video di sini</p>
+                                            <p class="text-xs text-slate-500 mb-4">atau</p>
+                                            <button class="px-6 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-xs shadow-md pointer-events-none" type="button">Pilih Video</button>
+                                            <p class="text-[11px] text-slate-400 mt-4">Format didukung: MP4, MOV, AVI (Maksimal 3 MB)</p>
+                                        </div>
+                                        <input accept="video/*" class="absolute inset-0 opacity-0 cursor-pointer" type="file" name="dataset_file" id="file-input-locked" required onchange="handleFileSelectLocked(this)">
+                                    </div>
+                                </div>
+
+                                <div class="hidden bg-slate-50 border border-slate-200 rounded-2xl p-4 items-center gap-4 group" id="file-preview-locked">
+                                    <div class="w-20 h-16 bg-slate-900 rounded-xl flex items-center justify-center text-white shrink-0">
+                                        <span class="material-symbols-outlined text-3xl">play_circle</span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="font-bold text-slate-900 text-sm truncate mb-1" id="file-name-locked">video_sample.mp4</h4>
+                                        <p class="text-xs text-slate-500" id="file-size-locked">2.4 MB</p>
+                                    </div>
+                                    <button class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition" type="button" onclick="removeSelectedFileLocked()">
+                                        <span class="material-symbols-outlined">close</span>
+                                    </button>
+                                </div>
+
+                                <div class="space-y-3 pt-2">
+                                    <div class="flex items-start space-x-3 bg-blue-50/50 p-3.5 rounded-2xl border border-blue-100">
+                                        <input class="mt-0.5 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer" id="confirm-guidelines-locked" type="checkbox" required>
+                                        <label class="text-xs font-semibold text-slate-700 cursor-pointer" for="confirm-guidelines-locked">Saya telah memastikan video mengikuti panduan perekaman SIBI.</label>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-4 pt-4 border-t border-slate-100">
+                                    <a href="{{ route('contributor.kebutuhan.index') }}" class="px-6 min-h-[44px] bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
+                                        <span class="material-symbols-outlined text-sm">arrow_back</span>
+                                        Kembali ke Kebutuhan Dataset
+                                    </a>
+                                    <button class="flex-1 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2" type="submit">
+                                        <span class="material-symbols-outlined text-sm">publish</span>
+                                        Unggah Dataset
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                @endif
+
+                    <div class="lg:col-span-4">
+                        <x-video-guidelines />
+                    </div>
+                </div>
             </div>
         @else
             <!-- ========================================================================= -->
@@ -278,7 +255,7 @@
                     </div>
                     <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-2">Upload Dataset Umum</h1>
                     <p class="text-sm text-slate-600 max-w-2xl leading-relaxed">
-                        Pilih kategori dataset (Abjad, Kata, Idiom/Ungkapan, Kalimat, atau Cerita Pendek).
+                        Pilih kategori dataset (Abjad, Kata, Kata Imbuhan, Kalimat, atau Cerita Pendek).
                     </p>
                 </div>
 
@@ -292,9 +269,9 @@
                         <span class="material-symbols-outlined text-base">spellcheck</span>
                         B. Kata
                     </button>
-                    <button type="button" @click="selectCategory('idiom_expression')" :class="activeCategory === 'idiom_expression' ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'" class="flex-1 min-w-[130px] px-3 py-3 rounded-xl font-extrabold text-xs transition flex items-center justify-center gap-1.5">
+                    <button type="button" @click="selectCategory('kata_imbuhan')" :class="activeCategory === 'kata_imbuhan' ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'" class="flex-1 min-w-[130px] px-3 py-3 rounded-xl font-extrabold text-xs transition flex items-center justify-center gap-1.5">
                         <span class="material-symbols-outlined text-base">auto_awesome</span>
-                        C. Idiom/Ungkapan
+                        C. Kata Imbuhan
                     </button>
                     <button type="button" @click="selectCategory('sentence')" :class="activeCategory === 'sentence' ? 'bg-teal-600 text-white shadow-md' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'" class="flex-1 min-w-[130px] px-3 py-3 rounded-xl font-extrabold text-xs transition flex items-center justify-center gap-1.5">
                         <span class="material-symbols-outlined text-base">notes</span>
@@ -306,9 +283,9 @@
                     </button>
                 </div>
 
-                <!-- PREDEFINED CATEGORIES FORM (Alphabet, Word, Idiom/Expression) -->
+                <!-- PREDEFINED CATEGORIES FORM (Alphabet, Word, Kata Imbuhan) -->
                 <div x-show="activeCategory !== 'sentence' && activeCategory !== 'short_story'" class="space-y-6">
-                    <!-- Subcategory Selector (Alphabet: Letters A-Z vs Numbers 1-10) -->
+                    <!-- Subcategory Selector for Alphabet -->
                     <div x-show="activeCategory === 'alphabet'" class="bg-blue-50/60 p-4 rounded-2xl border border-blue-100 flex items-center gap-3">
                         <span class="text-xs font-bold text-blue-900 uppercase tracking-wider shrink-0">Subkategori Abjad:</span>
                         <div class="flex gap-2">
@@ -321,15 +298,33 @@
                         </div>
                     </div>
 
+                    <!-- Subcategory Selector for Word (4 Official Subcategories) -->
+                    <div x-show="activeCategory === 'word'" class="bg-blue-50/60 p-4 rounded-2xl border border-blue-100 flex flex-col gap-2">
+                        <span class="text-xs font-bold text-blue-900 uppercase tracking-wider">Subkategori Kata:</span>
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" @click="selectWordSubcategory('Kata ganti diri')" :class="activeWordSubcategory === 'Kata ganti diri' ? 'bg-blue-600 text-white shadow-xs font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition">
+                                1. Kata ganti diri
+                            </button>
+                            <button type="button" @click="selectWordSubcategory('Kata kerja (kata dasar)')" :class="activeWordSubcategory === 'Kata kerja (kata dasar)' ? 'bg-blue-600 text-white shadow-xs font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition">
+                                2. Kata kerja (kata dasar)
+                            </button>
+                            <button type="button" @click="selectWordSubcategory('Kata benda')" :class="activeWordSubcategory === 'Kata benda' ? 'bg-blue-600 text-white shadow-xs font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition">
+                                3. Kata benda
+                            </button>
+                            <button type="button" @click="selectWordSubcategory('Kata sifat')" :class="activeWordSubcategory === 'Kata sifat' ? 'bg-blue-600 text-white shadow-xs font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition">
+                                4. Kata sifat
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Label Selector -->
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Pilih Label Predefined Kebutuhan Dataset</label>
                         <div class="relative">
                             <select :value="selectedNeedId" @change="onNeedChange($event.target.value)" class="w-full h-12 pl-4 pr-10 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-slate-800 font-semibold text-sm transition shadow-xs appearance-none cursor-pointer">
                                 <template x-for="item in filteredNeeds" :key="item.id">
-                                    <option :value="item.id" :disabled="item.status === 'fulfilled' || item.current_count >= item.target_count">
-                                        <span x-text="(item.status === 'fulfilled' || item.current_count >= item.target_count) ? '[TERPENUHI] ' : ''"></span>
-                                        <span x-text="item.title"></span> (<span x-text="item.current_count"></span>/<span x-text="item.target_count"></span> Video)
+                                    <option :value="item.id">
+                                        <span x-text="item.title"></span> (<span x-text="item.current_count"></span> Video Terkumpul)
                                     </option>
                                 </template>
                             </select>
@@ -346,24 +341,11 @@
                             <div class="flex-1 w-full">
                                 <div class="flex justify-between items-center mb-3">
                                     <h3 class="text-base font-bold text-blue-900" x-text="selectedNeed.category + ': ' + selectedNeed.title"></h3>
-                                    <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold" x-text="Math.round((selectedNeed.current_count / Math.max(selectedNeed.target_count, 1)) * 100) + '% Terpenuhi'"></span>
+                                    <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold" x-text="selectedNeed.current_count + ' Video Terkumpul'"></span>
                                 </div>
-                                <div class="grid grid-cols-3 gap-4 mb-4">
-                                    <div class="bg-white/80 p-3 rounded-xl border border-white">
-                                        <p class="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-1">Target</p>
-                                        <p class="font-bold text-slate-900 text-sm" x-text="selectedNeed.target_count + ' Video'"></p>
-                                    </div>
-                                    <div class="bg-white/80 p-3 rounded-xl border border-white">
-                                        <p class="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-1">Terkumpul</p>
-                                        <p class="font-bold text-blue-600 text-sm" x-text="selectedNeed.current_count + ' Video'"></p>
-                                    </div>
-                                    <div class="bg-white/80 p-3 rounded-xl border border-white">
-                                        <p class="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-1">Sisa Kuota</p>
-                                        <p class="font-bold text-slate-900 text-sm" x-text="Math.max(0, selectedNeed.target_count - selectedNeed.current_count) + ' Video'"></p>
-                                    </div>
-                                </div>
-                                <div class="w-full h-2 bg-blue-200/60 rounded-full overflow-hidden">
-                                    <div class="h-full bg-blue-600 rounded-full transition-all duration-1000" :style="'width: ' + Math.min(100, Math.round((selectedNeed.current_count / Math.max(selectedNeed.target_count, 1)) * 100)) + '%'"></div>
+                                <div class="bg-white/80 p-3 rounded-xl border border-white">
+                                    <p class="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-1">Status Pengumpulkan Video</p>
+                                    <p class="font-bold text-blue-600 text-sm" x-text="selectedNeed.current_count + ' Video Telah Terkumpul'"></p>
                                 </div>
                             </div>
                         </div>
@@ -377,7 +359,7 @@
                                     @csrf
                                     <input type="hidden" name="dataset_need_id" :value="selectedNeedId">
                                     <input type="hidden" name="category" :value="activeCategory">
-                                    <input type="hidden" name="subcategory" :value="activeSubcategory">
+                                    <input type="hidden" name="subcategory" :value="activeCategory === 'word' ? activeWordSubcategory : activeSubcategory">
                                     <input type="hidden" name="title" :value="selectedNeed ? 'Peragaan ' + selectedNeed.title : 'Peragaan SIBI'">
                                     <input type="hidden" name="sign_label" :value="selectedNeed ? selectedNeed.title : 'Label SIBI'">
 

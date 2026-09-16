@@ -13,23 +13,7 @@ class ValidatorController extends Controller
     public function __construct(
         protected DatasetService $datasetService,
         protected ValidationService $validationService
-    ) {
-        $this->middleware(function ($request, $next) {
-            $user = auth()->user();
-            if (!$user) {
-                return redirect()->route('auth.login')->withErrors([
-                    'email' => 'Silakan masuk (login) terlebih dahulu untuk mengakses halaman Validator / Pakar SIBI.',
-                ]);
-            }
-
-            $role = is_object($user->role) ? $user->role->value : $user->role;
-            if ($role !== 'validator') {
-                abort(403, 'Akses ditolak. Halaman validasi ini khusus untuk pengguna dengan hak akses Validator / Pakar SIBI.');
-            }
-
-            return $next($request);
-        });
-    }
+    ) {}
 
     public function dashboard(): View
     {
@@ -60,8 +44,10 @@ class ValidatorController extends Controller
 
     public function riwayat(): View
     {
-        $allDatasets = $this->datasetService->getAllDatasets();
-        return view('pages.validator.riwayat', compact('allDatasets'));
+        $validations = \App\Models\Validation::with(['dataset', 'dataset.user', 'validator'])
+            ->latest()
+            ->get();
+        return view('pages.validator.riwayat', compact('validations'));
     }
 
     public function processValidation(Request $request, int $id)
@@ -73,16 +59,12 @@ class ValidatorController extends Controller
 
         $validatorId = auth()->id() ?? 1;
 
-        $dataset = Dataset::find($id);
-        if ($dataset) {
-            $dataset->update([
-                'status' => $request->status,
-                'rejection_reason' => ($request->status === 'rejected') ? $request->notes : null
-            ]);
-        }
-
         $this->validationService->validateDataset($id, $validatorId, $request->status, $request->notes);
 
-        return redirect()->route('validator.antrean')->with('success', 'Keputusan evaluasi validasi dataset berhasil disimpan.');
+        $msg = ($request->status === 'validated')
+            ? 'Dataset berhasil divalidasi oleh Pakar SIBI dan masuk ke Repository Dataset.'
+            : 'Dataset ditolak oleh Pakar SIBI dan telah dibersihkan dari antrean.';
+
+        return redirect()->route('validator.antrean')->with('success', $msg);
     }
 }

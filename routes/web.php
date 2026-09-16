@@ -41,7 +41,7 @@ Route::controller(AuthController::class)->name('auth.')->group(function () {
 });
 
 // Contributor Routes
-Route::prefix('contributor')->name('contributor.')->group(function () {
+Route::middleware(['auth', 'role:contributor'])->prefix('contributor')->name('contributor.')->group(function () {
     Route::get('/dashboard', [ContributorController::class, 'dashboard'])->name('dashboard');
     Route::get('/dataset', [ContributorController::class, 'datasets'])->name('dataset.index');
     Route::get('/upload', [ContributorController::class, 'upload'])->name('dataset.upload');
@@ -56,7 +56,7 @@ Route::prefix('contributor')->name('contributor.')->group(function () {
 });
 
 // Validator Routes
-Route::prefix('validator')->name('validator.')->group(function () {
+Route::middleware(['auth', 'role:validator'])->prefix('validator')->name('validator.')->group(function () {
     Route::get('/dashboard', [ValidatorController::class, 'dashboard'])->name('dashboard');
     Route::get('/antrean', [ValidatorController::class, 'antrean'])->name('antrean');
     Route::get('/detail/{id}', [ValidatorController::class, 'detail'])->name('detail');
@@ -66,7 +66,7 @@ Route::prefix('validator')->name('validator.')->group(function () {
 });
 
 // Administrator Routes
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/kebutuhan', [AdminController::class, 'kebutuhan'])->name('kebutuhan.index');
     Route::post('/kebutuhan', [AdminController::class, 'storeNeed'])->name('kebutuhan.store');
@@ -79,7 +79,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 // Dataset & General Profile Routes
-Route::get('/dataset/{dataset}/validation-result', [DatasetController::class, 'validationResult'])->name('dataset.validation-result');
-Route::get('/dataset/{id}', [DatasetController::class, 'detail'])->name('dataset.detail');
-Route::get('/profile', [ProfileController::class, 'show'])->name('profile.index');
-Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dataset/{dataset}/validation-result', [DatasetController::class, 'validationResult'])->name('dataset.validation-result');
+    Route::get('/dataset/{id}', [DatasetController::class, 'detail'])->name('dataset.detail');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.index');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});

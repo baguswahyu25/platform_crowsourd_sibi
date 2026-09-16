@@ -17,7 +17,6 @@ class DatasetNeed extends Model
         'category_id',
         'subcategory',
         'description',
-        'target_count',
         'current_count',
         'priority',
         'status',
@@ -29,7 +28,6 @@ class DatasetNeed extends Model
         return [
             'priority' => PriorityLevel::class,
             'status' => DatasetNeedStatus::class,
-            'target_count' => 'integer',
             'current_count' => 'integer',
         ];
     }

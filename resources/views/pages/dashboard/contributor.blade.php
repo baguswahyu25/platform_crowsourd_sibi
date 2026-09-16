@@ -13,9 +13,9 @@
 
         <!-- 4 Column Responsive Cards Grid for Contributor -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <x-card title="Total Kali Mengunggah" value="{{ $myDatasets->count() }} Berkas" icon="folder" trend="Dukungan Multi-Upload Active" :trendUp="true" />
-            <x-card title="Disetujui / Valid" value="{{ $myDatasets->where('status.value', 'validated')->count() }} Berkas" icon="check_circle" trend="Validated Datasets" :trendUp="true" />
-            <x-card title="Menunggu Validasi" value="{{ $myDatasets->where('status.value', 'pending')->count() }} Berkas" icon="pending_actions" trend="Sedang Ditinjau Pakar" :trendUp="true" />
+            <x-card title="Total Dataset Tersimpan" value="{{ $myDatasets->count() }} Berkas" icon="folder" trend="Dataset Aktif di DB" :trendUp="true" />
+            <x-card title="Disetujui / Valid" value="{{ $myDatasets->where('status.value', 'validated')->count() }} Berkas" icon="check_circle" trend="Masuk Repository" :trendUp="true" />
+            <x-card title="Menunggu Validasi Pakar" value="{{ $myDatasets->whereIn('status.value', ['waiting_expert_validation', 'pending'])->count() }} Berkas" icon="pending_actions" trend="Sedang Ditinjau Pakar" :trendUp="true" />
             <x-card title="Skor Kontributor" value="{{ $myDatasets->count() * 50 }} Poin" icon="military_tech" trend="Top Contributor" :trendUp="true" />
         </div>
 

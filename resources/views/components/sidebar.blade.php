@@ -82,7 +82,7 @@
                         <span class="material-symbols-outlined text-sm mr-3">folder_open</span> Dataset Saya
                     </a>
                     <a href="{{ route('contributor.kebutuhan.index') }}" class="flex items-center px-3 py-2.5 rounded-xl text-xs font-semibold transition {{ Str::startsWith($currentRoute, 'contributor.kebutuhan') ? 'bg-blue-50 text-blue-600 font-bold' : 'text-slate-600 hover:bg-slate-50' }}">
-                        <span class="material-symbols-outlined text-sm mr-3">checklist</span> Target Kebutuhan
+                        <span class="material-symbols-outlined text-sm mr-3">checklist</span> Kebutuhan Dataset
                     </a>
                 </nav>
             </div>

@@ -19,7 +19,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 text-xs">
-                @forelse($allDatasets->where('status.value', 'rejected') as $dataset)
+                @forelse($allDatasets->filter(fn($d) => ($d->status->value ?? $d->status) === 'rejected') as $dataset)
                     <tr class="hover:bg-slate-50/80 transition">
                         <td class="px-5 py-4 font-bold text-slate-900">#DS-{{ $dataset->id }} - {{ $dataset->title }}</td>
                         <td class="px-5 py-4 text-slate-600">{{ $dataset->user->name ?? 'Kontributor' }}</td>

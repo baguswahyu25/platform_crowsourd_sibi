@@ -12,8 +12,8 @@
         <!-- 4 Column Responsive Cards Grid for Validator -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             <x-card title="Antrean Belum Diperiksa" value="{{ $pendingDatasets->count() }}" icon="pending_actions" trend="Perlu Peninjauan" :trendUp="false" />
-            <x-card title="Disetujui / Di-Validasi" value="{{ $allDatasets->where('status.value', 'validated')->count() }}" icon="check_circle" trend="Total Validated" :trendUp="true" />
-            <x-card title="Ditolak Pakar (Tidak Valid)" value="{{ $allDatasets->where('status.value', 'rejected')->count() }}" icon="cancel" trend="Perlu Upload Ulang" :trendUp="false" />
+            <x-card title="Disetujui / Di-Validasi" value="{{ $allDatasets->filter(fn($d) => ($d->status->value ?? $d->status) === 'validated')->count() }}" icon="check_circle" trend="Total Validated" :trendUp="true" />
+            <x-card title="Ditolak Pakar (Tidak Valid)" value="{{ $allDatasets->filter(fn($d) => ($d->status->value ?? $d->status) === 'rejected')->count() }}" icon="cancel" trend="Perlu Upload Ulang" :trendUp="false" />
             <x-card title="Total Dataset Masuk" value="{{ $allDatasets->count() }}" icon="video_library" trend="Sistem Crowdsourcing" :trendUp="true" />
         </div>
 

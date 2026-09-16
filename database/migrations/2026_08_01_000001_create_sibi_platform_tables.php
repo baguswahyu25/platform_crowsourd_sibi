@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('title');
             $table->string('category');
             $table->text('description')->nullable();
-            $table->integer('target_count')->default(100);
             $table->integer('current_count')->default(0);
             $table->string('priority')->default('medium');
             $table->string('status')->default('active');

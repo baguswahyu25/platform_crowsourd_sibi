@@ -79,6 +79,10 @@ class Dataset extends Model
             return null;
         }
 
+        if (str_starts_with($this->file_path, 'http://') || str_starts_with($this->file_path, 'https://')) {
+            return $this->file_path;
+        }
+
         $cleanPath = ltrim(str_replace(['public/', 'storage/'], '', $this->file_path), '/');
         return asset('storage/' . $cleanPath);
     }
@@ -90,6 +94,10 @@ class Dataset extends Model
     {
         if (empty($this->file_path)) {
             return false;
+        }
+
+        if (str_starts_with($this->file_path, 'http://') || str_starts_with($this->file_path, 'https://')) {
+            return true;
         }
 
         $cleanPath = ltrim(str_replace(['public/', 'storage/'], '', $this->file_path), '/');

@@ -1,12 +1,12 @@
 <x-app-layout title="Kelola Kebutuhan & Label Dataset - Administrator" role="admin">
     <div class="space-y-6" x-data="{
         editModalOpen: false,
-        editData: { id: '', title: '', target_count: 100, priority: 'high', status: 'active' },
+        editData: { id: '', title: '', priority: 'high', status: 'active' },
+        addCat: 'word',
         openEdit(need) {
             this.editData = {
                 id: need.id,
                 title: need.title,
-                target_count: need.target_count,
                 priority: need.priority.value || need.priority,
                 status: need.status.value || need.status
             };
@@ -26,7 +26,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Kelola Kebutuhan & Label Dataset</h1>
-                <p class="text-xs text-slate-500 mt-1">Kelola label predefined untuk kategori Abjad, Kata, Idiom/Ungkapan, serta tinjau sampel Kalimat & Cerita Pendek.</p>
+                <p class="text-xs text-slate-500 mt-1">Kelola label predefined untuk kategori Abjad, Kata, Kata Imbuhan, serta tinjau sampel Kalimat & Cerita Pendek.</p>
             </div>
             <x-button variant="primary" icon="add" x-on:click="$dispatch('open-modal', 'add-need-modal')">Tambah Label Predefined</x-button>
         </div>
@@ -42,8 +42,8 @@
             <a href="{{ route('admin.kebutuhan.index', ['category' => 'word']) }}" class="px-4 py-2 rounded-xl text-xs font-extrabold transition {{ $categoryFilter === 'word' ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-50 text-slate-700 hover:bg-slate-100' }}">
                 💬 Kata
             </a>
-            <a href="{{ route('admin.kebutuhan.index', ['category' => 'idiom_expression']) }}" class="px-4 py-2 rounded-xl text-xs font-extrabold transition {{ $categoryFilter === 'idiom_expression' ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-50 text-slate-700 hover:bg-slate-100' }}">
-                ✨ Idiom / Ungkapan
+            <a href="{{ route('admin.kebutuhan.index', ['category' => 'kata_imbuhan']) }}" class="px-4 py-2 rounded-xl text-xs font-extrabold transition {{ in_array($categoryFilter, ['kata_imbuhan', 'idiom_expression']) ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-50 text-slate-700 hover:bg-slate-100' }}">
+                ✨ Kata Imbuhan
             </a>
             <a href="#sentence-section" class="px-4 py-2 rounded-xl text-xs font-extrabold bg-teal-50 text-teal-800 border border-teal-200 hover:bg-teal-100 transition">
                 📝 Kalimat ({{ $sentenceSubmissions->count() }})
@@ -65,7 +65,7 @@
                         <th class="px-5 py-3.5">Judul Label</th>
                         <th class="px-5 py-3.5">Kategori Utama</th>
                         <th class="px-5 py-3.5">Subkategori</th>
-                        <th class="px-5 py-3.5">Target / Terkumpul</th>
+                        <th class="px-5 py-3.5">Video Terkumpul</th>
                         <th class="px-5 py-3.5">Prioritas</th>
                         <th class="px-5 py-3.5">Status</th>
                         <th class="px-5 py-3.5 text-right">Aksi</th>
@@ -81,8 +81,8 @@
                                 </span>
                             </td>
                             <td class="px-5 py-4 text-slate-600">{{ $need->subcategory ?? '-' }}</td>
-                            <td class="px-5 py-4 text-slate-700 font-semibold">
-                                {{ $need->current_count }} / {{ $need->target_count }} Sampel
+                            <td class="px-5 py-4 text-slate-700 font-bold">
+                                {{ $need->current_count }} Video
                             </td>
                             <td class="px-5 py-4">
                                 @if(($need->priority->value ?? $need->priority) === 'high')
@@ -97,7 +97,7 @@
                                 @if(($need->status->value ?? $need->status) === 'active')
                                     <x-badge type="active" label="Aktif" />
                                 @elseif(($need->status->value ?? $need->status) === 'fulfilled')
-                                    <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold">Terpenuhi</span>
+                                    <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold">Aktif</span>
                                 @else
                                     <x-badge type="inactive" label="Nonaktif" />
                                 @endif
@@ -245,31 +245,41 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Kategori Utama</label>
-                        <select name="category_id" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-600 outline-none">
+                        <select name="category_id" x-model="addCat" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-600 outline-none">
                             <option value="alphabet">Abjad (Alphabet)</option>
-                            <option value="word" selected>Kata (Word)</option>
-                            <option value="idiom_expression">Idiom / Ungkapan / Kata Majemuk</option>
+                            <option value="word">Kata (Word)</option>
+                            <option value="kata_imbuhan">Kata Imbuhan</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Subkategori (Opsional)</label>
-                        <input type="text" name="subcategory" placeholder="Contoh: verbs atau letters" class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-600 outline-none">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Subkategori</label>
+                        <template x-if="addCat === 'word'">
+                            <select name="subcategory" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-600 outline-none">
+                                <option value="Kata ganti diri">Kata ganti diri</option>
+                                <option value="Kata kerja (kata dasar)">Kata kerja (kata dasar)</option>
+                                <option value="Kata benda">Kata benda</option>
+                                <option value="Kata sifat">Kata sifat</option>
+                            </select>
+                        </template>
+                        <template x-if="addCat === 'alphabet'">
+                            <select name="subcategory" class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-600 outline-none">
+                                <option value="letters">Huruf (A-Z)</option>
+                                <option value="numbers">Angka (1-10)</option>
+                            </select>
+                        </template>
+                        <template x-if="addCat !== 'word' && addCat !== 'alphabet'">
+                            <input type="text" name="subcategory" placeholder="Subkategori (Opsional)" class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-600 outline-none">
+                        </template>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Target Kuota Sampel</label>
-                        <input type="number" name="target_count" value="20" min="1" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-600 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Prioritas</label>
-                        <select name="priority" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-600 outline-none">
-                            <option value="high" selected>Tinggi</option>
-                            <option value="medium">Sedang</option>
-                            <option value="low">Rendah</option>
-                        </select>
-                    </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Prioritas</label>
+                    <select name="priority" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-600 outline-none">
+                        <option value="high" selected>Tinggi</option>
+                        <option value="medium">Sedang</option>
+                        <option value="low">Rendah</option>
+                    </select>
                 </div>
 
                 <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
@@ -294,26 +304,19 @@
                             <input type="text" name="title" x-model="editData.title" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-600 outline-none">
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Target Kuota Sampel</label>
-                                <input type="number" name="target_count" x-model="editData.target_count" min="1" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-600 outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Prioritas</label>
-                                <select name="priority" x-model="editData.priority" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-600 outline-none">
-                                    <option value="high">Tinggi</option>
-                                    <option value="medium">Sedang</option>
-                                    <option value="low">Rendah</option>
-                                </select>
-                            </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Prioritas</label>
+                            <select name="priority" x-model="editData.priority" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-600 outline-none">
+                                <option value="high">Tinggi</option>
+                                <option value="medium">Sedang</option>
+                                <option value="low">Rendah</option>
+                            </select>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Status</label>
                             <select name="status" x-model="editData.status" required class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-blue-600 outline-none">
                                 <option value="active">Aktif</option>
-                                <option value="fulfilled">Terpenuhi</option>
                                 <option value="inactive">Nonaktif</option>
                             </select>
                         </div>

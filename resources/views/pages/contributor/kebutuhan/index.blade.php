@@ -1,9 +1,8 @@
-<x-app-layout title="Target Kebutuhan Dataset - SIBI Dataset Platform" role="contributor">
+<x-app-layout title="Kebutuhan Dataset - SIBI Dataset Platform" role="contributor">
     <div class="space-y-8" x-data="{
         activeCat: 'all',
         activeWordGroup: 'all',
         searchTerm: '',
-        statusFilter: 'all',
 
         setCat(cat) {
             this.activeCat = cat;
@@ -14,7 +13,7 @@
         <div>
             <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-2">Kebutuhan Dataset SIBI</h1>
             <p class="text-sm text-slate-600 max-w-3xl leading-relaxed">
-                Daftar kebutuhan dataset video Bahasa Isyarat Indonesia (SIBI). Pilih kategori utama (Abjad, Kata, Idiom/Ungkapan, Kalimat, atau Cerita Pendek) untuk memfilter kebutuhan target.
+                Daftar kebutuhan dataset video Bahasa Isyarat Indonesia (SIBI). Pilih kategori utama (Abjad, Kata, Kata Imbuhan, Kalimat, atau Cerita Pendek) untuk memfilter kebutuhan pengumpulan video.
             </p>
         </div>
 
@@ -29,8 +28,8 @@
             <button type="button" @click="setCat('word')" :class="activeCat === 'word' ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'" class="px-4 py-2.5 rounded-xl font-extrabold text-xs transition">
                 💬 B. Kata (Words)
             </button>
-            <button type="button" @click="setCat('idiom_expression')" :class="activeCat === 'idiom_expression' ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'" class="px-4 py-2.5 rounded-xl font-extrabold text-xs transition">
-                ✨ C. Idiom / Ungkapan / Kata Majemuk
+            <button type="button" @click="setCat('kata_imbuhan')" :class="activeCat === 'kata_imbuhan' ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'" class="px-4 py-2.5 rounded-xl font-extrabold text-xs transition">
+                ✨ C. Kata Imbuhan
             </button>
             <button type="button" @click="setCat('sentence')" :class="activeCat === 'sentence' ? 'bg-teal-600 text-white shadow-xs' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'" class="px-4 py-2.5 rounded-xl font-extrabold text-xs transition">
                 📝 D. Kalimat
@@ -42,27 +41,19 @@
 
         <!-- Subcategory Filter Pills for WORD Category -->
         <div x-show="activeCat === 'word'" class="bg-blue-50/70 p-3.5 rounded-2xl border border-blue-100 flex flex-wrap items-center gap-2 text-xs">
-            <span class="font-bold text-blue-900 uppercase tracking-wider mr-2 text-[11px]">Subkelompok Kata:</span>
+            <span class="font-bold text-blue-900 uppercase tracking-wider mr-2 text-[11px]">Subkategori Kata:</span>
             <button type="button" @click="activeWordGroup = 'all'" :class="activeWordGroup === 'all' ? 'bg-blue-600 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3 py-1 rounded-lg transition">Semua</button>
-            <button type="button" @click="activeWordGroup = 'personal_pronouns'" :class="activeWordGroup === 'personal_pronouns' ? 'bg-blue-600 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3 py-1 rounded-lg transition">Kata Ganti Orang</button>
-            <button type="button" @click="activeWordGroup = 'verbs'" :class="activeWordGroup === 'verbs' ? 'bg-blue-600 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3 py-1 rounded-lg transition">Kata Kerja</button>
-            <button type="button" @click="activeWordGroup = 'nouns_body_parts'" :class="activeWordGroup === 'nouns_body_parts' ? 'bg-blue-600 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3 py-1 rounded-lg transition">Anggota Tubuh</button>
-            <button type="button" @click="activeWordGroup = 'nouns_clothing'" :class="activeWordGroup === 'nouns_clothing' ? 'bg-blue-600 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3 py-1 rounded-lg transition">Pakaian</button>
-            <button type="button" @click="activeWordGroup = 'nouns_stationery'" :class="activeWordGroup === 'nouns_stationery' ? 'bg-blue-600 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3 py-1 rounded-lg transition">Alat Tulis</button>
-            <button type="button" @click="activeWordGroup = 'nouns_eating_utensils'" :class="activeWordGroup === 'nouns_eating_utensils' ? 'bg-blue-600 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3 py-1 rounded-lg transition">Alat Makan</button>
-            <button type="button" @click="activeWordGroup = 'adjectives'" :class="activeWordGroup === 'adjectives' ? 'bg-blue-600 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3 py-1 rounded-lg transition">Kata Sifat</button>
+            <button type="button" @click="activeWordGroup = 'Kata ganti diri'" :class="activeWordGroup === 'Kata ganti diri' ? 'bg-blue-600 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3 py-1 rounded-lg transition">Kata ganti diri</button>
+            <button type="button" @click="activeWordGroup = 'Kata kerja (kata dasar)'" :class="activeWordGroup === 'Kata kerja (kata dasar)' ? 'bg-blue-600 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3 py-1 rounded-lg transition">Kata kerja (kata dasar)</button>
+            <button type="button" @click="activeWordGroup = 'Kata benda'" :class="activeWordGroup === 'Kata benda' ? 'bg-blue-600 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3 py-1 rounded-lg transition">Kata benda</button>
+            <button type="button" @click="activeWordGroup = 'Kata sifat'" :class="activeWordGroup === 'Kata sifat' ? 'bg-blue-600 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100'" class="px-3 py-1 rounded-lg transition">Kata sifat</button>
         </div>
 
-        <!-- Filters & Search Bar -->
+        <!-- Search Bar -->
         <div x-show="activeCat !== 'sentence' && activeCat !== 'short_story'" class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div class="relative w-full sm:w-96">
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400">search</span>
                 <input x-model="searchTerm" class="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition text-sm text-slate-800" placeholder="Cari label SIBI (misal: Makan, Huruf A, Selamat Pagi)..." type="text">
-            </div>
-            <div class="flex items-center gap-1 bg-slate-200/70 p-1 rounded-xl self-start sm:self-auto">
-                <button type="button" @click="statusFilter = 'all'" :class="statusFilter === 'all' ? 'bg-white text-blue-600 font-bold shadow-xs' : 'text-slate-600 hover:bg-white/50'" class="px-4 py-2 rounded-lg transition text-xs">Semua Status</button>
-                <button type="button" @click="statusFilter = 'active'" :class="statusFilter === 'active' ? 'bg-white text-blue-600 font-bold shadow-xs' : 'text-slate-600 hover:bg-white/50'" class="px-4 py-2 rounded-lg transition text-xs font-semibold">Belum Terpenuhi</button>
-                <button type="button" @click="statusFilter = 'fulfilled'" :class="statusFilter === 'fulfilled' ? 'bg-white text-blue-600 font-bold shadow-xs' : 'text-slate-600 hover:bg-white/50'" class="px-4 py-2 rounded-lg transition text-xs font-semibold">Sudah Terpenuhi</button>
             </div>
         </div>
 
@@ -114,12 +105,8 @@
         <div x-show="activeCat !== 'sentence' && activeCat !== 'short_story'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($needs->where('status.value', '!=', 'inactive') as $need)
                 @php
-                    $isFulfilled = ($need->status->value === 'fulfilled' || $need->current_count >= $need->target_count);
-                    $percentage = round(($need->current_count / max($need->target_count, 1)) * 100);
-                    if ($percentage > 100) $percentage = 100;
-                    $remaining = max(0, $need->target_count - $need->current_count);
-
                     $catId = $need->category_id ?? 'word';
+                    if ($catId === 'idiom_expression') $catId = 'kata_imbuhan';
                     $subGroup = $need->subcategory ?? '';
                     $titleLower = strtolower($need->title);
 
@@ -131,10 +118,10 @@
                         $icon = 'waving_hand';
                         $bgIcon = 'bg-emerald-100 text-emerald-700';
                         $catDisplay = 'Kata';
-                    } elseif ($catId === 'idiom_expression') {
+                    } elseif ($catId === 'kata_imbuhan') {
                         $icon = 'auto_awesome';
                         $bgIcon = 'bg-indigo-100 text-indigo-700';
-                        $catDisplay = 'Idiom / Ungkapan';
+                        $catDisplay = 'Kata Imbuhan';
                     } else {
                         $icon = 'dataset';
                         $bgIcon = 'bg-blue-100 text-blue-700';
@@ -142,9 +129,8 @@
                     }
                 @endphp
 
-                <div x-show="(activeCat === 'all' || activeCat === '{{ $catId }}') &&
+                <div x-show="(activeCat === 'all' || activeCat === '{{ $catId }}' || (activeCat === 'kata_imbuhan' && '{{ $need->category_id }}' === 'idiom_expression')) &&
                             (activeCat !== 'word' || activeWordGroup === 'all' || activeWordGroup === '{{ $subGroup }}') &&
-                            (statusFilter === 'all' || '{{ $isFulfilled ? 'fulfilled' : 'active' }}' === statusFilter) &&
                             (searchTerm === '' || '{{ $titleLower }}'.includes(searchTerm.toLowerCase().trim()))"
                      class="dataset-card bg-white border border-slate-200 rounded-3xl p-6 flex flex-col h-full hover:shadow-lg transition-all duration-200">
                     
@@ -154,10 +140,8 @@
                         </div>
                         <div class="text-right">
                             <span class="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-800 font-extrabold text-[10px] uppercase block mb-1 border border-blue-100">{{ $catDisplay }}</span>
-                            @if($isFulfilled)
-                                <span class="px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700 font-extrabold text-[9px] uppercase">SELESAI</span>
-                            @else
-                                <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-extrabold text-[9px] uppercase">BELUM TERPENUHI</span>
+                            @if(!empty($need->subcategory))
+                                <span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-extrabold text-[9px] block">{{ $need->subcategory }}</span>
                             @endif
                         </div>
                     </div>
@@ -166,42 +150,20 @@
                     <p class="text-xs text-slate-500 mb-6 leading-relaxed">{{ $need->description }}</p>
 
                     <div class="mt-auto space-y-4">
-                        <div>
-                            <div class="flex justify-between text-xs font-bold text-slate-700 mb-1">
-                                <span>{{ $need->current_count }} / {{ $need->target_count }} Video</span>
-                                <span class="text-blue-600">{{ $percentage }}%</span>
+                        <div class="bg-blue-50/70 p-3 rounded-2xl border border-blue-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] text-blue-600 uppercase font-extrabold">Progres Pengumpulan</p>
+                                <p class="text-xs text-slate-700 font-bold">Video Terkumpul</p>
                             </div>
-                            <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-blue-600 rounded-full" style="width: {{ $percentage }}%;"></div>
-                            </div>
+                            <span class="px-3 py-1 bg-blue-600 text-white font-extrabold text-xs rounded-xl shadow-xs">
+                                {{ $need->current_count }} Video
+                            </span>
                         </div>
 
-                        <div class="grid grid-cols-3 gap-2 py-3 border-y border-slate-100 text-center">
-                            <div>
-                                <p class="text-[10px] text-slate-400 uppercase font-bold">Target</p>
-                                <p class="font-bold text-slate-800 text-xs">{{ $need->target_count }}</p>
-                            </div>
-                            <div class="border-x border-slate-100">
-                                <p class="text-[10px] text-slate-400 uppercase font-bold">Terkumpul</p>
-                                <p class="font-bold text-slate-800 text-xs">{{ $need->current_count }}</p>
-                            </div>
-                            <div>
-                                <p class="text-[10px] text-slate-400 uppercase font-bold">Sisa</p>
-                                <p class="font-bold text-slate-800 text-xs">{{ $remaining }}</p>
-                            </div>
-                        </div>
-
-                        @if($isFulfilled)
-                            <button class="w-full py-3 bg-slate-200 text-slate-500 rounded-xl font-bold text-xs cursor-not-allowed flex items-center justify-center gap-2 min-h-[44px]" disabled>
-                                <span class="material-symbols-outlined text-base">check_circle</span>
-                                Target Terpenuhi
-                            </button>
-                        @else
-                            <a href="{{ route('contributor.dataset.upload', ['need_id' => $need->id]) }}" class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2 text-xs shadow-md min-h-[44px]">
-                                <span class="material-symbols-outlined text-base">cloud_upload</span>
-                                Unggah Dataset
-                            </a>
-                        @endif
+                        <a href="{{ route('contributor.dataset.upload', ['need_id' => $need->id]) }}" class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2 text-xs shadow-md min-h-[44px]">
+                            <span class="material-symbols-outlined text-base">cloud_upload</span>
+                            Unggah Dataset
+                        </a>
                     </div>
                 </div>
             @empty

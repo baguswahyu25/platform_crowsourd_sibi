@@ -42,9 +42,6 @@ class DatasetService
             $need = DatasetNeed::find($data['dataset_need_id']);
             if ($need) {
                 $need->increment('current_count');
-                if ($need->current_count >= $need->target_count) {
-                    $need->update(['status' => DatasetNeedStatus::FULFILLED]);
-                }
             }
         }
 
